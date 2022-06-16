@@ -1,0 +1,40 @@
+.no-height {
+    height: auto;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    > p {
+        padding: 0;
+        margin: 0;
+        line-height: 1rem;
+        font-size: 90%;
+        display: block;
+        text-align: center;
+        flex-grow: 1;
+    }
+}
+
+.token {
+    border-radius: .25rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 85%;
+    padding: 3px;
+    white-space: nowrap;
+    margin: 3px;
+    display: flex;
+    max-width: 150px;
+
+    > span {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+    }
+
+    > i {
+        cursor: pointer;
+        align-self: center;
+    }
+}

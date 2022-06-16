@@ -1,0 +1,102 @@
+<div class="card mt-2">
+    <div class="card-body">
+        <div class="d-flex gap-2">
+            <div>
+                <div class="d-flex flex-column">
+                    <button class="btn btn-xs btn-outline-primary">
+                        <i class="far fa-thumbs-up"></i>
+                    </button>
+                    <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
+                        <span class="fw-bold">Vote</span>
+                    </span>
+                    <button class="btn btn-xs btn-outline-primary">
+                        <i class="far fa-thumbs-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex gap-3 content align-items-center">
+                    <a class="fw-bold text-black text-decoration-none" [routerLink]="['/r', 1, 'p', 1]">Bonnie Aarons at
+                        The Nun World Premiere</a>
+                </div>
+                <div class="d-flex gap-2 meta">
+                    <a [routerLink]="['/r', 1]" class="text-black fw-bold hover">/r/subreddit</a>
+
+                    <span class="text-black-50">Posted by <a href="#" class="hover text-black-50">/u/foo</a> 20 minutes
+                        ago</span>
+                </div>
+                <div class="mt-2">
+                    <markdown ngPreserveWhitespaces>
+                        Lorem markdownum mihi, nectar triumpha ureret Eurynomus in tractu, fore Veneris
+                        corpus. Retroque sanguine, vitta mente et poena, parcere et corpora caelum
+                        silentia inposita, cum mihi!
+
+                        Inmensa [profanam](http://www.parentem-tumulus.org/detis-at) nobilis est
+                        exstantibus, nemora, omnes dentibus animus; voluit intellege. Supplex satos
+                        Aeneia sexta plura, quid, ab aquis: hac ducere.
+
+                        > Deo rite levavit tene erat timore radices stagna, nam, sociis tota; sentiat
+                        > graviore pectore et terra. In teque ecce accedit. Iuveni arma, at reserata
+                        > ordine quae; acri infectus casus non; caesumque.
+
+                        Erat manu spernit quantum, distat sine cum quin indoluisse, quisque duorum,
+                        progenitore ab cuncta. Est inquit summum Aglauros egressus quarum Salmacis suos;
+                        non ac scitatur? Pectora noluit occupat et pendenti Latoius, in *illis reccidat
+                        ante* simulacraque. Mea pedibus proelia vires.
+
+                        1. Vultus tori pudorem ingenio
+                        2. Preces trepida et mater troia fulvas excipiunt
+                        3. Gramina abstractus sic umoribus vult e texerat
+                    </markdown>
+
+                    <div class="mt-2 d-flex gap-2">
+                        <button class="btn btn-sm btn-light">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            Edit
+                        </button>
+
+                        <button class="btn btn-sm btn-light">
+                            <i class="fa-solid fa-xmark"></i>
+                            Remove
+                        </button>
+
+                        <button class="btn btn-sm btn-light">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                            Spam
+                        </button>                        
+
+                        <button class="btn btn-sm btn-light">
+                            <i class="far fa-flag"></i>
+                            Report
+                        </button>                        
+                    </div>
+
+                    <textarea class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
+                        placeholder="What are your thoughts?"></textarea>
+
+                    <button class="btn btn-sm btn-primary mt-2">Comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-body">
+        <div class="ms-2 me-2 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Sort By:
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="#">Top</a></li>
+                    <li><a class="dropdown-item" href="#">Newest</a></li>
+                    <li><a class="dropdown-item" href="#">Best</a></li>
+                    <li><a class="dropdown-item" href="#">Oldest</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <app-forum-post-comments [depth]="0"></app-forum-post-comments>
+    </div>
+</div>

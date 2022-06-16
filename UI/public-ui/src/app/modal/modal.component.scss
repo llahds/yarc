@@ -1,0 +1,17 @@
+.modal.show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+}
+
+.modal-body {
+    max-height: 80vh;
+    overflow: auto;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge*/
+    user-select: none; /* Non-prefixed version, currently 
+                                not supported by any browser */
+}

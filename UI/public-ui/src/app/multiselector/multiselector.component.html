@@ -1,0 +1,15 @@
+<app-typeahead [placeholder]="placeholder" [queryText]="query" (onQueryChanged)="search($event)"
+    [typeaheadItems]="typeaheadItems" (onSelected)="select($event)" >
+    <ng-template let-item #item>
+        {{item.name}}
+    </ng-template>
+</app-typeahead>
+
+<div class="form-control form-control-sm no-height d-flex gap-1 flex-wrap mt-1 align-items-center">
+    <p *ngIf="selectedItems.length === 0">{{emptyMessage}}</p>
+
+    <span *ngFor="let item of selectedItems; let i = index;" class="token d-flex gap-1">
+        <span class="mr-1">{{item.name}}</span>
+        <i class="fa fa-times" (click)="remove(i)"></i>
+    </span>
+</div>

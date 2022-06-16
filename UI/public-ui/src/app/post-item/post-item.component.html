@@ -1,0 +1,48 @@
+<div class="d-flex gap-2">
+    <div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-xs btn-outline-primary">
+                <i class="far fa-thumbs-up"></i>
+            </button>
+            <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
+                <span class="fw-bold">Vote</span>
+            </span>
+            <button class="btn btn-xs btn-outline-primary">
+                <i class="far fa-thumbs-down"></i>
+            </button>
+        </div>
+    </div>
+    <div class="d-flex align-items-center">
+        <i class="text-black-50 fas fa-external-link-alt"></i>
+    </div>
+    <div class="flex-grow-1">
+        <div class="d-flex gap-3 content align-items-center">
+            <a class="fw-bold text-black text-decoration-none" [routerLink]="['/r', 1, 'p', 1]">Bonnie Aarons at The Nun World Premiere</a>
+            <a href="#" class="hover">www.yahoo.com <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="d-flex gap-2 meta">
+            <a [routerLink]="['/r', 1]" class="text-black fw-bold hover">/r/subreddit</a>
+
+            <span class="text-black-50">Posted by <a href="#" class="hover text-black-50">/u/foo</a> 20 minutes
+                ago</span>
+        </div>
+    </div>
+    <div>
+        <a href="#" class="btn btn-sm btn-light text-black-50 d-flex gap-2 align-items-center">
+            <i class="far fa-comment-alt"></i>
+            <span>22</span>
+        </a>
+    </div>
+    <div class="flex-shrink-1">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

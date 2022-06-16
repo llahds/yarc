@@ -1,0 +1,17 @@
+<div class="autocomplete">
+    <div class="input-group input-group-sm">
+        <input type="text" class="form-control" [placeholder]="placeholder" [ngModel]="queryText"
+            (ngModelChange)="queryChanged($event)" [disabled]="disabled">
+        <button class="btn btn-sm btn-outline-secondary" type="button" (click)="clear()">
+            <i *ngIf="!isSearching" class="fa fa-times"></i>
+            <i *ngIf="isSearching" class="fa fa-spinner fa-spin ml-1"></i>
+        </button>
+    </div>
+
+    <div class="autocomplete-items" *ngIf="_items.length > 0">
+        <div *ngFor="let item of _items" (click)="select(item)">
+            <ng-container [ngTemplateOutlet]="itemTemplateRef" [ngTemplateOutletContext]="{$implicit: item}">
+            </ng-container>
+        </div>
+    </div>
+</div>

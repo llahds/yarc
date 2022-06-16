@@ -1,0 +1,34 @@
+<header class="p-2 border-bottom bg-light">
+    <div class="container-fluid d-flex gap-3 align-items-center justify-content-between">
+        <a routerLink="/" class="link-dark text-decoration-none" aria-expanded="false">
+            YARC
+        </a>
+
+        <div class="d-flex align-items-center" style="flex-basis: 50rem;">
+            <form class="w-100" role="search">
+                <input type="search" class="form-control form-control-sm" placeholder="Search YARC" aria-label="Search">
+            </form>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
+
+            <button type="button" class="btn  btn-sm btn-primary">Sign Up</button>
+
+            <div class="flex-shrink-0 dropdown align-self-center">
+                <a href="#" class="d-block dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="far fa-user"></i>
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

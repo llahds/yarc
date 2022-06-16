@@ -1,0 +1,51 @@
+<div class="container mt-2">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input class="form-control form-control-sm" placeholder="ex: The best burgers around">
+                    <div class="form-text">Enter a name for your community.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Slug</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">/r/</span>
+                        <input type="text" class="form-control" placeholder="ex: AmazingBurgers">
+                    </div>
+                    <div class="form-text">The slug must be unique and cannot contain punctuation or spaces.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control form-control-sm" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Topics</label>
+                    <app-multiselector placeholder="search for topics" emptyMessage="No topics have been added."
+                        (onQueryChanged)="searchTopics($event)" [typeaheadItems]="suggestedTopics"
+                        (onSelectedItemsChanged)="entity.topics = $event" [selectedItems]="entity.topics">
+                    </app-multiselector>
+                    <div class="form-text">Topics help users discover your community and link similar communities
+                        together.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Moderators</label>
+                    <app-multiselector placeholder="search for moderators" emptyMessage="No moderators have been added."
+                        (onQueryChanged)="searchModerators($event)" [typeaheadItems]="suggestedModerators"
+                        (onSelectedItemsChanged)="entity.moderators= $event" [selectedItems]="entity.moderators">
+                    </app-multiselector>
+                    <div class="form-text">Looking for help managing your community?</div>
+                </div>
+                <div class="mb-3 d-flex gap-2">
+                    <button class="btn btn-sm btn-light">
+                        Cancel
+                    </button>
+
+                    <button class="btn btn-sm btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="mb-2 d-flex gap-2" style="margin-left: 20px;">
+
+    <div>
+        <img class="rounded-circle" style="max-width: 2em; object-fit: contain;" src="https://i.pravatar.cc/100">
+    </div>
+
+    <div>
+        <div class="d-flex gap-2">
+            <a class="text-black hover" routerLink="['/u', 1]">user_foo</a>
+            <span>12 hours ago</span>
+        </div>
+
+        <div>
+            <markdown ngPreserveWhitespaces class="markdown">
+                Erat manu spernit quantum, distat sine cum quin indoluisse, quisque duorum,
+                progenitore ab cuncta. Est inquit summum Aglauros egressus quarum Salmacis suos;
+                non ac scitatur? Pectora noluit occupat et pendenti Latoius, in *illis reccidat
+                ante* simulacraque. Mea pedibus proelia vires.
+
+                Erat manu spernit quantum, distat sine cum quin indoluisse, quisque duorum,
+                progenitore ab cuncta. Est inquit summum Aglauros egressus quarum Salmacis suos;
+                non ac scitatur? Pectora noluit occupat et pendenti Latoius, in *illis reccidat
+                ante* simulacraque. Mea pedibus proelia vires.
+            </markdown>
+
+            <div class="d-flex gap-2 align-items-center">
+                <div>
+                    <div class="d-flex gap-2 ">
+                        <button class="btn btn-xs btn-outline-primary">
+                            <i class="far fa-thumbs-up"></i>
+                        </button>
+                        <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
+                            <span class="fw-bold">12.9k</span>
+                        </span>
+                        <button class="btn btn-xs btn-outline-primary">
+                            <i class="far fa-thumbs-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn btn-sm btn-light d-flex gap-2 align-items-center" (click)="showReply = !showReply">
+                    <i class="far fa-comment-alt"></i>
+                    <span>Reply</span>
+                </button>
+            </div>
+
+            <div class="mt-2" *ngIf="showReply">
+                <textarea class="form-control form-control-sm mb-1" style="max-width: 600px; height: 100px;"
+                    placeholder="What are your thoughts?"></textarea>
+                <div class="d-flex gap-1">
+                    <button class="btn btn-sm btn-light" (click)="showReply = false">Cancel</button>
+                    <button class="btn btn-sm btn-primary">Reply</button>
+                </div>
+            </div>
+
+            <div class="mt-0">
+                <a class="btn btn-sm btn-link hover" (click)="showChildren = true" *ngIf="!showChildren">22 replies</a>
+
+                <app-forum-post-comments [depth]="depth + 1" *ngIf="showChildren"></app-forum-post-comments>
+            </div>
+        </div>
+    </div>
+
+</div>
