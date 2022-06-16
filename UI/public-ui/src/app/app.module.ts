@@ -20,6 +20,7 @@ import { ModalComponent } from './modal/modal.component';
 import { ForumEditComponent } from './forum/forum-edit/forum-edit.component';
 import { TypeaheadComponent } from './typeahead/typeahead.component';
 import { MultiselectorComponent } from './multiselector/multiselector.component';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MultiselectorComponent } from './multiselector/multiselector.component'
     ModalComponent,
     ForumEditComponent,
     TypeaheadComponent,
-    MultiselectorComponent
+    MultiselectorComponent,
+    ConfirmModalComponent
   ],
   imports: [
     BrowserModule,

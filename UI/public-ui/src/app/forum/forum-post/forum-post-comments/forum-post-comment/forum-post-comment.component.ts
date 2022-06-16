@@ -11,9 +11,24 @@ export class ForumPostCommentComponent implements OnInit {
   public showChildren: boolean = false;
   @Input() depth: number = 0;
 
+  public showRemoveModal: boolean = false;
+  public showSpamModal: boolean = false;
+  public showReportModal: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  confirmRemove() {
+    this.showRemoveModal = true;
+  }
+
+  confirmSpam() {
+    this.showSpamModal = true;
+  }
+
+  confirmReport() {
+    this.showReportModal = true;
+  }
 }

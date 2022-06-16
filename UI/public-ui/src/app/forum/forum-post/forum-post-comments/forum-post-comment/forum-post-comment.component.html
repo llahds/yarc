@@ -42,6 +42,26 @@
                     <i class="far fa-comment-alt"></i>
                     <span>Reply</span>
                 </button>
+
+                <button class="btn btn-sm btn-light" (click)="showReply = !showReply">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Edit
+                </button>
+
+                <button class="btn btn-sm btn-light" (click)="confirmRemove()">
+                    <i class="fa-solid fa-xmark"></i>
+                    Remove
+                </button>
+
+                <button class="btn btn-sm btn-light" (click)="confirmSpam()">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    Spam
+                </button>
+
+                <button class="btn btn-sm btn-light" (click)="confirmReport()">
+                    <i class="far fa-flag"></i>
+                    Report
+                </button>
             </div>
 
             <div class="mt-2" *ngIf="showReply">
@@ -62,3 +82,26 @@
     </div>
 
 </div>
+
+<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"
+    (onConfirm)="showRemoveModal = false">
+    Are you sure you want to remove this comment?
+</app-confirm-modal>
+
+<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false" (onConfirm)="showSpamModal = false">
+    Are you sure you want to mark this comment as spam?
+</app-confirm-modal>
+
+
+<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false"
+    (onConfirm)="showReportModal = false">
+    <p>Are you sure you want to report this comment?</p>
+    <div>
+        <select class="form-control form-control-sm">
+            <option> - Reason - </option>
+            <option>Offensive</option>
+            <option>Hate Speech</option>
+        </select>
+        <div class="form-text">Specifying a reason helps us evaluate if this comment should be removed.</div>
+    </div>
+</app-confirm-modal>

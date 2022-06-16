@@ -55,17 +55,17 @@
                             Edit
                         </button>
 
-                        <button class="btn btn-sm btn-light">
+                        <button class="btn btn-sm btn-light" (click)="confirmRemove()">
                             <i class="fa-solid fa-xmark"></i>
                             Remove
                         </button>
 
-                        <button class="btn btn-sm btn-light">
+                        <button class="btn btn-sm btn-light" (click)="confirmSpam()">
                             <i class="fa-regular fa-calendar-xmark"></i>
                             Spam
                         </button>                        
 
-                        <button class="btn btn-sm btn-light">
+                        <button class="btn btn-sm btn-light" (click)="confirmReport()">
                             <i class="far fa-flag"></i>
                             Report
                         </button>                        
@@ -100,3 +100,24 @@
         <app-forum-post-comments [depth]="0"></app-forum-post-comments>
     </div>
 </div>
+
+<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"  (onConfirm)="showRemoveModal = false">
+    Are you sure you want to remove this post?
+</app-confirm-modal>
+
+<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false"  (onConfirm)="showSpamModal = false">
+    Are you sure you want to mark this post as spam?
+</app-confirm-modal>
+
+
+<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false"  (onConfirm)="showReportModal = false">
+    <p>Are you sure you want to report this post?</p>
+    <div>
+        <select class="form-control form-control-sm">
+            <option> - Reason - </option>
+            <option>Offensive</option>
+            <option>Hate Speech</option>
+        </select>
+        <div class="form-text">Specifying a reason helps us evaluate if this post should be removed.</div>
+    </div>
+</app-confirm-modal>

@@ -1,0 +1,16 @@
+<app-modal [showModal]="showConfirm">
+    <ng-template #content>
+        <ng-content></ng-content>
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-between w-100">
+            <button class="btn btn-sm btn-light" (click)="cancel()">
+                Cancel
+            </button>
+            <button class="btn btn-sm btn-primary" (click)="confirm()">
+                Confirm
+            </button>
+        </div>
+    </ng-template>
+</app-modal>

@@ -7,9 +7,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForumPostComponent implements OnInit {
 
+  public showRemoveModal: boolean = false;
+  public showSpamModal: boolean = false;
+  public showReportModal: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  confirmRemove() {
+    this.showRemoveModal = true;
+  }
+
+  confirmSpam() {
+    this.showSpamModal = true;
+  }
+
+  confirmReport() {
+    this.showReportModal = true;
   }
 
 }
