@@ -21,6 +21,7 @@ import { ForumEditComponent } from './forum/forum-edit/forum-edit.component';
 import { TypeaheadComponent } from './typeahead/typeahead.component';
 import { MultiselectorComponent } from './multiselector/multiselector.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { PostEditComponent } from './post-edit/post-edit.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     ForumEditComponent,
     TypeaheadComponent,
     MultiselectorComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    PostEditComponent
   ],
   imports: [
     BrowserModule,

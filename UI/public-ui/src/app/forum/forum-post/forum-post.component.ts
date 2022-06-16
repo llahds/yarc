@@ -10,6 +10,7 @@ export class ForumPostComponent implements OnInit {
   public showRemoveModal: boolean = false;
   public showSpamModal: boolean = false;
   public showReportModal: boolean = false;
+  public showPostModal: boolean = false;
 
   constructor() { }
 

@@ -1,0 +1,69 @@
+<app-modal [showModal]="showPost">
+    <ng-template #content>
+        <ul class="nav nav-tabs" data-bs-tabs="tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="true" data-bs-toggle="tab" href="#post">
+                    Post
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#images">
+                    Images
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#video">
+                    Video
+                </a>
+            </li>  
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#link">
+                    Link
+                </a>
+            </li>                        
+        </ul>
+
+        <div class="tab-content mt-2">
+            <div class="tab-pane active" id="post">
+                <form>
+                    <input class="form-control form-control-sm mb-2" placeholder="title">
+                    <textarea class="form-control form-control-sm" rows="4" placeholder="text"></textarea>
+                </form>
+            </div>
+            <div class="tab-pane" id="images">
+                <form>
+                    <input class="form-control form-control-sm mb-2" placeholder="title">
+                    <textarea class="form-control form-control-sm mb-2" rows="4" placeholder="text"></textarea>
+                    <input class="form-control form-control-sm" id="formFileSm" type="file" multiple>
+                </form>
+            </div>
+            <div class="tab-pane" id="video">
+                <form>
+                    <input class="form-control form-control-sm mb-2" placeholder="title">
+                    <input class="form-control form-control-sm" id="formFileSm" type="file">
+                </form>
+            </div>        
+            <div class="tab-pane" id="link">
+                <form>
+                    <input class="form-control form-control-sm mb-2" placeholder="title">
+                    <textarea class="form-control form-control-sm mb-2" rows="4" placeholder="text"></textarea>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">https://</span>
+                        <input class="form-control" placeholder="url">
+                    </div>
+                </form>
+            </div>                
+        </div>
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-between w-100">
+            <button class="btn btn-sm btn-light" (click)="cancel()">
+                Cancel
+            </button>
+            <button class="btn btn-sm btn-primary" (click)="post()">
+                Post
+            </button>
+        </div>
+    </ng-template>
+</app-modal>

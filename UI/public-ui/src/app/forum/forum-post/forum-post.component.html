@@ -50,7 +50,7 @@
                     </markdown>
 
                     <div class="mt-2 d-flex gap-2">
-                        <button class="btn btn-sm btn-light">
+                        <button class="btn btn-sm btn-light" (click)="showPostModal = true">
                             <i class="fa-regular fa-pen-to-square"></i>
                             Edit
                         </button>
@@ -121,3 +121,5 @@
         <div class="form-text">Specifying a reason helps us evaluate if this post should be removed.</div>
     </div>
 </app-confirm-modal>
+
+<app-post-edit [showPost]="showPostModal" (onCancel)="showPostModal = false" (onPost)="showPostModal = false"></app-post-edit>
