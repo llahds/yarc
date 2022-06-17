@@ -1,5 +1,26 @@
 <div class="card">
-    <div class="card-body">
-        spam
+    <div class="dropdown">
+        <button class="btn btn-sm btn-light dropdown-toggle ts-4" type="button" data-bs-toggle="dropdown">
+            Sort By:
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Newest</a></li>
+            <li><a class="dropdown-item" href="#">Oldest</a></li>
+            <li><a class="dropdown-item" href="#">Most Votes</a></li>
+        </ul>
     </div>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let item of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
+            <app-mod-post-item>
+                <button class="btn btn-sm btn-light text-black-50">
+                    <i class="far fa-check-circle"></i>
+                </button>
+                
+                <button class="btn btn-sm btn-light text-black-50">
+                    <i class="fas fa-times"></i>
+                </button>        
+            </app-mod-post-item>
+        </li>
+    </ul>
 </div>
