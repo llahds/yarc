@@ -68,3 +68,15 @@ a.hover:hover {
 .ts-4 {
     font-size: .75rem; 
 } 
+
+.nav-menu > a {
+    padding: .25rem;
+    padding-left: .45rem;
+    padding-right: .45rem;
+    border: 0;
+    border-left: 2px solid transparent;
+
+    &.active {
+        border-left: 2px solid red;
+    }
+}

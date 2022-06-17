@@ -22,6 +22,15 @@ import { TypeaheadComponent } from './typeahead/typeahead.component';
 import { MultiselectorComponent } from './multiselector/multiselector.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PostEditComponent } from './post-edit/post-edit.component';
+import { ForumSettingsComponent } from './forum/forum-settings/forum-settings.component';
+import { ForumSettingsSpamComponent } from './forum/forum-settings/forum-settings-spam/forum-settings-spam.component';
+import { ForumSettingsReportsComponent } from './forum/forum-settings/forum-settings-reports/forum-settings-reports.component';
+import { ForumSettingsBannedComponent } from './forum/forum-settings/forum-settings-banned/forum-settings-banned.component';
+import { ForumSettingsMutedComponent } from './forum/forum-settings/forum-settings-muted/forum-settings-muted.component';
+import { ForumSettingsApprovedComponent } from './forum/forum-settings/forum-settings-approved/forum-settings-approved.component';
+import { ForumSettingsPostsComponent } from './forum/forum-settings/forum-settings-posts/forum-settings-posts.component';
+import { ForumSettingsAutomaticComponent } from './forum/forum-settings/forum-settings-automatic/forum-settings-automatic.component';
+import { AddRemoveStringsComponent } from './add-remove-strings/add-remove-strings.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +49,16 @@ import { PostEditComponent } from './post-edit/post-edit.component';
     TypeaheadComponent,
     MultiselectorComponent,
     ConfirmModalComponent,
-    PostEditComponent
+    PostEditComponent,
+    ForumSettingsComponent,
+    ForumSettingsSpamComponent,
+    ForumSettingsReportsComponent,
+    ForumSettingsBannedComponent,
+    ForumSettingsMutedComponent,
+    ForumSettingsApprovedComponent,
+    ForumSettingsPostsComponent,
+    ForumSettingsAutomaticComponent,
+    AddRemoveStringsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,44 @@
+<div class="d-flex gap-2 mt-2">
+    <div class="d-flex flex-column d-none d-sm-block" style="width: 250px;">
+        <div class="card mb-2">
+            <div class="card-header">
+                Queues
+            </div>
+            <div class="card-body d-flex flex-column nav-menu p-0">
+                <a [routerLink]="['/r', 1, 'settings', 'reports']" class="hover text-black"
+                    routerLinkActive="active">Reports</a>
+                <a [routerLink]="['/r', 1, 'settings', 'spam']" class="hover text-black"
+                    routerLinkActive="active">SPAM</a>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-header">
+                User Management
+            </div>
+            <div class="card-body d-flex flex-column nav-menu p-0">
+                <a [routerLink]="['/r', 1, 'settings', 'banned']" class="hover text-black"
+                    routerLinkActive="active">Banned</a>
+                <a [routerLink]="['/r', 1, 'settings', 'muted']" class="hover text-black"
+                    routerLinkActive="active">Muted</a>
+                <a [routerLink]="['/r', 1, 'settings', 'approved']" class="hover text-black"
+                    routerLinkActive="active">Approved</a>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-header">
+                Content Rules
+            </div>
+            <div class="card-body d-flex flex-column nav-menu p-0">
+                <a [routerLink]="['/r', 1, 'settings', 'posts']" class="hover text-black"
+                    routerLinkActive="active">Posts & Comments</a>
+                <a [routerLink]="['/r', 1, 'settings', 'automatic']" class="hover text-black"
+                    routerLinkActive="active">Automatic</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-grow-1">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>
