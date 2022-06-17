@@ -34,6 +34,7 @@ import { AddRemoveStringsComponent } from './add-remove-strings/add-remove-strin
 import { ModPostItemComponent } from './forum/forum-settings/mod-post-item/mod-post-item.component';
 import { ModUserComponent } from './forum/forum-settings/mod-user/mod-user.component';
 import { ModSearchUsersComponent } from './forum/forum-settings/mod-search-users/mod-search-users.component';
+import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { ModSearchUsersComponent } from './forum/forum-settings/mod-search-users
     ModPostItemComponent,
     ModUserComponent,
     ModSearchUsersComponent,
+    ForumCreateComponent,
   ],
   imports: [
     BrowserModule,

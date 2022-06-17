@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
 import { ForumEditComponent } from './forum/forum-edit/forum-edit.component';
 import { ForumListComponent } from './forum/forum-list/forum-list.component';
 import { ForumPostComponent } from './forum/forum-post/forum-post.component';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: "popular",
     component: PopularComponent,
+  },
+  {
+    path: "r/create",
+    component: ForumCreateComponent
   },
   {
     path: "r/:id",
