@@ -32,6 +32,8 @@ import { ForumSettingsPostsComponent } from './forum/forum-settings/forum-settin
 import { ForumSettingsAutomaticComponent } from './forum/forum-settings/forum-settings-automatic/forum-settings-automatic.component';
 import { AddRemoveStringsComponent } from './add-remove-strings/add-remove-strings.component';
 import { ModPostItemComponent } from './forum/forum-settings/mod-post-item/mod-post-item.component';
+import { ModUserComponent } from './forum/forum-settings/mod-user/mod-user.component';
+import { ModSearchUsersComponent } from './forum/forum-settings/mod-search-users/mod-search-users.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { ModPostItemComponent } from './forum/forum-settings/mod-post-item/mod-p
     ForumSettingsPostsComponent,
     ForumSettingsAutomaticComponent,
     AddRemoveStringsComponent,
-    ModPostItemComponent
+    ModPostItemComponent,
+    ModUserComponent,
+    ModSearchUsersComponent,
   ],
   imports: [
     BrowserModule,

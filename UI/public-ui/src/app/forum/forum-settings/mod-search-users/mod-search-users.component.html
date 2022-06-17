@@ -1,0 +1,31 @@
+<app-modal [showModal]="show">
+    <ng-template #content>
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="search for users" [ngModel]="queryText"
+                (ngModelChange)="queryChanged($event)">
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="clear()">
+                <i *ngIf="!isSearching" class="fa fa-times"></i>
+                <i *ngIf="isSearching" class="fa fa-spinner fa-spin ml-1"></i>
+            </button>
+        </div>
+
+        <p class="ts-4 text-center" *ngIf="users.length === 0">No users were found.</p>
+
+        <div class="mt-1">
+            <div class="d-flex gap-2 align-items-center mb-1" *ngFor="let user of users">
+                <button class="btn btn-sm ts-4 btn-outline-secondary" (click)="select(user)">
+                    Select
+                </button>
+                <span class="ts-4">{{user.name}}</span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-end w-100">
+            <button class="btn btn-sm btn-light" (click)="cancel()">
+                Cancel
+            </button>
+        </div>
+    </ng-template>
+</app-modal>

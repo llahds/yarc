@@ -1,5 +1,41 @@
 <div class="card">
-    <div class="card-body">
-        muted
+    <div class="d-flex gap-2 p-2 align-items-center">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-light dropdown-toggle ts-4" type="button" data-bs-toggle="dropdown">
+                Sort By:
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Newest</a></li>
+                <li><a class="dropdown-item" href="#">Oldest</a></li>
+            </ul>
+        </div>
+
+        <div class="input-group input-group-sm" style="max-width: 300px;">
+            <input type="text" class="form-control" placeholder="search muted users">
+            <button class="btn btn-sm btn-outline-secondary">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <button class="btn btn-sm btn-outline-primary" (click)="showMuteModal = true">
+            Mute User
+        </button>
     </div>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let item of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
+            <app-mod-user>
+                <button class="btn btn-sm btn-light text-black-50">
+                    <i class="far fa-check-circle"></i>
+                </button>
+
+                <button class="btn btn-sm btn-light text-black-50">
+                    <i class="fas fa-times"></i>
+                </button>
+            </app-mod-user>
+        </li>
+    </ul>
 </div>
+
+<app-mod-search-users [show]="showMuteModal" (onCancel)="showMuteModal = false" (onConfirm)="showMuteModal = false">
+</app-mod-search-users>

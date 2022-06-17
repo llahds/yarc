@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForumSettingsApprovedComponent implements OnInit {
 
+  public showApprovedModal: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {

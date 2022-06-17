@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForumSettingsMutedComponent implements OnInit {
 
+  public showMuteModal: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
