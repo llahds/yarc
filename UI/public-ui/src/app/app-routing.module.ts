@@ -14,6 +14,7 @@ import { ForumSettingsSpamComponent } from './forum/forum-settings/forum-setting
 import { ForumSettingsComponent } from './forum/forum-settings/forum-settings.component';
 import { ForumComponent } from './forum/forum.component';
 import { PopularComponent } from './popular/popular.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,10 @@ const routes: Routes = [
         ]
       }
     ]
+  },
+  {
+    path: "user-settings",
+    component: UserSettingsComponent
   }
 ];
 

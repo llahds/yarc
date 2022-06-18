@@ -37,6 +37,7 @@ import { ModSearchUsersComponent } from './forum/forum-settings/mod-search-users
 import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     ForumCreateComponent,
     SignInComponent,
     SignUpComponent,
+    UserSettingsComponent,
   ],
   imports: [
     BrowserModule,

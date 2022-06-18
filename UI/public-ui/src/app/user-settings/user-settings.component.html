@@ -1,0 +1,109 @@
+<div class="container mt-2">
+    <div class="card">
+        <div class="card-body p-4">
+            <h5 class="mb-3">User Settings</h5>
+
+            <form>
+                <div class="mb-3">
+                    <label class="form-label  fw-bold">Display Name (optional)</label>
+                    <input class="form-control form-control-sm" style="max-width: 200px;"
+                        placeholder="ex: AmazingBurgersDude">
+                    <div class="form-text">Enter an optional display name for your profile.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label  fw-bold">About (optional)</label>
+                    <textarea class="form-control form-control-sm" style="max-width: 500px;"
+                        placeholder="ex: I am but a simple burger farmer..."></textarea>
+                    <div class="form-text">A brief description of yourself shown on your profile.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label  fw-bold">Avatar (optional)</label>
+                    <input class="form-control form-control-sm" style="max-width: 200px;" type="file">
+                    <div class="form-text">Images must be .png or .jpg format</div>
+                </div>
+
+                <div class="mb-3 d-flex gap-3 align-items-center">
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary"
+                            (click)="showChangeEmail = true">Change</button>
+                    </div>
+                    <div class="flex-grow-1">
+                        <label class="form-label  fw-bold m-0">Email</label>
+                        <div class="ts-5 text-muted">email@email.com</div>
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex gap-3 align-items-center">
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary"
+                            (click)="showChangePassword = true">Change</button>
+                    </div>
+                    <div class="flex-grow-1">
+                        <label class="form-label fw-bold m-0">Password</label>
+                        <div class="ts-5 text-muted">Password must be at least 8 characters long.</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="max-width: 500px;">
+                        <label class="form-label  fw-bold">People You've Blocked</label>
+                        <app-add-remove-strings emptyMessage="You haven't blocked anyone.">
+                        </app-add-remove-strings>
+                        <div class="form-text">Blocked people can’t send you chat requests or private messages.</div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-modal [showModal]="showChangeEmail" [showSmall]="true">
+    <ng-template #content>
+        <div class="mb-2">
+            <input class="form-control form-control-sm" placeholder="new email">
+        </div>
+        <div class="mb-2">
+            <input type="password" class="form-control form-control-sm" placeholder="current password">
+        </div>
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-between w-100">
+            <button class="btn btn-sm btn-light" (click)="showChangeEmail = false">
+                Cancel
+            </button>
+            <button class="btn btn-sm btn-primary" (click)="showChangeEmail = false">
+                Change
+            </button>
+        </div>
+    </ng-template>
+</app-modal>
+
+
+<app-modal [showModal]="showChangePassword" [showSmall]="true">
+    <ng-template #content>
+        <div class="mb-2">
+            <input type="password" class="form-control form-control-sm" placeholder="current password">
+        </div>
+        <div class="mb-2">
+            <input type="password" class="form-control form-control-sm" placeholder="new password">
+        </div>
+        <div>
+            <input type="password" class="form-control form-control-sm" placeholder="confirm new password">
+        </div>        
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-between w-100">
+            <button class="btn btn-sm btn-light" (click)="showChangePassword = false">
+                Cancel
+            </button>
+            <button class="btn btn-sm btn-primary" (click)="showChangePassword = false">
+                Change
+            </button>
+        </div>
+    </ng-template>
+</app-modal>
