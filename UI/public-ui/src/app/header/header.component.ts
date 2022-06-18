@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  public showSignIn: boolean = false;
+  public showSignUp: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {

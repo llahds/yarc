@@ -11,9 +11,9 @@
         </div>
 
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="showSignIn = true">Sign In</button>
 
-            <button type="button" class="btn  btn-sm btn-primary">Sign Up</button>
+            <button type="button" class="btn  btn-sm btn-primary"  (click)="showSignUp = true">Sign Up</button>
 
             <div class="flex-shrink-0 dropdown align-self-center">
                 <a href="#" class="d-block dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,3 +32,11 @@
         </div>
     </div>
 </header>
+
+<app-sign-in [showSignIn]="showSignIn" (onCancel)="showSignIn = false" (onSignIn)="showSignIn = false">
+
+</app-sign-in>
+
+<app-sign-up [showSignUp]="showSignUp" (onCancel)="showSignUp = false" (onSignUp)="showSignUp = false">
+
+</app-sign-up>

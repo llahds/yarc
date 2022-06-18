@@ -35,6 +35,8 @@ import { ModPostItemComponent } from './forum/forum-settings/mod-post-item/mod-p
 import { ModUserComponent } from './forum/forum-settings/mod-user/mod-user.component';
 import { ModSearchUsersComponent } from './forum/forum-settings/mod-search-users/mod-search-users.component';
 import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,8 @@ import { ForumCreateComponent } from './forum/forum-create/forum-create.componen
     ModUserComponent,
     ModSearchUsersComponent,
     ForumCreateComponent,
+    SignInComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
