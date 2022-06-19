@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PostsService } from 'src/app/services/posts.service';
+import { Post } from 'src/app/services/models/posts';
 
 @Component({
   selector: 'app-forum-post',
@@ -12,9 +15,23 @@ export class ForumPostComponent implements OnInit {
   public showReportModal: boolean = false;
   public showPostModal: boolean = false;
 
-  constructor() { }
+  public forumId!: number;
+  public item!: Post;
+
+  constructor(
+    private route: ActivatedRoute,
+    private api: PostsService
+  ) { }
 
   ngOnInit(): void {
+    this.route.parent?.params.subscribe(params => {
+      this.forumId = +params["id"];
+    });
+
+    this.route.paramMap.subscribe(params => {
+      const id = +this.route.snapshot.params["postId"];
+      this.api.getView(this.forumId, id).subscribe(r => this.item = r);
+    });
   }
 
   confirmRemove() {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ForumsService } from '../services/forums.service';
+import { Forum } from '../services/models/forums';
 
 @Component({
   selector: 'app-forum',
@@ -8,27 +10,19 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ForumComponent implements OnInit {
 
+  public forum!: Forum;
+  public id!: number;
+
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private api: ForumsService
   ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      if (+this.route.snapshot.params['id'] === 0) {
-        console.log(this.route.snapshot.params['id']);
-        // this.headerLabel = "Add Article";
-        // this.entity = { title: "", text: "", keywords: [], topics: [], isNew: true };
-        // this.isLoading = false;
-      }
-      else {
-        // this.headerLabel = "Edit Article";
-        // this.entity = { title: "", text: "", keywords: [], categories: [], isNew: true };
-        // this.api.getArticle(this.route.snapshot.params.id)
-        //   .subscribe(
-        //     data => this.handleSuccess(data),
-        //     err => this.handleErrors(err)
-        //   );
-      }
+      const id = +this.route.snapshot.params['id'];
+      this.id = id;
+      this.api.getForum(id).subscribe(r => this.forum = r);
     });
   }
 }

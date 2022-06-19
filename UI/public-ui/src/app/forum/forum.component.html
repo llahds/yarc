@@ -7,8 +7,8 @@
         <img class="logo" src="https://placeholder.pics/svg/300">
     </div>
     <div>
-        <h4 class="p-0 m-0">Subreddit name</h4>
-        <a class="text-black-50 text-decoration-none" [routerLink]="['/r', 1]">/r/subreddit</a>
+        <h4 class="p-0 m-0">{{forum?.name}}</h4>
+        <a class="text-black-50 text-decoration-none" [routerLink]="['/r', id]">/r/{{forum?.slug}}</a>
     </div>
     <div>
         <button class="btn btn-sm btn-primary">Join</button>

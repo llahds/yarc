@@ -20,21 +20,104 @@ namespace Api.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
+        [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
+        public async Task<IActionResult> List(int forumId, int startAt)
+        {
+            var posts = await this.context
+                .Posts
+                .Where(E => E.ForumId == forumId && E.Id > startAt)
+                .OrderBy(E => E.CreatedOn)
+                .Take(25)
+                .Select(E => new ForumPostListItemModel
+                {
+                    Id = E.Id,
+                    CreatedOn = E.CreatedOn,
+                    Title = E.Title,
+                    Forum = new KeyValueModel
+                    {
+                        Id = E.ForumId,
+                        Name = E.Forum.Name
+                    },
+                    PostedBy = new PostedByModel
+                    {
+                        Id = E.PostedById,
+                        Name = E.PostedBy.DisplayName ?? "[deleted]",
+                        AvatarId = -1
+                    }
+                })
+                .ToArrayAsync();
+
+            return this.Ok(posts);
+        }
+
+        [HttpGet, Route("api/1.0/forums/posts/popular")]
+        [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
+        public async Task<IActionResult> Popular(int startAt)
+        {
+            var max = 2_265_922;
+            var r = new Random();
+            var randomIds = Enumerable.Range(0, 25).Select(R => r.Next(0, max)).ToArray();
+
+            var posts = await this.context
+                .Posts
+                //.Where(E => E.Id > startAt)
+                //.OrderBy(E => Guid.NewGuid())
+                //.Take(25)
+                .Where(E => randomIds.Contains(E.Id))
+                .Select(E => new ForumPostListItemModel
+                {
+                    Id = E.Id,
+                    CreatedOn = E.CreatedOn,
+                    Title = E.Title,
+                    Forum = new KeyValueModel
+                    {
+                        Id = E.ForumId,
+                        Name = E.Forum.Name
+                    },
+                    PostedBy = new PostedByModel
+                    {
+                        Id = E.PostedById,
+                        Name = E.PostedBy.DisplayName ?? "[deleted]",
+                        AvatarId = -1
+                    }
+                })
+                .ToArrayAsync();
+
+            return this.Ok(posts);
+        }
+
         [HttpGet, Route("api/1.0/forums/{forumId}/posts/{postId}")]
-        [ProducesResponseType(200, Type = typeof(ForumPostModel))]
+        [ProducesResponseType(200, Type = typeof(ForumPostViewModel))]
         public async Task<IActionResult> Get(int forumId, int postId)
         {
-            var entity = await this.context
+            var model = await this.context
                 .Posts
                 .Where(E => E.Id == postId && E.ForumId == forumId)
+                .Select(E => new ForumPostViewModel
+                {
+                    Id = E.Id,
+                    CreatedOn = E.CreatedOn,
+                    Title = E.Title,
+                    Text = E.Text,
+                    Forum = new KeyValueModel
+                    {
+                        Id = E.ForumId,
+                        Name = E.Forum.Name
+                    },
+                    PostedBy = new PostedByModel
+                    {
+                        Id = E.PostedById,
+                        Name = E.PostedBy.DisplayName ?? "[deleted]",
+                        AvatarId = -1
+                    }
+                })
                 .FirstOrDefaultAsync();
 
-            if (entity == null)
+            if (model == null)
             {
                 return this.NotFound();
             }
-
-            var model = this.mapper.Map<ForumPostModel>(entity);
 
             return this.Ok(model);
         }

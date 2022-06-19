@@ -38,6 +38,8 @@ import { ForumCreateComponent } from './forum/forum-create/forum-create.componen
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { HttpClientModule } from '@angular/common/http';
+import { TimeAgoPipe } from './services/time-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -73,13 +75,15 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
     SignInComponent,
     SignUpComponent,
     UserSettingsComponent,
+    TimeAgoPipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MarkdownModule.forRoot(),
     FormsModule,
-    LMarkdownEditorModule
+    LMarkdownEditorModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
