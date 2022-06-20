@@ -58,7 +58,7 @@
                 </div>
                 <p class="mt-2">Created Jan 25, 2008</p>
                 <div class="d-grid gap-2 mt-2 mb-2">
-                    <button class="btn btn-sm btn-primary" (click)="showPostModal = true">Create Post</button>
+                    <button class="btn btn-sm btn-primary" (click)="createPost()">Create Post</button>
                   </div>                
                 <div>
                     Topics:
@@ -99,4 +99,4 @@
     </div>
 </div>
 
-<app-post-edit [showPost]="showPostModal" (onCancel)="showPostModal = false" (onPost)="showPostModal = false"></app-post-edit>
+<app-post-edit [forumId]="id" [postId]="postId" [showPost]="showPostModal" (onCancel)="showPostModal = false" (onPost)="showPostModal = false"></app-post-edit>

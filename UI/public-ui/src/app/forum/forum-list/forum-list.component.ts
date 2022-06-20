@@ -13,6 +13,7 @@ export class ForumListComponent implements OnInit {
   public showPostModal: boolean = false;
   public list: Post[] = [];
   public id!: number;
+  public postId!: number;
 
   constructor(
     private posts: PostsService,
@@ -24,5 +25,10 @@ export class ForumListComponent implements OnInit {
       this.id = +this.route.snapshot.params['id'];
       this.posts.getPosts(this.id, 0).subscribe(r => this.list = r);
     });
+  }
+
+  createPost() {
+    this.postId = 0;
+    this.showPostModal = true
   }
 }

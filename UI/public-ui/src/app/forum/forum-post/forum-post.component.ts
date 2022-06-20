@@ -17,6 +17,7 @@ export class ForumPostComponent implements OnInit {
 
   public forumId!: number;
   public item!: Post;
+  public postId!: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,4 +47,14 @@ export class ForumPostComponent implements OnInit {
     this.showReportModal = true;
   }
 
+  editPost() {
+    this.postId = this.item.id;
+    this.showPostModal = true    
+  }
+
+  reload() {
+    this.api.getView(this.forumId, this.item.id).subscribe(r => this.item = r);
+    this.postId = 0;
+    this.showPostModal = false;
+  }
 }

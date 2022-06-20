@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Post } from './models/posts';
+import { Id } from './models/common';
+import { EditPost, Post } from './models/posts';
 import { RestApiService } from './rest-api.service';
 
 @Injectable({
@@ -23,5 +24,13 @@ export class PostsService {
 
   getView(forumId: number, postId: number) : Observable<Post> {
     return this.client.get(`api/1.0/forums/${forumId}/posts/${postId}`);
+  }
+
+  create(forumId: number, model: EditPost) : Observable<Id> {
+    return this.client.post(`api/1.0/forums/${forumId}/posts`, model);
+  }
+
+  update(forumId: number, postId: number, model: EditPost) : Observable<Id> {
+    return this.client.put(`api/1.0/forums/${forumId}/posts/${postId}`, model);
   }
 }

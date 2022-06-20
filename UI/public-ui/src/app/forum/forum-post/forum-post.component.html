@@ -27,7 +27,7 @@
                     <markdown ngPreserveWhitespaces [data]="item?.text"></markdown>
 
                     <div class="mt-2 d-flex gap-2">
-                        <button class="btn btn-sm btn-light" (click)="showPostModal = true">
+                        <button class="btn btn-sm btn-light" (click)="editPost()">
                             <i class="fa-regular fa-pen-to-square"></i>
                             Edit
                         </button>
@@ -99,4 +99,4 @@
     </div>
 </app-confirm-modal>
 
-<app-post-edit [showPost]="showPostModal" (onCancel)="showPostModal = false" (onPost)="showPostModal = false"></app-post-edit>
+<app-post-edit [forumId]="forumId" [postId]="item?.id" [showPost]="showPostModal" (onCancel)="showPostModal = false; postId = 0;" (onPost)="reload()"></app-post-edit>

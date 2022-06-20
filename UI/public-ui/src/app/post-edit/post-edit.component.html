@@ -3,7 +3,7 @@
         <div class="card mb-2 ts-4">
             <div class="card-body">
                 Posting guidelines go here
-            </div>            
+            </div>
         </div>
 
         <ul class="nav nav-tabs" data-bs-tabs="tabs">
@@ -13,28 +13,32 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#images">
+                <a class="nav-link disabled" data-bs-toggle="tab" href="#images">
                     Images
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#video">
+                <a class="nav-link disabled" data-bs-toggle="tab" href="#video">
                     Video
                 </a>
-            </li>  
+            </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#link">
+                <a class="nav-link disabled" data-bs-toggle="tab" href="#link">
                     Link
                 </a>
-            </li>                        
+            </li>
         </ul>
 
         <div class="tab-content mt-2">
             <div class="tab-pane active" id="post">
-                <form>
-                    <input class="form-control form-control-sm mb-2" placeholder="title">
-                    <textarea class="form-control form-control-sm" rows="4" placeholder="text"></textarea>
-                </form>
+                <div>
+                    <input class="form-control form-control-sm mb-2" placeholder="title" [(ngModel)]="entity.title"
+                        [class.is-invalid]="errors['Title']">
+                    <app-control-validation-errors [errors]="errors" fieldName="Title"></app-control-validation-errors>
+                    <textarea class="form-control form-control-sm" rows="4" placeholder="text" [(ngModel)]="entity.text"
+                        [class.is-invalid]="errors['Text']"></textarea>
+                    <app-control-validation-errors [errors]="errors" fieldName="Text"></app-control-validation-errors>
+                </div>
             </div>
             <div class="tab-pane" id="images">
                 <form>
@@ -48,7 +52,7 @@
                     <input class="form-control form-control-sm mb-2" placeholder="title">
                     <input class="form-control form-control-sm" id="formFileSm" type="file">
                 </form>
-            </div>        
+            </div>
             <div class="tab-pane" id="link">
                 <form>
                     <input class="form-control form-control-sm mb-2" placeholder="title">
@@ -58,17 +62,19 @@
                         <input class="form-control" placeholder="url">
                     </div>
                 </form>
-            </div>                
+            </div>
         </div>
     </ng-template>
 
     <ng-template #actions>
         <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="cancel()">
+            <button class="btn btn-sm btn-light" (click)="cancel()" [disabled]="isSaving">
                 Cancel
             </button>
-            <button class="btn btn-sm btn-primary" (click)="post()">
+            <button class="btn btn-sm btn-primary" (click)="post()" [disabled]="isSaving">
                 Post
+
+                <i class="fa fa-spin fa-spinner" *ngIf="isSaving"></i>
             </button>
         </div>
     </ng-template>
