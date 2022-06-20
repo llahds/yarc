@@ -41,9 +41,20 @@ namespace Api.Controllers
 
         [HttpPost, Route("api/1.0/forums")]
         [ProducesResponseType(200, Type = typeof(IdModel<int>))]
-
         public async Task<IActionResult> Create([FromBody] EditForumModel model)
         {
+            if (string.IsNullOrEmpty(model?.Slug) == false)
+            {
+                var userNameAlreadyExists = await context
+                    .Forums
+                    .AnyAsync(U => U.Slug == model.Slug);
+
+                if (userNameAlreadyExists)
+                {
+                    this.ModelState.AddModelError(nameof(model.Slug), "Slug already exists.");
+                }
+            }
+
             if (this.ModelState.IsValid == false)
             {
                 return this.BadRequest(this.ModelState);
@@ -63,6 +74,18 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] EditForumModel model)
         {
+            if (string.IsNullOrEmpty(model?.Slug) == false)
+            {
+                var userNameAlreadyExists = await context
+                    .Forums
+                    .AnyAsync(U => U.Slug == model.Slug && U.Id != id);
+
+                if (userNameAlreadyExists)
+                {
+                    this.ModelState.AddModelError(nameof(model.Slug), "Slug already exists.");
+                }
+            }
+
             if (this.ModelState.IsValid == false)
             {
                 return this.BadRequest(this.ModelState);
@@ -80,6 +103,7 @@ namespace Api.Controllers
 
             entity.Name = model.Name;
             entity.Description = model.Description;
+            entity.Slug = model.Slug;
 
             await this.context.SaveChangesAsync();
 

@@ -8,3 +8,7 @@ export interface PostedBy  {
     id: number;
     name: string;
 }
+
+export interface Id {
+    id: number
+}

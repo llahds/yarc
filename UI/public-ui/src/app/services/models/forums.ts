@@ -1,6 +1,13 @@
-export interface Forum {
-    name: string;
+import { KeyValueModel } from "./common";
+
+export interface Forum extends ForumEditModel {
+    createdOn: Date;
+}
+
+export interface ForumEditModel {
+    name: string; 
     description: string;
     slug: string;
-    createdOn: Date;
+    topics: KeyValueModel[]
+    moderators: KeyValueModel[]
 }
