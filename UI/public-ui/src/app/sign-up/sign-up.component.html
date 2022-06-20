@@ -1,28 +1,41 @@
 <app-modal [showModal]="showSignUp" [showSmall]="true">
     <ng-template #content>
-        <form class="d-flex flex-column gap-1">
+        <div class="d-flex flex-column gap-1">
             <div>
-                <input class="form-control form-control-sm" placeholder="email">
-            </div>            
-            <div>
-                <input class="form-control form-control-sm" placeholder="user name">
+                <input type="email" class="form-control form-control-sm" placeholder="email" [(ngModel)]="entity.email"
+                    [class.is-invalid]="errors['Email']" maxlength="125">
+                <app-control-validation-errors [errors]="errors" fieldName="Email"></app-control-validation-errors>
             </div>
             <div>
-                <input type="password" class="form-control form-control-sm" placeholder="password">
-            </div>            
+                <input class="form-control form-control-sm" placeholder="user name (ex: AwesomeBurgerDude)"
+                    [(ngModel)]="entity.userName" [class.is-invalid]="errors['UserName']" maxlength="75">
+                <app-control-validation-errors [errors]="errors" fieldName="UserName">
+                </app-control-validation-errors>
+                <div class="text-muted ts-5">The user name must be unique and can only contain letters and numbers.</div>
+            </div>
             <div>
-                <input type="password" class="form-control form-control-sm" placeholder="confirm password">
-            </div>                        
-        </form>
+                <input type="password" class="form-control form-control-sm" placeholder="password"
+                    [(ngModel)]="entity.password" [class.is-invalid]="errors['Password']">
+                <app-control-validation-errors [errors]="errors" fieldName="Password"></app-control-validation-errors>
+            </div>
+            <div>
+                <input type="password" class="form-control form-control-sm" placeholder="confirm password"
+                    [(ngModel)]="entity.confirmPassword" [class.is-invalid]="errors['ConfirmPassword']">
+                <app-control-validation-errors [errors]="errors" fieldName="ConfirmPassword">
+                </app-control-validation-errors>
+            </div>
+        </div>
     </ng-template>
 
     <ng-template #actions>
         <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="cancel()">
+            <button class="btn btn-sm btn-light" (click)="cancel()" [disabled]="isSaving">
                 Cancel
             </button>
-            <button class="btn btn-sm btn-primary" (click)="signUp()">
+            <button class="btn btn-sm btn-primary" (click)="signUp()" [disabled]="hasInvalidData || isSaving">
                 Sign Up
+
+                <i class="fa fa-spin fa-spinner" *ngIf="isSaving"></i>
             </button>
         </div>
     </ng-template>

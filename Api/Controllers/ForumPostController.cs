@@ -1,6 +1,7 @@
 ﻿using Api.Data;
 using Api.Data.Entities;
 using Api.Models;
+using Api.Services.Authentication;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,16 @@ namespace Api.Controllers
     {
         private readonly YARCContext context;
         private readonly IMapper mapper;
+        private readonly IIdentityService identity;
 
         public ForumPostController(
             YARCContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IIdentityService identity)
         {
             this.context = context;
             this.mapper = mapper;
+            this.identity = identity;
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]

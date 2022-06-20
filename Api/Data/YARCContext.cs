@@ -46,7 +46,7 @@ namespace Api.Data
             modelBuilder.Entity<ForumOwner>()
                 .HasKey(c => new { c.ForumId, c.OwnerId });
 
-            modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", DisplayName = "admin", CreatedOn = DateTime.UtcNow });
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 
             base.OnModelCreating(modelBuilder);
         }

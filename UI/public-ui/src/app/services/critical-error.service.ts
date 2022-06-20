@@ -21,11 +21,13 @@ export class CriticalErrorService {
     return observable.pipe(
       catchError(err => {
         if (err.status == 400 || err.status == 401) {
-          return throwError(() => new Error(err));
+          return throwError(err);
+          //return throwError(() => new Error(err));
         }
         else {
           this.setError(err.statusText);
-          return throwError(() => new Error(err));
+          return throwError(err);
+          //return throwError(() => new Error(err));
         }
       })
     );

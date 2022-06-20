@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from './authentication.service';
 import { CriticalErrorService } from './critical-error.service';
 
 @Injectable({
@@ -11,15 +12,24 @@ export class RestApiService {
   constructor(
     private http: HttpClient,
     private criticalErrors: CriticalErrorService,
+    private authentication: AuthenticationService
   ) { }
+
+  public getHeaders(): HttpHeaders {
+    if (this.authentication.token) {
+      return new HttpHeaders({
+        Authorization: `Bearer ${this.authentication.token}`
+      });
+    } else {
+      return new HttpHeaders();
+    }
+  }
 
   public get(url: string) {
     return this.criticalErrors.wrap(this.http.get(
       `${environment.service.url}/${url}`,
       {
-        headers: new HttpHeaders({
-          //Authorization: `Bearer ${this.authenticationService.token}`
-        })
+        headers: this.getHeaders()
       }
     ));
   }
@@ -29,9 +39,7 @@ export class RestApiService {
       `${environment.service.url}/${url}`,
       model,
       {
-        headers: new HttpHeaders({
-          //Authorization: `Bearer ${this.authenticationService.token}`
-        })
+        headers: this.getHeaders()
       }
     ));
   }
@@ -41,9 +49,7 @@ export class RestApiService {
       `${environment.service.url}/${url}`,
       model,
       {
-        headers: new HttpHeaders({
-          //Authorization: `Bearer ${this.authenticationService.token}`
-        })
+        headers: this.getHeaders()
       }
     ));
   }
@@ -52,9 +58,7 @@ export class RestApiService {
     return this.criticalErrors.wrap(this.http.delete(
       `${environment.service.url}/${url}`,
       {
-        headers: new HttpHeaders({
-          //Authorization: `Bearer ${this.authenticationService.token}`
-        })
+        headers: this.getHeaders()
       }
     ));
   }

@@ -40,6 +40,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TimeAgoPipe } from './services/time-ago.pipe';
+import { ControlValidationErrorsComponent } from './control-validation-errors/control-validation-errors.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { TimeAgoPipe } from './services/time-ago.pipe';
     SignUpComponent,
     UserSettingsComponent,
     TimeAgoPipe,
+    ControlValidationErrorsComponent,
   ],
   imports: [
     BrowserModule,
