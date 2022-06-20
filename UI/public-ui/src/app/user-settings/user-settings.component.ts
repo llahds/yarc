@@ -9,6 +9,7 @@ export class UserSettingsComponent implements OnInit {
 
   public showChangeEmail: boolean = false;
   public showChangePassword: boolean = false;
+  public showChangeUserName: boolean = false;
 
   constructor() { }
 

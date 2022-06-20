@@ -27,6 +27,17 @@
                 <div class="mb-3 d-flex gap-3 align-items-center">
                     <div>
                         <button class="btn btn-sm btn-outline-secondary"
+                            (click)="showChangeUserName = true">Change</button>
+                    </div>
+                    <div class="flex-grow-1">
+                        <label class="form-label fw-bold m-0">User Name</label>
+                        <div class="ts-5 text-muted">User name must be unique and can only contain letters and numbers.</div>
+                    </div>
+                </div>      
+
+                <div class="mb-3 d-flex gap-3 align-items-center">
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary"
                             (click)="showChangeEmail = true">Change</button>
                     </div>
                     <div class="flex-grow-1">
@@ -51,7 +62,7 @@
                         <label class="form-label  fw-bold">People You've Blocked</label>
                         <app-add-remove-strings emptyMessage="You haven't blocked anyone.">
                         </app-add-remove-strings>
-                        <div class="form-text">Blocked people can’t send you chat requests or private messages.</div>
+                        <div class="form-text">Blocked people can't send you chat requests or private messages.</div>
                     </div>
                 </div>
 
@@ -59,6 +70,28 @@
         </div>
     </div>
 </div>
+
+<app-modal [showModal]="showChangeUserName" [showSmall]="true">
+    <ng-template #content>
+        <div class="mb-2">
+            <input class="form-control form-control-sm" placeholder="new user name">
+        </div>
+        <div class="mb-2">
+            <input type="password" class="form-control form-control-sm" placeholder="current password">
+        </div>
+    </ng-template>
+
+    <ng-template #actions>
+        <div class="d-flex gap-2 justify-content-between w-100">
+            <button class="btn btn-sm btn-light" (click)="showChangeUserName = false">
+                Cancel
+            </button>
+            <button class="btn btn-sm btn-primary" (click)="showChangeUserName = false">
+                Change
+            </button>
+        </div>
+    </ng-template>
+</app-modal>
 
 <app-modal [showModal]="showChangeEmail" [showSmall]="true">
     <ng-template #content>
