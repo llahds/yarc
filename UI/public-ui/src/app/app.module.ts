@@ -41,6 +41,9 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TimeAgoPipe } from './services/time-ago.pipe';
 import { ControlValidationErrorsComponent } from './control-validation-errors/control-validation-errors.component';
+import { ChangeUserNameComponent } from './user-settings/change-user-name/change-user-name.component';
+import { ChangeEmailComponent } from './user-settings/change-email/change-email.component';
+import { ChangePasswordComponent } from './user-settings/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +81,9 @@ import { ControlValidationErrorsComponent } from './control-validation-errors/co
     UserSettingsComponent,
     TimeAgoPipe,
     ControlValidationErrorsComponent,
+    ChangeUserNameComponent,
+    ChangeEmailComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,18 +3,24 @@
         <div class="card-body p-4">
             <h5 class="mb-3">User Settings</h5>
 
-            <form>
+            <div>
                 <div class="mb-3">
                     <label class="form-label  fw-bold">Display Name (optional)</label>
                     <input class="form-control form-control-sm" style="max-width: 200px;"
-                        placeholder="ex: AmazingBurgersDude">
+                        placeholder="ex: AmazingBurgersDude" [(ngModel)]="entity.displayName"
+                        [class.is-invalid]="errors['DisplayName']" maxlength="75">
+                    <app-control-validation-errors [errors]="errors" fieldName="DisplayName">
+                    </app-control-validation-errors>
                     <div class="form-text">Enter an optional display name for your profile.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label  fw-bold">About (optional)</label>
                     <textarea class="form-control form-control-sm" style="max-width: 500px;"
-                        placeholder="ex: I am but a simple burger farmer..."></textarea>
+                        placeholder="ex: I am but a simple burger farmer..." [(ngModel)]="entity.about"
+                        [class.is-invalid]="errors['About']" maxlength="4000"></textarea>
+                    <app-control-validation-errors [errors]="errors" fieldName="About">
+                    </app-control-validation-errors>
                     <div class="form-text">A brief description of yourself shown on your profile.</div>
                 </div>
 
@@ -24,6 +30,14 @@
                     <div class="form-text">Images must be .png or .jpg format</div>
                 </div>
 
+                <div class="mb-5">
+                    <button class="btn btn-sm btn-outline-primary" [disabled]="isSaving" (click)="save()">
+                        Save
+
+                        <i class="fa fa-spin fa-spinner" *ngIf="isSaving"></i>
+                    </button>
+                </div>
+
                 <div class="mb-3 d-flex gap-3 align-items-center">
                     <div>
                         <button class="btn btn-sm btn-outline-secondary"
@@ -31,9 +45,10 @@
                     </div>
                     <div class="flex-grow-1">
                         <label class="form-label fw-bold m-0">User Name</label>
-                        <div class="ts-5 text-muted">User name must be unique and can only contain letters and numbers.</div>
+                        <div class="ts-5 text-muted">User name must be unique and can only contain letters and numbers.
+                        </div>
                     </div>
-                </div>      
+                </div>
 
                 <div class="mb-3 d-flex gap-3 align-items-center">
                     <div>
@@ -46,7 +61,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3 d-flex gap-3 align-items-center">
+                <div class="mb-5 d-flex gap-3 align-items-center">
                     <div>
                         <button class="btn btn-sm btn-outline-secondary"
                             (click)="showChangePassword = true">Change</button>
@@ -66,77 +81,13 @@
                     </div>
                 </div>
 
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-<app-modal [showModal]="showChangeUserName" [showSmall]="true">
-    <ng-template #content>
-        <div class="mb-2">
-            <input class="form-control form-control-sm" placeholder="new user name">
-        </div>
-        <div class="mb-2">
-            <input type="password" class="form-control form-control-sm" placeholder="current password">
-        </div>
-    </ng-template>
+<app-change-user-name [show]="showChangeUserName" (onCancel)="showChangeUserName = false" (onUpdate)="showChangeUserName = false"></app-change-user-name>
 
-    <ng-template #actions>
-        <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="showChangeUserName = false">
-                Cancel
-            </button>
-            <button class="btn btn-sm btn-primary" (click)="showChangeUserName = false">
-                Change
-            </button>
-        </div>
-    </ng-template>
-</app-modal>
+<app-change-email [show]="showChangeEmail" (onCancel)="showChangeEmail = false" (onUpdate)="showChangeEmail = false"></app-change-email>
 
-<app-modal [showModal]="showChangeEmail" [showSmall]="true">
-    <ng-template #content>
-        <div class="mb-2">
-            <input class="form-control form-control-sm" placeholder="new email">
-        </div>
-        <div class="mb-2">
-            <input type="password" class="form-control form-control-sm" placeholder="current password">
-        </div>
-    </ng-template>
-
-    <ng-template #actions>
-        <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="showChangeEmail = false">
-                Cancel
-            </button>
-            <button class="btn btn-sm btn-primary" (click)="showChangeEmail = false">
-                Change
-            </button>
-        </div>
-    </ng-template>
-</app-modal>
-
-
-<app-modal [showModal]="showChangePassword" [showSmall]="true">
-    <ng-template #content>
-        <div class="mb-2">
-            <input type="password" class="form-control form-control-sm" placeholder="current password">
-        </div>
-        <div class="mb-2">
-            <input type="password" class="form-control form-control-sm" placeholder="new password">
-        </div>
-        <div>
-            <input type="password" class="form-control form-control-sm" placeholder="confirm new password">
-        </div>        
-    </ng-template>
-
-    <ng-template #actions>
-        <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="showChangePassword = false">
-                Cancel
-            </button>
-            <button class="btn btn-sm btn-primary" (click)="showChangePassword = false">
-                Change
-            </button>
-        </div>
-    </ng-template>
-</app-modal>
+<app-change-password [show]="showChangePassword" (onCancel)="showChangePassword = false" (onUpdate)="showChangePassword = false"></app-change-password>

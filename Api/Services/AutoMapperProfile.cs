@@ -14,6 +14,7 @@ namespace Api.Services
             CreateMap<ForumPostModel, Post>().ReverseMap();
             CreateMap<ForumPostListItemModel, Post>().ReverseMap();
             CreateMap<RegisterModel, User>().ReverseMap();
+            CreateMap<UserSettingsModel, User>().ReverseMap();
         }
     }
 }

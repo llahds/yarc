@@ -9,3 +9,24 @@ export interface AuthenticationToken {
     token: string;
     userName: string;
 }
+
+export interface UserSettings {
+    displayName: string;
+    about: string;
+}
+
+export interface ChangeUserName {
+    userName: string;
+    password: string;
+}
+
+export interface ChangeEmail {
+    email: string;
+    password: string;
+}
+
+export interface ChangePassword {
+    oldPassword: string;
+    password: string;
+    confirmPassword: string;
+}
