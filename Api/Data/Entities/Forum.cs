@@ -19,5 +19,6 @@ namespace Api.Data.Entities
         public ICollection<ForumOwner> ForumOwners { get; set; }
         public ICollection<ForumModerator> ForumModerators { get; set; }
         public ICollection<Post> Posts { get; set; }
+        public ICollection<ForumMember> Members { get; set; }
     }
 }

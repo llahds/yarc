@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserInfo } from 'src/app/services/models/users';
 
 @Component({
   selector: 'app-mod-user',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mod-user.component.scss']
 })
 export class ModUserComponent implements OnInit {
+
+  @Input() item!: UserInfo;
 
   constructor() { }
 

@@ -25,5 +25,6 @@ namespace Api.Data.Entities
         [MaxLength(35)]
         public string UserName { get; set; }
         public ICollection<ReportedPost> ReportedPosts { get; set; }
+        public ICollection<ForumMember> Forums { get; set; }
     }
 }

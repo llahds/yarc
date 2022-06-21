@@ -3,6 +3,6 @@
         <ng-content></ng-content>
     </div> 
     <div class="flex-grow-1 d-flex align-items-center">
-        <a class="fw-bold text-black hover" [routerLink]="['/r', 1, 'p', 1]">/u/foo</a>
+        <a class="fw-bold text-black hover" [routerLink]="['/u', item.id]">{{item.userName}}</a>
     </div>
 </div>

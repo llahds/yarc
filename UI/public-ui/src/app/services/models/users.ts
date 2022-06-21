@@ -30,3 +30,12 @@ export interface ChangePassword {
     password: string;
     confirmPassword: string;
 }
+
+export const FORUM_STATUS_BANNED = 0;
+export const FORUM_STATUS_MUTED = 1;
+export const FORUM_STATUS_APPROVED = 2;
+
+export interface UserInfo {
+    id: number;
+    userName: string;
+}

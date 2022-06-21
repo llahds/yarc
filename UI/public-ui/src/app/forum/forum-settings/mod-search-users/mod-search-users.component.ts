@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, Subject } from 'rxjs';
+import { ForumUserManagementService } from 'src/app/services/forum-user-management.service';
+import { UserInfo } from 'src/app/services/models/users';
 
 @Component({
   selector: 'app-mod-search-users',
@@ -9,7 +11,7 @@ import { debounceTime, Subject } from 'rxjs';
 export class ModSearchUsersComponent implements OnInit {
   @Input() show: boolean = false;
   @Output() onCancel = new EventEmitter<void>();
-  @Output() onConfirm = new EventEmitter<void>();
+  @Output() onConfirm = new EventEmitter<UserInfo>();
 
   users: any[] = [];
 
@@ -17,7 +19,9 @@ export class ModSearchUsersComponent implements OnInit {
   public isSearching: boolean = false;
   public queryText: string = "";
 
-  constructor() {
+  constructor(
+    private api: ForumUserManagementService
+  ) {
     this._queryChanged
       .pipe(
         debounceTime(300)
@@ -29,6 +33,8 @@ export class ModSearchUsersComponent implements OnInit {
   }
 
   cancel() {
+    this.users = [];
+    this.queryText = "";
     this.onCancel.emit();
   }
 
@@ -38,17 +44,26 @@ export class ModSearchUsersComponent implements OnInit {
   }
 
   search(m: string) {
+    this.users = [];
+    this.queryText = m;
     this.isSearching = true;
-    this.users = [{ name: "foo" }, { name: "foo2" }];
-    this.isSearching = false;
+    if (m) {
+      this.api.searchUsers(m)
+        .subscribe(r => {
+          this.isSearching = false;
+          this.users = r;
+        });
+    } else {
+      this.isSearching = false;
+    }
   }
 
   queryChanged(text: string) {
     this._queryChanged.next(text);
   }
 
-  select(item: any) {
+  select(item: UserInfo) {
     this.clear();
-    this.onConfirm.emit();
+    this.onConfirm.emit(item);
   }
 }
