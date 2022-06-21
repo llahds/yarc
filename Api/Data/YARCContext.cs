@@ -54,6 +54,10 @@ namespace Api.Data
                 .WithMany(F => F.ReportedPosts)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Forum>()
+                .Property<string>(F => F._postSettingsJson)
+                .HasColumnName("PostSettings");
+
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules" });

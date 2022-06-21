@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace Api.Data.Entities
 {
@@ -20,5 +21,20 @@ namespace Api.Data.Entities
         public ICollection<ForumModerator> ForumModerators { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<ForumMember> Members { get; set; }
+
+        internal string _postSettingsJson { get; set; }
+
+        [NotMapped]
+        public ForumPostSettings PostSettings 
+        { 
+            get
+            {
+                return JsonSerializer.Deserialize<ForumPostSettings>(string.IsNullOrEmpty(this._postSettingsJson) ? "{}" : this._postSettingsJson);
+            } 
+            set
+            {
+                this._postSettingsJson = JsonSerializer.Serialize(value ?? new ForumPostSettings());
+            } 
+        }
     }
 }

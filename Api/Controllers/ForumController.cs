@@ -20,6 +20,25 @@ namespace Api.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet, Route("api/1.0/forums/{id}/posts/guide-lines")]
+        [ProducesResponseType(200, Type = typeof(ForumPostGuideLinesModel))]
+        public async Task<IActionResult> GetGuideLines(int id)
+        {
+            var entity = await this.context
+                .Forums
+                .Where(E => E.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = this.mapper.Map<ForumPostGuideLinesModel>(entity.PostSettings);
+
+            return this.Ok(model);
+        }
+
         [HttpGet, Route("api/1.0/forums/{id}")]
         [ProducesResponseType(200, Type = typeof(ForumModel))]
         public async Task<IActionResult> Get(int id)

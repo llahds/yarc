@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Id } from './models/common';
-import { ForumEditModel, Forum } from './models/forums';
+import { ForumEditModel, Forum, ForumPostSettings, ForumPostGuideLines } from './models/forums';
 import { RestApiService } from './rest-api.service';
 
 @Injectable({
@@ -29,5 +29,17 @@ export class ForumsService {
 
   remove(id: number) {
     return this.client.delete(`api/1.0/forums/${id}`);
+  }
+
+  getSettings(id: number) : Observable<ForumPostSettings> {
+    return this.client.get(`api/1.0/moderation/forums/${id}/posts/settings`);
+  }
+
+  updateSettings(id: number, model: ForumPostSettings) {
+    return this.client.put(`api/1.0/moderation/forums/${id}/posts/settings`, model);
+  }
+
+  getGuideLines(id: number) : Observable<ForumPostGuideLines> {
+    return this.client.get(`api/1.0/forums/${id}/posts/guide-lines`);
   }
 }

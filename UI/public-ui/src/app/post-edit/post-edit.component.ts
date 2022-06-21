@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ForumsService } from '../services/forums.service';
 import { EditPost } from '../services/models/posts';
 import { PostsService } from '../services/posts.service';
 
@@ -12,8 +13,10 @@ export class PostEditComponent implements OnInit {
   public entity: EditPost = { title: "", text: "" };;
   public errors: any = {};
   public isSaving: boolean = false;
+  public guidelines: string = "";
 
-  @Input() forumId!: number;
+  //@Input() forumId!: number;
+  private _forumId!: number;
   private _postId!: number | undefined;
   @Input() showPost: boolean = false;
 
@@ -21,7 +24,8 @@ export class PostEditComponent implements OnInit {
   @Output() onPost = new EventEmitter<void>();
 
   constructor(
-    private posts: PostsService
+    private posts: PostsService,
+    private forums: ForumsService
   ) { }
 
   ngOnInit(): void {
@@ -78,5 +82,17 @@ export class PostEditComponent implements OnInit {
     }
 
     this._postId = value;
+  }
+
+  @Input() set forumId(value: number) {
+    if (value) {
+      this.forums.getGuideLines(value).subscribe(r => this.guidelines = r.guideLines);
+    }
+
+    this._forumId = value;
+  }
+
+  get forumId() {
+    return this._forumId;
   }
 }

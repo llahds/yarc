@@ -11,3 +11,16 @@ export interface ForumEditModel {
     topics: KeyValueModel[]
     moderators: KeyValueModel[]
 }
+
+export interface ForumPostSettings extends ForumPostGuideLines {
+    requiredTitleWords: string[];
+    bannedTitleWords: string[];
+    postTextBannedWords: string[];
+    isDomainWhitelist: boolean;
+    domains: string[];
+}
+
+export interface ForumPostGuideLines {
+    guideLines: string;
+}
+

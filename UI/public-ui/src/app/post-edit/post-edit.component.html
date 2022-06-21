@@ -1,8 +1,8 @@
 <app-modal [showModal]="showPost">
     <ng-template #content>
-        <div class="card mb-2 ts-4">
+        <div class="card mb-2 ts-4" *ngIf="guidelines">
             <div class="card-body">
-                Posting guidelines go here
+                {{guidelines}}
             </div>
         </div>
 
