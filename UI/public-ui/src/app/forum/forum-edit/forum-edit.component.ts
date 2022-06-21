@@ -24,8 +24,8 @@ export class ForumEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.parent?.paramMap.subscribe(params => {
-      this.id = +params.get('id')!;
+    this.route.paramMap.subscribe(params => {
+      this.id = +params.get('forumId')!;
       if (this.id) {
         this.forums.getForum(this.id).subscribe(r => {
           this.entity = r;

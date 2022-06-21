@@ -10,6 +10,8 @@ export class ConfirmModalComponent implements OnInit {
   @Input() showConfirm: boolean = false;
   @Output() onCancel = new EventEmitter<void>();
   @Output() onConfirm = new EventEmitter<void>();
+  @Input() disableButtons: boolean = false;
+  @Input() showActive: boolean = false;
 
   constructor() { }
 

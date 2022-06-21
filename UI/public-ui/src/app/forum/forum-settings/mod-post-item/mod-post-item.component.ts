@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Post } from 'src/app/services/models/posts';
 
 @Component({
   selector: 'app-mod-post-item',
@@ -7,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModPostItemComponent implements OnInit {
 
+  @Input() item!: Post;
+  @Input() forumId!: number;
+  @Input() reasons: string[] = [];
+  
   constructor() { }
 
   ngOnInit(): void {

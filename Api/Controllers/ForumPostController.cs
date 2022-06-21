@@ -30,7 +30,7 @@ namespace Api.Controllers
         {
             var posts = await this.context
                 .Posts
-                .Where(E => E.ForumId == forumId && E.Id > startAt)
+                .Where(E => E.ForumId == forumId && E.Id > startAt && E.IsHidden == false)
                 .OrderBy(E => E.CreatedOn)
                 .Take(25)
                 .Select(E => new ForumPostListItemModel
@@ -68,7 +68,7 @@ namespace Api.Controllers
                 //.Where(E => E.Id > startAt)
                 //.OrderBy(E => Guid.NewGuid())
                 //.Take(25)
-                .Where(E => randomIds.Contains(E.Id))
+                .Where(E => randomIds.Contains(E.Id) && E.IsHidden == false)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -95,6 +95,13 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumPostViewModel))]
         public async Task<IActionResult> Get(int forumId, int postId)
         {
+            var userId = 0;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                userId = this.identity.GetIdentity().Id;
+            }
+
             var model = await this.context
                 .Posts
                 .Where(E => E.Id == postId && E.ForumId == forumId)
@@ -114,7 +121,9 @@ namespace Api.Controllers
                         Id = E.PostedById,
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
-                    }
+                    },
+                    CanReport = userId > 0 
+                        && E.ReportedPosts.Any(R => R.ReportedById == userId) == false
                 })
                 .FirstOrDefaultAsync();
 

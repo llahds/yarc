@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
 import { ForumEditComponent } from './forum/forum-edit/forum-edit.component';
 import { ForumListComponent } from './forum/forum-list/forum-list.component';
@@ -16,6 +16,10 @@ import { ForumComponent } from './forum/forum.component';
 import { PopularComponent } from './popular/popular.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 
+export const routingConfiguration: ExtraOptions = {
+  paramsInheritanceStrategy: 'always'
+};
+
 const routes: Routes = [
   {
     path: "",
@@ -31,7 +35,7 @@ const routes: Routes = [
     component: ForumCreateComponent
   },
   {
-    path: "r/:id",
+    path: "r/:forumId",
     component: ForumComponent,
     children: [
       {
@@ -50,7 +54,7 @@ const routes: Routes = [
         path: "settings",
         component: ForumSettingsComponent,
         children: [
-          { path: "", redirectTo: "spam", pathMatch: "full" },
+          { path: "", redirectTo: "reports", pathMatch: "full" },
           { path: "spam", component: ForumSettingsSpamComponent },
           { path: "reports", component: ForumSettingsReportsComponent },
           { path: "banned", component: ForumSettingsBannedComponent },
@@ -69,7 +73,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, routingConfiguration)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

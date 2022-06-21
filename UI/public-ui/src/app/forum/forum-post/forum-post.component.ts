@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
 import { Post } from 'src/app/services/models/posts';
+import { ReportingReason, SPAM_ID } from 'src/app/services/models/reporting';
+import { ReportingService } from 'src/app/services/reporting.service';
 
 @Component({
   selector: 'app-forum-post',
@@ -19,17 +21,22 @@ export class ForumPostComponent implements OnInit {
   public item!: Post;
   public postId!: number;
 
+  public reportingReasons: ReportingReason[] = [];
+  public selectedReportReasonId!: number;
+  public isReporting: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
-    private api: PostsService
+    private api: PostsService,
+    private reporting: ReportingService
   ) { }
 
   ngOnInit(): void {
-    this.route.parent?.params.subscribe(params => {
-      this.forumId = +params["id"];
-    });
+    this.reporting.getRules()
+      .subscribe(r => this.reportingReasons = r);
 
     this.route.paramMap.subscribe(params => {
+      this.forumId = +this.route.snapshot.params["forumId"];
       const id = +this.route.snapshot.params["postId"];
       this.api.getView(this.forumId, id).subscribe(r => this.item = r);
     });
@@ -56,5 +63,27 @@ export class ForumPostComponent implements OnInit {
     this.api.getView(this.forumId, this.item.id).subscribe(r => this.item = r);
     this.postId = 0;
     this.showPostModal = false;
+  }
+
+  report() {
+    this.isReporting = true;
+    this.reporting
+      .report(this.item.id, this.selectedReportReasonId)
+      .subscribe(r => {
+        this.isReporting = false;
+        this.showReportModal = false;
+        this.item.canReport = false;
+      });
+  }
+
+  spam() {
+    this.isReporting = true;
+    this.reporting
+      .report(this.item.id, SPAM_ID)
+      .subscribe(r => {
+        this.isReporting = false;
+        this.showSpamModal = false;
+        this.item.canReport = false;
+      });    
   }
 }

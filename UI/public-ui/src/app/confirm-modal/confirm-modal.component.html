@@ -5,11 +5,13 @@
 
     <ng-template #actions>
         <div class="d-flex gap-2 justify-content-between w-100">
-            <button class="btn btn-sm btn-light" (click)="cancel()">
+            <button class="btn btn-sm btn-light" (click)="cancel()" [disabled]="disableButtons">
                 Cancel
             </button>
-            <button class="btn btn-sm btn-primary" (click)="confirm()">
+            <button class="btn btn-sm btn-primary" (click)="confirm()"  [disabled]="disableButtons">
                 Confirm
+
+                <i class="fa fa-spin fa-spinner" *ngIf="showActive"></i>
             </button>
         </div>
     </ng-template>

@@ -7,6 +7,7 @@ export interface Post extends EditPost {
     downs: number;
     postedBy: PostedBy;
     createdOn: Date;
+    canReport: boolean;
 }
 
 export interface EditPost {

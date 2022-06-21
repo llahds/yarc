@@ -22,7 +22,7 @@ export class ForumListComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.id = +this.route.snapshot.params['id'];
+      this.id = +this.route.snapshot.params['forumId'];
       this.posts.getPosts(this.id, 0).subscribe(r => this.list = r);
     });
   }

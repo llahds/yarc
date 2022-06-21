@@ -22,6 +22,7 @@ namespace Api.Services.Authentication
                 return new IdentityModel
                 {
                     UserName = identity.FindFirst(ClaimTypes.NameIdentifier).Value,
+                    Id = Convert.ToInt32(identity.FindFirst("Id").Value)
                 };
             }
 

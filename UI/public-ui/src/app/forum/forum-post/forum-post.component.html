@@ -16,12 +16,15 @@
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex gap-3 content align-items-center">
-                    <a class="fw-bold text-black text-decoration-none" [routerLink]="['/r', forumId, 'p', item?.id]">{{item?.title}}</a>
+                    <a class="fw-bold text-black text-decoration-none"
+                        [routerLink]="['/r', forumId, 'p', item?.id]">{{item?.title}}</a>
                 </div>
                 <div class="d-flex gap-2 meta">
                     <a [routerLink]="['/r', forumId]" class="text-black fw-bold hover">{{item?.forum?.name}}</a>
 
-                    <span class="text-black-50">Posted by <a href="#" class="hover text-black-50">{{item?.postedBy?.name}}</a> {{item?.createdOn | timeAgo}}</span>
+                    <span class="text-black-50">Posted by <a href="#"
+                            class="hover text-black-50">{{item?.postedBy?.name}}</a> {{item?.createdOn |
+                        timeAgo}}</span>
                 </div>
                 <div class="mt-2">
                     <markdown ngPreserveWhitespaces [data]="item?.text"></markdown>
@@ -37,15 +40,15 @@
                             Remove
                         </button>
 
-                        <button class="btn btn-sm btn-light" (click)="confirmSpam()">
+                        <button class="btn btn-sm btn-light" (click)="confirmSpam()" *ngIf="item?.canReport">
                             <i class="fa-regular fa-calendar-xmark"></i>
                             Spam
-                        </button>                        
+                        </button>
 
-                        <button class="btn btn-sm btn-light" (click)="confirmReport()">
+                        <button class="btn btn-sm btn-light" (click)="confirmReport()" *ngIf="item?.canReport">
                             <i class="far fa-flag"></i>
                             Report
-                        </button>                        
+                        </button>
                     </div>
 
                     <textarea class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
@@ -78,25 +81,26 @@
     </div>
 </div>
 
-<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"  (onConfirm)="showRemoveModal = false">
+<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"
+    (onConfirm)="showRemoveModal = false">
     Are you sure you want to remove this post?
 </app-confirm-modal>
 
-<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false"  (onConfirm)="showSpamModal = false">
+<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false" (onConfirm)="spam()"
+    [showActive]="isReporting" [disableButtons]="isReporting">
     Are you sure you want to mark this post as spam?
 </app-confirm-modal>
 
-
-<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false"  (onConfirm)="showReportModal = false">
+<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false" (onConfirm)="report()"
+    [showActive]="isReporting" [disableButtons]="isReporting">
     <p>Are you sure you want to report this post?</p>
     <div>
-        <select class="form-control form-control-sm">
-            <option> - Reason - </option>
-            <option>Offensive</option>
-            <option>Hate Speech</option>
+        <select class="form-control form-control-sm" [(ngModel)]="selectedReportReasonId">
+            <option *ngFor="let rule of reportingReasons" [value]="rule.id">{{rule.label}}</option>
         </select>
         <div class="form-text">Specifying a reason helps us evaluate if this post should be removed.</div>
     </div>
 </app-confirm-modal>
 
-<app-post-edit [forumId]="forumId" [postId]="item?.id" [showPost]="showPostModal" (onCancel)="showPostModal = false; postId = 0;" (onPost)="reload()"></app-post-edit>
+<app-post-edit [forumId]="forumId" [postId]="item?.id" [showPost]="showPostModal"
+    (onCancel)="showPostModal = false; postId = 0;" (onPost)="reload()"></app-post-edit>

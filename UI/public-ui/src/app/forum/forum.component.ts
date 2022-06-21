@@ -20,9 +20,8 @@ export class ForumComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const id = +this.route.snapshot.params['id'];
-      this.id = id;
-      this.api.getForum(id).subscribe(r => this.forum = r);
+      this.id = +this.route.snapshot.params['forumId'];
+      this.api.getForum(this.id).subscribe(r => this.forum = r);
     });
   }
 }

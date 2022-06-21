@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Api.Data.Entities
 {
     [Table("Posts", Schema = "Social"), Index(nameof(CreatedOn))]
+    [Index(nameof(IsHidden))]
     public class Post 
     {
         public int Id { get; set; }
@@ -16,5 +17,7 @@ namespace Api.Data.Entities
         public int ForumId { get; set; }
         public User PostedBy { get; set; }
         public int PostedById { get; set; }
+        public ICollection<ReportedPost> ReportedPosts { get; set; }
+        public bool IsHidden { get; set; }
     }
 }

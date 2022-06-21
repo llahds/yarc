@@ -40,7 +40,8 @@ namespace Api.Controllers
             }
 
             var upn = new Claim(ClaimTypes.NameIdentifier, entity.UserName);
-            var token = await this.tokens.Generate(new[] { upn });
+            var id = new Claim("Id", entity.Id.ToString());
+            var token = await this.tokens.Generate(new[] { upn, id });
 
             return this.Ok(new AuthenticationTokenModel
             {

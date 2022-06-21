@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forum-settings',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForumSettingsComponent implements OnInit {
 
-  constructor() { }
+  public forumId!: number;
+
+  constructor(
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.forumId = +this.route.snapshot.params["forumId"];
+    });    
   }
 
 }
