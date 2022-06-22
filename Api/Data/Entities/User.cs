@@ -26,5 +26,6 @@ namespace Api.Data.Entities
         public string UserName { get; set; }
         public ICollection<ReportedPost> ReportedPosts { get; set; }
         public ICollection<ForumMember> Forums { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

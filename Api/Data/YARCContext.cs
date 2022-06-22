@@ -13,6 +13,7 @@ namespace Api.Data
         public DbSet<ReportReason> ReportReasons { get; set; }
         public DbSet<ReportedPost> ReportedPosts { get; set; }
         public DbSet<ForumMember> ForumMembers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)

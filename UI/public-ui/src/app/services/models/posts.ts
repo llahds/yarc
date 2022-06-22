@@ -14,3 +14,11 @@ export interface EditPost {
     title: string;
     text: string;
 }
+
+export interface Comment {
+    id: number;
+    createdOn: Date;
+    text: string;
+    postedBy: PostedBy
+    replyCount: number;
+}

@@ -19,5 +19,6 @@ namespace Api.Data.Entities
         public int PostedById { get; set; }
         public ICollection<ReportedPost> ReportedPosts { get; set; }
         public bool IsHidden { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

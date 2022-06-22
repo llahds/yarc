@@ -10,13 +10,18 @@ import { PostsService } from '../services/posts.service';
 export class PopularComponent implements OnInit {
 
   public list: Post[] = [];
+  public isLoading: boolean = false;
 
   constructor(
     private posts: PostsService
   ) { }
 
   ngOnInit(): void {
-    this.posts.getPopularPosts(0).subscribe(r => this.list = r);
+    this.isLoading = true;
+    this.posts.getPopularPosts(0).subscribe(r => {
+      this.list = r;
+      this.isLoading = false;
+    });
   }
 
 }

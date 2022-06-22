@@ -52,9 +52,13 @@
                     </div>
 
                     <textarea class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
-                        placeholder="What are your thoughts?"></textarea>
+                        [(ngModel)]="commentText" placeholder="What are your thoughts?"></textarea>
 
-                    <button class="btn btn-sm btn-primary mt-2">Comment</button>
+                    <button class="btn btn-sm btn-primary mt-2" [disabled]="isCommenting" (click)="comment()">
+                        Comment
+
+                        <i class="fa fa-spin fa-spinner" *ngIf="isCommenting"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -77,7 +81,8 @@
             </div>
         </div>
 
-        <app-forum-post-comments [depth]="0"></app-forum-post-comments>
+        <app-forum-post-comments *ngIf="item" [depth]="0" [list]="comments" [forumId]="forumId" [postId]="item!.id">
+        </app-forum-post-comments>
     </div>
 </div>
 

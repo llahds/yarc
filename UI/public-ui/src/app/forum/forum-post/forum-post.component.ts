@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
-import { Post } from 'src/app/services/models/posts';
+import { Comment, Post } from 'src/app/services/models/posts';
 import { ReportingReason, SPAM_ID } from 'src/app/services/models/reporting';
 import { ReportingService } from 'src/app/services/reporting.service';
 
@@ -21,9 +21,14 @@ export class ForumPostComponent implements OnInit {
   public item!: Post;
   public postId!: number;
 
+  public commentText: string = "";
+  public isCommenting: boolean = false;
+
   public reportingReasons: ReportingReason[] = [];
   public selectedReportReasonId!: number;
   public isReporting: boolean = false;
+
+  public comments: Comment[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +44,10 @@ export class ForumPostComponent implements OnInit {
       this.forumId = +this.route.snapshot.params["forumId"];
       const id = +this.route.snapshot.params["postId"];
       this.api.getView(this.forumId, id).subscribe(r => this.item = r);
+      this.api.getComments(this.forumId, id, undefined)
+        .subscribe(r => {
+          this.comments = r;
+        });
     });
   }
 
@@ -56,7 +65,7 @@ export class ForumPostComponent implements OnInit {
 
   editPost() {
     this.postId = this.item.id;
-    this.showPostModal = true    
+    this.showPostModal = true
   }
 
   reload() {
@@ -84,6 +93,16 @@ export class ForumPostComponent implements OnInit {
         this.isReporting = false;
         this.showSpamModal = false;
         this.item.canReport = false;
-      });    
+      });
+  }
+
+  comment() {
+    this.isCommenting = true;
+    this.api.createComment(this.forumId, this.item.id, this.commentText, undefined)
+      .subscribe(r => {
+        this.commentText = "";
+        this.isCommenting = false;
+        this.comments.unshift(r);
+      });
   }
 }

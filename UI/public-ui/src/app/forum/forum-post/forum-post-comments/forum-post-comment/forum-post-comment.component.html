@@ -6,22 +6,25 @@
 
     <div>
         <div class="d-flex gap-2">
-            <a class="text-black hover" routerLink="['/u', 1]">user_foo</a>
-            <span>12 hours ago</span>
+            <a class="text-black hover" routerLink="['/u', item.postedBy?.id]">{{item.postedBy?.name}}</a>
+            <span>{{item.createdOn | timeAgo}}</span>
         </div>
 
         <div>
-            <markdown ngPreserveWhitespaces class="markdown">
-                Erat manu spernit quantum, distat sine cum quin indoluisse, quisque duorum,
-                progenitore ab cuncta. Est inquit summum Aglauros egressus quarum Salmacis suos;
-                non ac scitatur? Pectora noluit occupat et pendenti Latoius, in *illis reccidat
-                ante* simulacraque. Mea pedibus proelia vires.
+            <markdown *ngIf="showEdit === false" ngPreserveWhitespaces class="markdown" [data]="item.text"></markdown>
 
-                Erat manu spernit quantum, distat sine cum quin indoluisse, quisque duorum,
-                progenitore ab cuncta. Est inquit summum Aglauros egressus quarum Salmacis suos;
-                non ac scitatur? Pectora noluit occupat et pendenti Latoius, in *illis reccidat
-                ante* simulacraque. Mea pedibus proelia vires.
-            </markdown>
+            <div *ngIf="showEdit">
+                <textarea class="form-control form-control-sm mb-1" style="max-width: 600px; height: 100px;"
+                    placeholder="What are your thoughts?" [(ngModel)]="editText"></textarea>
+                <div class="d-flex gap-1">
+                    <button class="btn btn-sm btn-light" (click)="showEdit = false" [disabled]="isEditing">Cancel</button>
+                    <button class="btn btn-sm btn-primary" (click)="update()" [disabled]="isEditing">
+                        Save
+                    
+                        <i class="fa fa-spin fa-spinner" *ngIf="isEditing"></i>
+                    </button>
+                </div>
+            </div>
 
             <div class="d-flex gap-2 align-items-center">
                 <div>
@@ -43,7 +46,7 @@
                     <span>Reply</span>
                 </button>
 
-                <button class="btn btn-sm btn-light" (click)="showReply = !showReply">
+                <button class="btn btn-sm btn-light" (click)="edit()">
                     <i class="fa-regular fa-pen-to-square"></i>
                     Edit
                 </button>
@@ -66,17 +69,26 @@
 
             <div class="mt-2" *ngIf="showReply">
                 <textarea class="form-control form-control-sm mb-1" style="max-width: 600px; height: 100px;"
-                    placeholder="What are your thoughts?"></textarea>
+                    placeholder="What are your thoughts?" [(ngModel)]="replyText"></textarea>
                 <div class="d-flex gap-1">
-                    <button class="btn btn-sm btn-light" (click)="showReply = false">Cancel</button>
-                    <button class="btn btn-sm btn-primary">Reply</button>
+                    <button class="btn btn-sm btn-light" (click)="showReply = false" [disabled]="isReplying">Cancel</button>
+                    <button class="btn btn-sm btn-primary" (click)="reply()" [disabled]="isReplying">
+                        Reply
+                    
+                        <i class="fa fa-spin fa-spinner" *ngIf="isReplying"></i>
+                    </button>
                 </div>
             </div>
 
             <div class="mt-0">
-                <a class="btn btn-sm btn-link hover" (click)="showChildren = true" *ngIf="!showChildren">22 replies</a>
+                <a class="btn btn-sm btn-link hover" (click)="getReplies()">
+                    <span *ngIf="item.replyCount === 0">no</span>
+                    <span *ngIf="item.replyCount > 0">{{item.replyCount}}</span>
+                    replies
+                </a>
 
-                <app-forum-post-comments [depth]="depth + 1" *ngIf="showChildren"></app-forum-post-comments>
+                <app-forum-post-comments [depth]="depth + 1" [forumId]="forumId" [postId]="postId" [list]="replies">
+                </app-forum-post-comments>
             </div>
         </div>
     </div>

@@ -14,6 +14,7 @@ export class ForumListComponent implements OnInit {
   public list: Post[] = [];
   public id!: number;
   public postId!: number;
+  public isLoading: boolean = false;
 
   constructor(
     private posts: PostsService,
@@ -22,8 +23,12 @@ export class ForumListComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
+      this.isLoading = true;
       this.id = +this.route.snapshot.params['forumId'];
-      this.posts.getPosts(this.id, 0).subscribe(r => this.list = r);
+      this.posts.getPosts(this.id, 0).subscribe(r => {
+        this.list = r;
+        this.isLoading = false;
+      });
     });
   }
 
