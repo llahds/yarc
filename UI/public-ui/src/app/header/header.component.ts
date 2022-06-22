@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit {
     this.authentication.onChallenge.subscribe(r => {
       this.userName = "";
       this.isAuthenticated = false;
+      this.showSignIn = true;
     });
   }
 

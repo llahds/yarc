@@ -77,7 +77,7 @@
 </div>
 
 <app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"
-    (onConfirm)="showRemoveModal = false">
+    (onConfirm)="remove()" [showActive]="isRemoving" [disableButtons]="isRemoving">
     Are you sure you want to remove this post?
 </app-confirm-modal>
 

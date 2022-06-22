@@ -7,6 +7,7 @@ namespace Api.Data.Entities
 {
     [Table("Forums", Schema = "Social")]
     [Index(nameof(Slug), IsUnique = true)]
+    [Index(nameof(IsDeleted))]
     public class Forum 
     {
         public int Id { get; set; }
@@ -21,6 +22,7 @@ namespace Api.Data.Entities
         public ICollection<ForumModerator> ForumModerators { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<ForumMember> Members { get; set; }
+        public bool IsDeleted { get; set; }
 
         internal string _postSettingsJson { get; set; }
 

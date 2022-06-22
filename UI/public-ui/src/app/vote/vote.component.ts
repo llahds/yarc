@@ -15,25 +15,29 @@ export class VoteComponent implements OnInit {
   @Input() downs!: number | undefined;
   @Input() vote!: number | undefined;
 
-  public isAuthenticated: boolean = false;
-
   constructor(
     private authentication: AuthenticationService
   ) { }
 
   ngOnInit(): void {
-    this.isAuthenticated = !!this.authentication.token;
-
-    this.authentication.onSignOut.subscribe(r => this.isAuthenticated = false);
+    this.authentication.onSignOut.subscribe(() => this.vote = 0);
   }
 
   up() {
-    this.vote = 1;
-    this.onUp.emit();
+    if (!this.authentication.token) {
+      this.authentication.challengeCredentials();
+    } else {
+      this.vote = 1;
+      this.onUp.emit();
+    }
   }
 
   down() {
-    this.vote = -1;
-    this.onDown.emit();
+    if (!this.authentication.token) {
+      this.authentication.challengeCredentials();
+    } else {
+      this.vote = -1;
+      this.onDown.emit();
+    }
   }
 }

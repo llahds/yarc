@@ -12,7 +12,7 @@ import { AuthenticationToken } from './models/users';
 export class AuthenticationService {
 
   onNewSignIn = new Subject<AuthenticationToken>();
-  onChallenge = new Subject<boolean>();
+  onChallenge = new Subject<void>();
   onSignOut = new Subject<void>();
 
   constructor(
@@ -31,7 +31,7 @@ export class AuthenticationService {
   }
 
   challengeCredentials() {
-    this.router.navigate(['/sign-in']);
+    this.onChallenge.next();
   }
 
   setIdentity(userInfo: AuthenticationToken) {

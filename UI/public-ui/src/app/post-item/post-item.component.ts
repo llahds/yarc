@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthenticationService } from '../services/authentication.service';
 import { Post } from '../services/models/posts';
 import { PostsService } from '../services/posts.service';
 
@@ -13,10 +14,12 @@ export class PostItemComponent implements OnInit {
   @Input() showForum: boolean = false;
 
   constructor(
-    private posts: PostsService
+    private posts: PostsService,
+    private authentication: AuthenticationService
   ) { }
 
   ngOnInit(): void {
+    
   }
 
   up() {

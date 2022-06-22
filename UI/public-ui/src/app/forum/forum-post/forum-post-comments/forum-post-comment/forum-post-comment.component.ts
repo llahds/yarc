@@ -27,6 +27,7 @@ export class ForumPostCommentComponent implements OnInit {
   public isEditing: boolean = false;
 
   public replies: Comment[] = [];
+  public isRemoving: boolean = false;
 
   constructor(
     private api: PostsService
@@ -89,5 +90,14 @@ export class ForumPostCommentComponent implements OnInit {
 
   down() {
     this.api.downvoteComment(this.forumId, this.postId, this.item.id).subscribe();
+  }
+
+  remove() {
+    this.isRemoving = true;
+    this.api.removeComment(this.forumId, this.postId, this.item.id).subscribe(r => {
+      this.isRemoving = false;
+      this.showRemoveModal = false;
+      this.item.isDeleted = true;
+    });
   }
 }

@@ -6,6 +6,7 @@ namespace Api.Data.Entities
 {
     [Table("Posts", Schema = "Social"), Index(nameof(CreatedOn))]
     [Index(nameof(IsHidden))]
+    [Index(nameof(IsDeleted))]
     public class Post 
     {
         public int Id { get; set; }
@@ -21,5 +22,6 @@ namespace Api.Data.Entities
         public bool IsHidden { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<PostVote> Votes { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

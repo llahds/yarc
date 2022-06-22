@@ -7,6 +7,7 @@ namespace Api.Data.Entities
     [Table("Users", Schema = "Social")]
     [Index(nameof(Email), IsUnique = true)]
     [Index(nameof(UserName), IsUnique = true)]
+    [Index(nameof(IsDeleted))]
     public class User 
     {
         public int Id { get; set; }
@@ -29,5 +30,6 @@ namespace Api.Data.Entities
         public ICollection<Comment> Comments { get; set; }
         public ICollection<PostVote> PostVotes { get; set; }
         public ICollection<CommentVote> CommentVotes { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

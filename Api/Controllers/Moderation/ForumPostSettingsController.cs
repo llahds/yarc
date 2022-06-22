@@ -36,7 +36,7 @@ namespace Api.Controllers.Moderation
         }
 
         [HttpPut, Route("api/1.0/moderation/forums/{forumId}/posts/settings")]
-        public async Task<IActionResult> Reject(int forumId, [FromBody] ForumPostSettingsModel model)
+        public async Task<IActionResult> Update(int forumId, [FromBody] ForumPostSettingsModel model)
         {
             var entity = await this.context
                 .Forums

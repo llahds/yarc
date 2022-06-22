@@ -37,7 +37,11 @@ namespace Api.Controllers
 
             var posts = await this.context
                 .Posts
-                .Where(E => E.ForumId == forumId && E.Id > startAt && E.IsHidden == false)
+                .Where(E => 
+                    E.ForumId == forumId 
+                    && E.Id > startAt 
+                    && E.IsHidden == false
+                    && E.IsDeleted == false)
                 .OrderBy(E => E.CreatedOn)
                 .Take(25)
                 .Select(E => new ForumPostListItemModel
@@ -81,7 +85,10 @@ namespace Api.Controllers
                 //.Where(E => E.Id > startAt)
                 //.OrderBy(E => Guid.NewGuid())
                 //.Take(25)
-                .Where(E => E.ForumId == 27 && E.IsHidden == false)
+                .Where(E => 
+                    E.ForumId == 27 
+                    && E.IsHidden == false
+                    && E.IsDeleted == false)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -121,7 +128,9 @@ namespace Api.Controllers
 
             var model = await this.context
                 .Posts
-                .Where(E => E.Id == postId && E.ForumId == forumId)
+                .Where(E => 
+                    E.Id == postId 
+                    && E.ForumId == forumId)
                 .Select(E => new ForumPostViewModel
                 {
                     Id = E.Id,
@@ -216,7 +225,7 @@ namespace Api.Controllers
                 return this.NotFound();
             }
 
-            this.context.Remove(entity);
+            entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
 

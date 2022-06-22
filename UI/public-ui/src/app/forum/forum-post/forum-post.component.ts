@@ -30,6 +30,8 @@ export class ForumPostComponent implements OnInit {
 
   public comments: Comment[] = [];
 
+  public isRemoving: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private api: PostsService,
@@ -112,5 +114,14 @@ export class ForumPostComponent implements OnInit {
 
   down() {
     this.api.downvotePost(this.forumId, this.item.id).subscribe();
+  }
+
+  remove() {
+    this.isRemoving = true;
+    this.api.remove(this.forumId, this.item.id)
+      .subscribe(r => {
+        this.isRemoving = false;
+        this.showRemoveModal = false;
+      })
   }
 }

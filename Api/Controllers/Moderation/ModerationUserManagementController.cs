@@ -27,7 +27,8 @@ namespace Api.Controllers.Moderation
                 .Users
                 .Where(U => 
                     U.Forums.Any(F => F.ForumId == forumId && F.Status == status)
-                    && (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query)))
+                    && (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query))
+                    && U.IsDeleted == false)
                 .Select(U => new UserInfoModel
                 {
                     Id = U.Id,
@@ -48,7 +49,10 @@ namespace Api.Controllers.Moderation
 
             var model = await this.context
                 .Users
-                .Where(U => (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query)))
+                .Where(U => 
+                    (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query))
+                    && U.IsDeleted == false
+                )
                 .Select(U => new UserInfoModel
                 {
                     Id = U.Id,

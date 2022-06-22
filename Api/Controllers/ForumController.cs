@@ -142,7 +142,7 @@ namespace Api.Controllers
                 return this.NotFound();
             }
 
-            this.context.Remove(entity);
+            entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
 

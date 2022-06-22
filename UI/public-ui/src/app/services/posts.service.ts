@@ -34,6 +34,10 @@ export class PostsService {
     return this.client.put(`api/1.0/forums/${forumId}/posts/${postId}`, model);
   }
 
+  remove(forumId: number, postId: number): Observable<Id> {
+    return this.client.delete(`api/1.0/forums/${forumId}/posts/${postId}`);
+  }
+
   getComments(forumId: number, postId: number, parentId: number | undefined): Observable<Comment[]> {
     return this.client.get(`api/1.0/forums/${forumId}/posts/${postId}/comments?parentId=${parentId}`);
   }
@@ -65,4 +69,8 @@ export class PostsService {
   downvoteComment(forumId: number, postId: number, commentId: number) {
     return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}/down`, {  });
   }  
+
+  removeComment(forumId: number, postId: number, commentId: number) {
+    return this.client.delete(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}`);
+  }
 }

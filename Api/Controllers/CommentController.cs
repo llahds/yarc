@@ -38,7 +38,11 @@ namespace Api.Controllers
 
             var comments = await this.context
                 .Comments
-                .Where(E => E.Post.ForumId == forumId && E.PostId == postId && E.ParentId == parentId)
+                .Where(E => 
+                    E.Post.ForumId == forumId 
+                    && E.PostId == postId 
+                    && E.ParentId == parentId
+                    && E.IsDeleted == false)
                 .OrderBy(E => E.CreatedOn)
                 .Select(E => new CommentModel
                 {
@@ -162,6 +166,26 @@ namespace Api.Controllers
             }
 
             entity.Text = model.Text;
+
+            await this.context.SaveChangesAsync();
+
+            return this.Ok();
+        }
+
+        [HttpDelete, Route("api/1.0/forums/{forumId}/posts/{postId}/comments/{commentId}")]
+        public async Task<IActionResult> Remove(int forumId, int postId, int commentId)
+        {
+            var entity = await this.context
+                .Comments
+                .Where(C => C.PostId == postId && C.Post.ForumId == forumId && C.Id == commentId)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return this.NotFound();
+            }
+
+            entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
 

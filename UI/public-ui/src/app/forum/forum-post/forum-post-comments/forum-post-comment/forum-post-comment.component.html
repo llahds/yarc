@@ -1,4 +1,4 @@
-<div class="mb-2 d-flex gap-2" style="margin-left: 20px;">
+<div class="mb-2 d-flex gap-2" style="margin-left: 20px;" *ngIf="!item?.isDeleted">
 
     <div>
         <img class="rounded-circle" style="max-width: 2em; object-fit: contain;" src="https://i.pravatar.cc/100">
@@ -86,7 +86,7 @@
 </div>
 
 <app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"
-    (onConfirm)="showRemoveModal = false">
+    (onConfirm)="remove()" [showActive]="isRemoving" [disableButtons]="isRemoving">
     Are you sure you want to remove this comment?
 </app-confirm-modal>
 

@@ -23,7 +23,10 @@ namespace Api.Controllers.Moderation
         {
             var posts = await this.context
                 .Posts
-                .Where(P => P.ForumId == forumId && P.ReportedPosts.Any(R => reasonIds.Length == 0 || (reasonIds.Length > 0 && reasonIds.Contains(R.ReasonId))))
+                .Where(P => 
+                    P.ForumId == forumId 
+                    && P.ReportedPosts.Any(R => reasonIds.Length == 0 || (reasonIds.Length > 0 && reasonIds.Contains(R.ReasonId))) 
+                    && P.IsDeleted == false)
                 .Select(P => new ReportQueueItemModel
                 {
                     Post = new ForumPostListItemModel
@@ -62,7 +65,10 @@ namespace Api.Controllers.Moderation
             var post = await this.context
                 .Posts
                 .Include(P => P.ReportedPosts)
-                .Where(U => U.ForumId == forumId && U.Id == postId)
+                .Where(U => 
+                    U.ForumId == forumId 
+                    && U.Id == postId
+                    && U.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
             if (post != null)
@@ -82,12 +88,15 @@ namespace Api.Controllers.Moderation
         {
             var post = await this.context
                 .Posts
-                .Where(U => U.ForumId == forumId && U.Id == postId)
+                .Where(U => 
+                    U.ForumId == forumId 
+                    && U.Id == postId
+                    && U.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
             if (post != null)
             {
-                context.Remove(post);
+                post.IsDeleted = true;
 
                 await this.context.SaveChangesAsync();
             }

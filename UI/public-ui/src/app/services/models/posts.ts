@@ -25,4 +25,5 @@ export interface Comment {
     ups: number;
     downs: number;
     vote: number;
+    isDeleted: boolean;
 }
