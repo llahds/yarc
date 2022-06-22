@@ -50,11 +50,19 @@ export class PostsService {
     return this.client.put(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}`, { text: text });
   }
 
-  up(forumId: number, postId: number) {
+  upvotePost(forumId: number, postId: number) {
     return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/up`, {  });
   }
 
-  down(forumId: number, postId: number) {
+  downvotePost(forumId: number, postId: number) {
     return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/down`, {  });
   }
+
+  upvoteComment(forumId: number, postId: number, commentId: number) {
+    return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}/up`, {  });
+  }
+
+  downvoteComment(forumId: number, postId: number, commentId: number) {
+    return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}/down`, {  });
+  }  
 }

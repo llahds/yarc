@@ -28,17 +28,7 @@
 
             <div class="d-flex gap-2 align-items-center">
                 <div>
-                    <div class="d-flex gap-2 ">
-                        <button class="btn btn-xs btn-outline-primary">
-                            <i class="far fa-thumbs-up"></i>
-                        </button>
-                        <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
-                            <span class="fw-bold">12.9k</span>
-                        </span>
-                        <button class="btn btn-xs btn-outline-primary">
-                            <i class="far fa-thumbs-down"></i>
-                        </button>
-                    </div>
+                    <app-vote (onDown)="down()" (onUp)="up()" [ups]="item?.ups" [downs]="item?.downs" [vote]="item?.vote"></app-vote>
                 </div>
 
                 <button class="btn btn-sm btn-light d-flex gap-2 align-items-center" (click)="showReply = !showReply">

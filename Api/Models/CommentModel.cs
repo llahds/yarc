@@ -8,5 +8,8 @@
         public PostedByModel PostedBy { get; set; }
 
         public int ReplyCount { get; set; }
+        public int Ups { get; set; }
+        public int Downs { get; set; }
+        public int? Vote { get; set; }
     }
 }

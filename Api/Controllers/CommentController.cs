@@ -29,6 +29,13 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(CommentModel[]))]
         public async Task<IActionResult> List(int forumId, int postId, int? parentId = null)
         {
+            var userId = 0;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                userId = this.identity.GetIdentity().Id;
+            }
+
             var comments = await this.context
                 .Comments
                 .Where(E => E.Post.ForumId == forumId && E.PostId == postId && E.ParentId == parentId)
@@ -44,7 +51,10 @@ namespace Api.Controllers
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
                     },
-                    ReplyCount = E.Children.Count()
+                    ReplyCount = E.Children.Count(),
+                    Ups = E.Votes.Count(V => V.Vote > 0),
+                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
                 })
                 .ToArrayAsync();
 

@@ -12,5 +12,6 @@
         public Comment Parent { get; set; }
         public int? ParentId { get; set; }
         public ICollection<Comment> Children { get; set; }
+        public ICollection<CommentVote> Votes { get; set; }
     }
 }

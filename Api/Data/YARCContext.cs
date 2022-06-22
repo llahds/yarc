@@ -15,6 +15,7 @@ namespace Api.Data
         public DbSet<ForumMember> ForumMembers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<PostVote> PostVotes { get; set; }
+        public DbSet<CommentVote> CommentVotes { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)
@@ -62,6 +63,10 @@ namespace Api.Data
 
             modelBuilder.Entity<PostVote>()
                 .HasIndex(c => new { c.PostId, c.ById })
+                .IsUnique();
+
+            modelBuilder.Entity<CommentVote>()
+                .HasIndex(c => new { c.CommentId, c.ById })
                 .IsUnique();
 
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });

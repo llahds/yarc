@@ -82,4 +82,12 @@ export class ForumPostCommentComponent implements OnInit {
         this.showEdit = false;
       });
   }
+
+  up() {
+    this.api.upvoteComment(this.forumId, this.postId, this.item.id).subscribe();
+  }
+
+  down() {
+    this.api.downvoteComment(this.forumId, this.postId, this.item.id).subscribe();
+  }
 }

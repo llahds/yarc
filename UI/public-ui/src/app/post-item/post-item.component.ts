@@ -20,10 +20,10 @@ export class PostItemComponent implements OnInit {
   }
 
   up() {
-    this.posts.up(this.item.forum.id, this.item.id).subscribe();
+    this.posts.upvotePost(this.item.forum.id, this.item.id).subscribe();
   }
 
   down() {
-    this.posts.down(this.item.forum.id, this.item.id).subscribe();
+    this.posts.downvotePost(this.item.forum.id, this.item.id).subscribe();
   }
 }

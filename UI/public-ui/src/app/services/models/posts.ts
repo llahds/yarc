@@ -22,4 +22,7 @@ export interface Comment {
     text: string;
     postedBy: PostedBy
     replyCount: number;
+    ups: number;
+    downs: number;
+    vote: number;
 }

@@ -11,9 +11,9 @@ export class VoteComponent implements OnInit {
   @Output() onUp = new EventEmitter<void>();
   @Output() onDown = new EventEmitter<void>();
 
-  @Input() ups!: number;
-  @Input() downs!: number;
-  @Input() vote!: number;
+  @Input() ups!: number | undefined;
+  @Input() downs!: number | undefined;
+  @Input() vote!: number | undefined;
 
   public isAuthenticated: boolean = false;
 

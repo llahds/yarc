@@ -107,10 +107,10 @@ export class ForumPostComponent implements OnInit {
   }
 
   up() {
-    this.api.up(this.forumId, this.item.id).subscribe();
+    this.api.upvotePost(this.forumId, this.item.id).subscribe();
   }
 
   down() {
-    this.api.down(this.forumId, this.item.id).subscribe();
+    this.api.downvotePost(this.forumId, this.item.id).subscribe();
   }
 }

@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="d-flex gap-2">
             <div>
-                <app-vote (onDown)="down()" (onUp)="up()" [ups]="item.ups" [downs]="item.downs" [vote]="item.vote"></app-vote>
+                <app-vote (onDown)="down()" (onUp)="up()" [ups]="item?.ups" [downs]="item?.downs" [vote]="item?.vote"></app-vote>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex gap-3 content align-items-center">
