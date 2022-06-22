@@ -14,6 +14,7 @@ namespace Api.Data
         public DbSet<ReportedPost> ReportedPosts { get; set; }
         public DbSet<ForumMember> ForumMembers { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<PostVote> PostVotes { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)
@@ -58,6 +59,10 @@ namespace Api.Data
             modelBuilder.Entity<Forum>()
                 .Property<string>(F => F._postSettingsJson)
                 .HasColumnName("PostSettings");
+
+            modelBuilder.Entity<PostVote>()
+                .HasIndex(c => new { c.PostId, c.ById })
+                .IsUnique();
 
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 

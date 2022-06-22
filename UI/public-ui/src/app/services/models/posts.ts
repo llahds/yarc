@@ -8,6 +8,7 @@ export interface Post extends EditPost {
     postedBy: PostedBy;
     createdOn: Date;
     canReport: boolean;
+    vote: number;
 }
 
 export interface EditPost {

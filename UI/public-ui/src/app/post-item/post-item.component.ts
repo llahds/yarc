@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../services/models/posts';
+import { PostsService } from '../services/posts.service';
 
 @Component({
   selector: 'app-post-item',
@@ -11,9 +12,18 @@ export class PostItemComponent implements OnInit {
   @Input() item!: Post;
   @Input() showForum: boolean = false;
 
-  constructor() { }
+  constructor(
+    private posts: PostsService
+  ) { }
 
   ngOnInit(): void {
   }
 
+  up() {
+    this.posts.up(this.item.forum.id, this.item.id).subscribe();
+  }
+
+  down() {
+    this.posts.down(this.item.forum.id, this.item.id).subscribe();
+  }
 }

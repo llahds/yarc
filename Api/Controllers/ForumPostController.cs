@@ -28,6 +28,13 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
         public async Task<IActionResult> List(int forumId, int startAt)
         {
+            var userId = 0;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                userId = this.identity.GetIdentity().Id;
+            }
+
             var posts = await this.context
                 .Posts
                 .Where(E => E.ForumId == forumId && E.Id > startAt && E.IsHidden == false)
@@ -48,7 +55,10 @@ namespace Api.Controllers
                         Id = E.PostedById,
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
-                    }
+                    },
+                    Ups = E.Votes.Count(V => V.Vote > 0),
+                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
                 })
                 .ToArrayAsync();
 
@@ -59,16 +69,19 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
         public async Task<IActionResult> Popular(int startAt)
         {
-            var max = 2_265_922;
-            var r = new Random();
-            var randomIds = Enumerable.Range(0, 25).Select(R => r.Next(0, max)).ToArray();
+            var userId = 0; 
+            
+            if (this.User.Identity.IsAuthenticated)
+            {
+                userId = this.identity.GetIdentity().Id;
+            }
 
             var posts = await this.context
                 .Posts
                 //.Where(E => E.Id > startAt)
                 //.OrderBy(E => Guid.NewGuid())
                 //.Take(25)
-                .Where(E => randomIds.Contains(E.Id) && E.IsHidden == false)
+                .Where(E => E.ForumId == 27 && E.IsHidden == false)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -84,8 +97,12 @@ namespace Api.Controllers
                         Id = E.PostedById,
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
-                    }
+                    },
+                    Ups = E.Votes.Count(V => V.Vote > 0),
+                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
                 })
+                .Take(25)
                 .ToArrayAsync();
 
             return this.Ok(posts);
@@ -123,7 +140,10 @@ namespace Api.Controllers
                         AvatarId = -1
                     },
                     CanReport = userId > 0 
-                        && E.ReportedPosts.Any(R => R.ReportedById == userId) == false
+                        && E.ReportedPosts.Any(R => R.ReportedById == userId) == false,
+                    Ups = E.Votes.Count(V => V.Vote > 0),
+                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
                 })
                 .FirstOrDefaultAsync();
 

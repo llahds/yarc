@@ -44,6 +44,7 @@ import { ControlValidationErrorsComponent } from './control-validation-errors/co
 import { ChangeUserNameComponent } from './user-settings/change-user-name/change-user-name.component';
 import { ChangeEmailComponent } from './user-settings/change-email/change-email.component';
 import { ChangePasswordComponent } from './user-settings/change-password/change-password.component';
+import { VoteComponent } from './vote/vote.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { ChangePasswordComponent } from './user-settings/change-password/change-
     ChangeUserNameComponent,
     ChangeEmailComponent,
     ChangePasswordComponent,
+    VoteComponent,
   ],
   imports: [
     BrowserModule,

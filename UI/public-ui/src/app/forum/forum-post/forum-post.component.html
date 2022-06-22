@@ -2,17 +2,7 @@
     <div class="card-body">
         <div class="d-flex gap-2">
             <div>
-                <div class="d-flex flex-column">
-                    <button class="btn btn-xs btn-outline-primary">
-                        <i class="far fa-thumbs-up"></i>
-                    </button>
-                    <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
-                        <span class="fw-bold">Vote</span>
-                    </span>
-                    <button class="btn btn-xs btn-outline-primary">
-                        <i class="far fa-thumbs-down"></i>
-                    </button>
-                </div>
+                <app-vote (onDown)="down()" (onUp)="up()" [ups]="item.ups" [downs]="item.downs" [vote]="item.vote"></app-vote>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex gap-3 content align-items-center">
@@ -54,7 +44,7 @@
                     <textarea class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
                         [(ngModel)]="commentText" placeholder="What are your thoughts?"></textarea>
 
-                    <button class="btn btn-sm btn-primary mt-2" [disabled]="isCommenting" (click)="comment()">
+                    <button class="btn btn-sm btn-primary mt-2" [disabled]="isCommenting || !commentText" (click)="comment()">
                         Comment
 
                         <i class="fa fa-spin fa-spinner" *ngIf="isCommenting"></i>

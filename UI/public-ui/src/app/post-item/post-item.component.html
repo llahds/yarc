@@ -1,29 +1,22 @@
 <div class="d-flex gap-2">
     <div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-xs btn-outline-primary">
-                <i class="far fa-thumbs-up"></i>
-            </button>
-            <span class="d-flex align-items-center  justify-content-center" style="width: 30px;">
-                <span class="fw-bold">Vote</span>
-            </span>
-            <button class="btn btn-xs btn-outline-primary">
-                <i class="far fa-thumbs-down"></i>
-            </button>
-        </div>
+        <app-vote (onDown)="down()" (onUp)="up()" [ups]="item.ups" [downs]="item.downs" [vote]="item.vote"></app-vote>
     </div>
     <div class="d-flex align-items-center">
         <i class="text-black-50 fas fa-external-link-alt"></i>
     </div>
     <div class="flex-grow-1">
         <div class="d-flex gap-3 content align-items-center">
-            <a class="fw-bold text-black text-decoration-none" [routerLink]="['/r', item?.forum?.id, 'p', item?.id]">{{item?.title}}</a>
+            <a class="fw-bold text-black text-decoration-none"
+                [routerLink]="['/r', item?.forum?.id, 'p', item?.id]">{{item?.title}}</a>
             <a href="#" class="hover">www.yahoo.com <i class="fas fa-external-link-alt"></i></a>
         </div>
         <div class="d-flex gap-2 meta">
-            <a *ngIf="showForum" [routerLink]="['/r', item?.forum?.id]" class="text-black fw-bold hover">{{item?.forum?.name}}</a>
+            <a *ngIf="showForum" [routerLink]="['/r', item?.forum?.id]"
+                class="text-black fw-bold hover">{{item?.forum?.name}}</a>
 
-            <span class="text-black-50">Posted by <a href="#" class="hover text-black-50">{{item?.postedBy?.name}}</a> {{item?.createdOn | timeAgo}}</span>
+            <span class="text-black-50">Posted by <a href="#" class="hover text-black-50">{{item?.postedBy?.name}}</a>
+                {{item?.createdOn | timeAgo}}</span>
         </div>
     </div>
     <div>

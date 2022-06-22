@@ -18,7 +18,7 @@
                     placeholder="What are your thoughts?" [(ngModel)]="editText"></textarea>
                 <div class="d-flex gap-1">
                     <button class="btn btn-sm btn-light" (click)="showEdit = false" [disabled]="isEditing">Cancel</button>
-                    <button class="btn btn-sm btn-primary" (click)="update()" [disabled]="isEditing">
+                    <button class="btn btn-sm btn-primary" (click)="update()" [disabled]="isEditing || !editText">
                         Save
                     
                         <i class="fa fa-spin fa-spinner" *ngIf="isEditing"></i>
@@ -72,7 +72,7 @@
                     placeholder="What are your thoughts?" [(ngModel)]="replyText"></textarea>
                 <div class="d-flex gap-1">
                     <button class="btn btn-sm btn-light" (click)="showReply = false" [disabled]="isReplying">Cancel</button>
-                    <button class="btn btn-sm btn-primary" (click)="reply()" [disabled]="isReplying">
+                    <button class="btn btn-sm btn-primary" (click)="reply()" [disabled]="isReplying || !replyText">
                         Reply
                     
                         <i class="fa fa-spin fa-spinner" *ngIf="isReplying"></i>

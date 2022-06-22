@@ -105,4 +105,12 @@ export class ForumPostComponent implements OnInit {
         this.comments.unshift(r);
       });
   }
+
+  up() {
+    this.api.up(this.forumId, this.item.id).subscribe();
+  }
+
+  down() {
+    this.api.down(this.forumId, this.item.id).subscribe();
+  }
 }

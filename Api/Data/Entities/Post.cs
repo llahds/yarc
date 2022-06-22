@@ -20,5 +20,6 @@ namespace Api.Data.Entities
         public ICollection<ReportedPost> ReportedPosts { get; set; }
         public bool IsHidden { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<PostVote> Votes { get; set; }
     }
 }

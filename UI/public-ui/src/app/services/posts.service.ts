@@ -49,4 +49,12 @@ export class PostsService {
   updateComment(forumId: number, postId: number, commentId: number, text: string) { 
     return this.client.put(`api/1.0/forums/${forumId}/posts/${postId}/comments/${commentId}`, { text: text });
   }
+
+  up(forumId: number, postId: number) {
+    return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/up`, {  });
+  }
+
+  down(forumId: number, postId: number) {
+    return this.client.post(`api/1.0/forums/${forumId}/posts/${postId}/down`, {  });
+  }
 }

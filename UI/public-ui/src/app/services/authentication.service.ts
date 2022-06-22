@@ -13,6 +13,7 @@ export class AuthenticationService {
 
   onNewSignIn = new Subject<AuthenticationToken>();
   onChallenge = new Subject<boolean>();
+  onSignOut = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -41,6 +42,7 @@ export class AuthenticationService {
 
   clearIdentity() {
     sessionStorage.clear();
+    this.onSignOut.next();
   }
 
   get token() {

@@ -27,5 +27,6 @@ namespace Api.Data.Entities
         public ICollection<ReportedPost> ReportedPosts { get; set; }
         public ICollection<ForumMember> Forums { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<PostVote> PostVotes { get; set; }
     }
 }
