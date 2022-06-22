@@ -81,6 +81,7 @@ namespace Api.Controllers
 
             var entity = this.mapper.Map<Forum>(model);
 
+            entity.PostSettings = new ForumPostSettings();
             entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.AddAsync(entity);

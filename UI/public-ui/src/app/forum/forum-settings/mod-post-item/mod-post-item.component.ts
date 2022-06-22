@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Post } from 'src/app/services/models/posts';
+import { Comment, Post } from 'src/app/services/models/posts';
+import { QueueListWorkItem } from 'src/app/services/models/reporting';
 
 @Component({
   selector: 'app-mod-post-item',
@@ -8,7 +9,7 @@ import { Post } from 'src/app/services/models/posts';
 })
 export class ModPostItemComponent implements OnInit {
 
-  @Input() item!: Post;
+  @Input() item!: QueueListWorkItem;
   @Input() forumId!: number;
   @Input() reasons: string[] = [];
   

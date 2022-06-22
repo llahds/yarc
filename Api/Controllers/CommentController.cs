@@ -42,7 +42,8 @@ namespace Api.Controllers
                     E.Post.ForumId == forumId 
                     && E.PostId == postId 
                     && E.ParentId == parentId
-                    && E.IsDeleted == false)
+                    && E.IsDeleted == false
+                    && E.IsHidden == false)
                 .OrderBy(E => E.CreatedOn)
                 .Select(E => new CommentModel
                 {
@@ -58,7 +59,9 @@ namespace Api.Controllers
                     ReplyCount = E.Children.Count(),
                     Ups = E.Votes.Count(V => V.Vote > 0),
                     Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
+                    CanReport = userId > 0
+                        && E.ReportedComments.Any(R => R.ReportedById == userId) == false,
                 })
                 .ToArrayAsync();
 

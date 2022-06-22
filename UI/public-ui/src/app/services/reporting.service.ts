@@ -12,12 +12,16 @@ export class ReportingService {
     private client: RestApiService
   ) { }
 
-  getRules() : Observable<ReportingReason[]>{
+  getReportingReasons() : Observable<ReportingReason[]>{
     return this.client.get(`api/1.0/reporting/reasons`);
   }
 
-  report(postId: number, reasonId: number) {
+  reportPost(postId: number, reasonId: number) {
     return this.client.post(`api/1.0/reporting/posts`, { reasonId: reasonId, postId: postId });
+  }
+
+  reportComment(commentId: number, reasonId: number) {
+    return this.client.post(`api/1.0/reporting/comments`, { reasonId: reasonId, commentId: commentId });
   }
 
   getQueueWorkItems(forumId: number, startAt: number, reasonIds: number[]) : Observable<QueueListWorkItem[]> {
@@ -25,11 +29,19 @@ export class ReportingService {
     return this.client.get(`api/1.0/moderation/${forumId}/queue?reasonIds=${reasonIds.join(",")}`);
   }
 
-  approve(forumId: number, postId: number) {
-    return this.client.post(`api/1.0/moderation/${forumId}/queue/${postId}/approve`, {});
+  approvePost(forumId: number, postId: number) {
+    return this.client.post(`api/1.0/moderation/${forumId}/queue/posts/${postId}/approve`, {});
   }
 
-  reject(forumId: number, postId: number) {
-    return this.client.post(`api/1.0/moderation/${forumId}/queue/${postId}/reject`, {});
+  rejectPost(forumId: number, postId: number) {
+    return this.client.post(`api/1.0/moderation/${forumId}/queue/posts/${postId}/reject`, {});
+  }
+
+  approveComment(forumId: number, commentId: number) {
+    return this.client.post(`api/1.0/moderation/${forumId}/queue/comments/${commentId}/approve`, {});
+  }
+
+  rejectComment(forumId: number, commentId: number) {
+    return this.client.post(`api/1.0/moderation/${forumId}/queue/comments/${commentId}/reject`, {});
   }
 }

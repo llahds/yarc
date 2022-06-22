@@ -40,7 +40,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPost, Route("api/1.0/reporting/posts")]
-        public async Task<IActionResult> Create([FromBody] ReportedPostModel model)
+        public async Task<IActionResult> CreateFromPost([FromBody] ReportedPostModel model)
         {
             var entity = new ReportedPost();
 
@@ -54,6 +54,30 @@ namespace Api.Controllers
             var post = await this.context.Posts.FirstOrDefaultAsync(P => P.Id == model.PostId);
 
             post.IsHidden = true;
+
+            await this.context.SaveChangesAsync();
+
+            return this.Ok();
+        }
+
+        [Authorize]
+        [HttpPost, Route("api/1.0/reporting/comments")]
+        public async Task<IActionResult> CreateFromComment([FromBody] ReportedCommentModel model)
+        {
+            var entity = new ReportedComment();
+
+            entity.CommentId = model.CommentId;
+            entity.ReasonId = model.ReasonId;
+            entity.ReportedById = this.identity.GetIdentity().Id;
+            entity.CreatedOn = DateTime.UtcNow;
+
+            await this.context.AddAsync(entity);
+
+            var comment = await this.context
+                .Comments
+                .FirstOrDefaultAsync(P => P.Id == model.CommentId);
+
+            comment.IsHidden = true;
 
             await this.context.SaveChangesAsync();
 

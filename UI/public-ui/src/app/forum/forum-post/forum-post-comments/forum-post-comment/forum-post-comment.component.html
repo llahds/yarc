@@ -17,10 +17,11 @@
                 <textarea class="form-control form-control-sm mb-1" style="max-width: 600px; height: 100px;"
                     placeholder="What are your thoughts?" [(ngModel)]="editText"></textarea>
                 <div class="d-flex gap-1">
-                    <button class="btn btn-sm btn-light" (click)="showEdit = false" [disabled]="isEditing">Cancel</button>
+                    <button class="btn btn-sm btn-light" (click)="showEdit = false"
+                        [disabled]="isEditing">Cancel</button>
                     <button class="btn btn-sm btn-primary" (click)="update()" [disabled]="isEditing || !editText">
                         Save
-                    
+
                         <i class="fa fa-spin fa-spinner" *ngIf="isEditing"></i>
                     </button>
                 </div>
@@ -28,7 +29,8 @@
 
             <div class="d-flex gap-2 align-items-center">
                 <div>
-                    <app-vote (onDown)="down()" (onUp)="up()" [ups]="item?.ups" [downs]="item?.downs" [vote]="item?.vote"></app-vote>
+                    <app-vote (onDown)="down()" (onUp)="up()" [ups]="item?.ups" [downs]="item?.downs"
+                        [vote]="item?.vote"></app-vote>
                 </div>
 
                 <button class="btn btn-sm btn-light d-flex gap-2 align-items-center" (click)="showReply = !showReply">
@@ -46,12 +48,12 @@
                     Remove
                 </button>
 
-                <button class="btn btn-sm btn-light" (click)="confirmSpam()">
+                <button class="btn btn-sm btn-light" (click)="confirmSpam()" *ngIf="item?.canReport">
                     <i class="fa-regular fa-calendar-xmark"></i>
                     Spam
                 </button>
 
-                <button class="btn btn-sm btn-light" (click)="confirmReport()">
+                <button class="btn btn-sm btn-light" (click)="confirmReport()" *ngIf="item?.canReport">
                     <i class="far fa-flag"></i>
                     Report
                 </button>
@@ -61,10 +63,11 @@
                 <textarea class="form-control form-control-sm mb-1" style="max-width: 600px; height: 100px;"
                     placeholder="What are your thoughts?" [(ngModel)]="replyText"></textarea>
                 <div class="d-flex gap-1">
-                    <button class="btn btn-sm btn-light" (click)="showReply = false" [disabled]="isReplying">Cancel</button>
+                    <button class="btn btn-sm btn-light" (click)="showReply = false"
+                        [disabled]="isReplying">Cancel</button>
                     <button class="btn btn-sm btn-primary" (click)="reply()" [disabled]="isReplying || !replyText">
                         Reply
-                    
+
                         <i class="fa fa-spin fa-spinner" *ngIf="isReplying"></i>
                     </button>
                 </div>
@@ -85,24 +88,22 @@
 
 </div>
 
-<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false"
-    (onConfirm)="remove()" [showActive]="isRemoving" [disableButtons]="isRemoving">
+<app-confirm-modal [showConfirm]="showRemoveModal" (onCancel)="showRemoveModal = false" (onConfirm)="remove()"
+    [showActive]="isRemoving" [disableButtons]="isRemoving">
     Are you sure you want to remove this comment?
 </app-confirm-modal>
 
-<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false" (onConfirm)="showSpamModal = false">
+<app-confirm-modal [showConfirm]="showSpamModal" (onCancel)="showSpamModal = false" (onConfirm)="spam()"
+    [showActive]="isReporting" [disableButtons]="isReporting">
     Are you sure you want to mark this comment as spam?
 </app-confirm-modal>
 
-
-<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false"
-    (onConfirm)="showReportModal = false">
-    <p>Are you sure you want to report this comment?</p>
+<app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false" (onConfirm)="report()"
+    [showActive]="isReporting" [disableButtons]="isReporting">
+    <p>Are you sure you want to report this post?</p>
     <div>
-        <select class="form-control form-control-sm">
-            <option> - Reason - </option>
-            <option>Offensive</option>
-            <option>Hate Speech</option>
+        <select class="form-control form-control-sm" [(ngModel)]="selectedReportReasonId">
+            <option *ngFor="let rule of reportingReasons" [value]="rule.id">{{rule.label}}</option>
         </select>
         <div class="form-text">Specifying a reason helps us evaluate if this comment should be removed.</div>
     </div>

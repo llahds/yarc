@@ -3,6 +3,7 @@
 namespace Api.Data.Entities
 {
     [Index(nameof(IsDeleted))]
+    [Index(nameof(IsHidden))]
     public class Comment
     {
         public int Id { get; set; }
@@ -17,5 +18,7 @@ namespace Api.Data.Entities
         public ICollection<Comment> Children { get; set; }
         public ICollection<CommentVote> Votes { get; set; }
         public bool IsDeleted { get; set; }
+        public ICollection<ReportedComment> ReportedComments { get; set; }
+        public bool IsHidden { get; set; }
     }
 }

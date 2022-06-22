@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Comment } from 'src/app/services/models/posts';
+import { ReportingReason, SPAM_ID } from 'src/app/services/models/reporting';
 import { PostsService } from 'src/app/services/posts.service';
+import { ReportingService } from 'src/app/services/reporting.service';
 
 @Component({
   selector: 'app-forum-post-comment',
@@ -29,11 +31,18 @@ export class ForumPostCommentComponent implements OnInit {
   public replies: Comment[] = [];
   public isRemoving: boolean = false;
 
+  public reportingReasons: ReportingReason[] = [];
+  public selectedReportReasonId!: number;
+  public isReporting: boolean = false;
+
   constructor(
-    private api: PostsService
+    private api: PostsService,
+    private reporting: ReportingService
   ) { }
 
   ngOnInit(): void {
+    this.reporting.getReportingReasons()
+      .subscribe(r => this.reportingReasons = r);
   }
 
   confirmRemove() {
@@ -99,5 +108,27 @@ export class ForumPostCommentComponent implements OnInit {
       this.showRemoveModal = false;
       this.item.isDeleted = true;
     });
+  }
+
+  report() {
+    this.isReporting = true;
+    this.reporting
+      .reportComment(this.item.id, this.selectedReportReasonId)
+      .subscribe(r => {
+        this.isReporting = false;
+        this.showReportModal = false;
+        this.item.canReport = false;
+      });
+  }
+
+  spam() {
+    this.isReporting = true;
+    this.reporting
+      .reportComment(this.item.id, SPAM_ID)
+      .subscribe(r => {
+        this.isReporting = false;
+        this.showSpamModal = false;
+        this.item.canReport = false;
+      });
   }
 }

@@ -35,13 +35,22 @@ export class ForumSettingsReportsComponent implements OnInit {
       });
   }
 
-  approve(id: number) {
+  approve(item: QueueListWorkItem) {
     this.isLoading = true;
-    this.reporting.approve(this.forumId, id).subscribe(() => this.reload());
+    if (item.post) {
+      this.reporting.approvePost(this.forumId, item.post.id).subscribe(() => this.reload());
+    } else {
+      this.reporting.approveComment(this.forumId, item.comment.id).subscribe(() => this.reload());
+    }
   }
 
-  reject(id: number) {
+  reject(item: QueueListWorkItem) {
+    console.log(item);
     this.isLoading = true;
-    this.reporting.reject(this.forumId, id).subscribe(() => this.reload());
+    if (item.post) {
+      this.reporting.rejectPost(this.forumId, item.post.id).subscribe(() => this.reload());
+    } else {
+      this.reporting.rejectComment(this.forumId, item.comment.id).subscribe(() => this.reload());
+    }    
   }
 }

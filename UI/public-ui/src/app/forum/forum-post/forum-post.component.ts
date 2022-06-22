@@ -39,7 +39,7 @@ export class ForumPostComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.reporting.getRules()
+    this.reporting.getReportingReasons()
       .subscribe(r => this.reportingReasons = r);
 
     this.route.paramMap.subscribe(params => {
@@ -79,7 +79,7 @@ export class ForumPostComponent implements OnInit {
   report() {
     this.isReporting = true;
     this.reporting
-      .report(this.item.id, this.selectedReportReasonId)
+      .reportPost(this.item.id, this.selectedReportReasonId)
       .subscribe(r => {
         this.isReporting = false;
         this.showReportModal = false;
@@ -90,7 +90,7 @@ export class ForumPostComponent implements OnInit {
   spam() {
     this.isReporting = true;
     this.reporting
-      .report(this.item.id, SPAM_ID)
+      .reportPost(this.item.id, SPAM_ID)
       .subscribe(r => {
         this.isReporting = false;
         this.showSpamModal = false;

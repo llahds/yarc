@@ -20,14 +20,14 @@
 
     <ul class="list-group list-group-flush" *ngIf="isLoading === false">
         <li class="list-group-item" *ngFor="let item of list">
-            <app-mod-post-item [item]="item.post" [forumId]="forumId" [reasons]="item.reasons">
-                <button class="btn btn-sm btn-light text-black-50" (click)="approve(item.post.id)">
+            <app-mod-post-item [item]="item" [forumId]="forumId" [reasons]="item.reasons">
+                <button class="btn btn-sm btn-light text-black-50" (click)="approve(item)">
                     <i class="far fa-check-circle"></i>
                 </button>
-                
-                <button class="btn btn-sm btn-light text-black-50" (click)="reject(item.post.id)">
+
+                <button class="btn btn-sm btn-light text-black-50" (click)="reject(item)">
                     <i class="fas fa-times"></i>
-                </button>        
+                </button>
             </app-mod-post-item>
         </li>
     </ul>
