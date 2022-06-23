@@ -19,6 +19,7 @@ namespace Api.Data
         public DbSet<CommentVote> CommentVotes { get; set; }
         public DbSet<ReportedComment> ReportedComments { get; set; }
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<ForumTopic> ForumTopics { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)

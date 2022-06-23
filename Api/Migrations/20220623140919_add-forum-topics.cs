@@ -24,7 +24,7 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ForumTopic",
+                name: "ForumTopics",
                 schema: "Social",
                 columns: table => new
                 {
@@ -33,16 +33,16 @@ namespace Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ForumTopic", x => new { x.ForumId, x.TopicId });
+                    table.PrimaryKey("PK_ForumTopics", x => new { x.ForumId, x.TopicId });
                     table.ForeignKey(
-                        name: "FK_ForumTopic_Forums_ForumId",
+                        name: "FK_ForumTopics_Forums_ForumId",
                         column: x => x.ForumId,
                         principalSchema: "Social",
                         principalTable: "Forums",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ForumTopic_Topics_TopicId",
+                        name: "FK_ForumTopics_Topics_TopicId",
                         column: x => x.TopicId,
                         principalSchema: "Social",
                         principalTable: "Topics",
@@ -56,12 +56,12 @@ namespace Api.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedOn",
-                value: new DateTime(2022, 6, 23, 14, 6, 13, 773, DateTimeKind.Utc).AddTicks(1526));
+                value: new DateTime(2022, 6, 23, 14, 9, 19, 506, DateTimeKind.Utc).AddTicks(7493));
 
             migrationBuilder.CreateIndex(
-                name: "IX_ForumTopic_TopicId",
+                name: "IX_ForumTopics_TopicId",
                 schema: "Social",
-                table: "ForumTopic",
+                table: "ForumTopics",
                 column: "TopicId");
 
             migrationBuilder.CreateIndex(
@@ -75,7 +75,7 @@ namespace Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ForumTopic",
+                name: "ForumTopics",
                 schema: "Social");
 
             migrationBuilder.DropTable(

@@ -24,3 +24,9 @@ export interface ForumPostGuideLines {
     guideLines: string;
 }
 
+export interface SimilarForum {
+    id: number;
+    name: string;
+    memberCount: number;
+}
+

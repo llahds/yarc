@@ -200,23 +200,33 @@ namespace Api.Controllers
 
 
         [HttpGet, Route("api/1.0/forums/{forumId}/similar")]
-        [ProducesResponseType(200, Type = typeof(KeyValueModel[]))]
+        [ProducesResponseType(200, Type = typeof(SimilarForumModel[]))]
         public async Task<IActionResult> FindSimilarTopics(int forumId)
         {
-            //var model = await this.context
-            //    .Topics
-            //    .Where(E => E.Name.StartsWith(queryText))
-            //    .Select(F => new KeyValueModel
-            //    {
-            //        Id = F.Id,
-            //        Name = F.Name
-            //    })
-            //    .OrderBy(B => B.Name)
-            //    .ToArrayAsync();
+            var forumTopicIds = this.context
+                .ForumTopics
+                .Where(F => F.ForumId == forumId)
+                .Select(F => F.TopicId);
 
+            var similar = await this.context
+                .Forums
+                .Select(F => new
+                {
+                    Forum = F,
+                    TopicCount = F.Topics.Count(T => forumTopicIds.Contains(T.TopicId))
+                })
+                .Where(T => T.TopicCount > 0 && T.Forum.Id != forumId)
+                .OrderByDescending(F => F.TopicCount)
+                .Select(T => new SimilarForumModel
+                {
+                    Id = T.Forum.Id,
+                    Name = T.Forum.Name,
+                    MemberCount = T.Forum.Members.Count()
+                })
+                .Take(10)
+                .ToArrayAsync();
 
-
-            return this.Ok();
+            return this.Ok(similar);
         }
     }
 }

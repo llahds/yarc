@@ -45,6 +45,7 @@ import { ChangeUserNameComponent } from './user-settings/change-user-name/change
 import { ChangeEmailComponent } from './user-settings/change-email/change-email.component';
 import { ChangePasswordComponent } from './user-settings/change-password/change-password.component';
 import { VoteComponent } from './vote/vote.component';
+import { SimilarForumsComponent } from './forum/similar-forums/similar-forums.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { VoteComponent } from './vote/vote.component';
     ChangeEmailComponent,
     ChangePasswordComponent,
     VoteComponent,
+    SimilarForumsComponent,
   ],
   imports: [
     BrowserModule,

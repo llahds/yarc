@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    [Migration("20220623140613_add-forum-topics")]
+    [Migration("20220623140919_add-forum-topics")]
     partial class addforumtopics
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,7 +217,7 @@ namespace Api.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("ForumTopic", "Social");
+                    b.ToTable("ForumTopics", "Social");
                 });
 
             modelBuilder.Entity("Api.Data.Entities.Post", b =>
@@ -526,7 +526,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2022, 6, 23, 14, 6, 13, 773, DateTimeKind.Utc).AddTicks(1526),
+                            CreatedOn = new DateTime(2022, 6, 23, 14, 9, 19, 506, DateTimeKind.Utc).AddTicks(7493),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,
