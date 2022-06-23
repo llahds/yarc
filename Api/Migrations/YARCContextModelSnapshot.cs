@@ -457,9 +457,13 @@ namespace Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Topics", "Social");
                 });
@@ -520,7 +524,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2022, 6, 23, 12, 12, 46, 915, DateTimeKind.Utc).AddTicks(3603),
+                            CreatedOn = new DateTime(2022, 6, 23, 14, 6, 13, 773, DateTimeKind.Utc).AddTicks(1526),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,

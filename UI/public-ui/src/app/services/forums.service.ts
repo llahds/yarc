@@ -46,4 +46,8 @@ export class ForumsService {
   suggestTopics(queryText: string) : Observable<KeyValueModel[]> {
     return this.client.get(`api/1.0/forums/topics/suggest?queryText=${queryText}`);
   }
+
+  similarForums(id: number) : Observable<KeyValueModel[]> {
+    return this.client.get(`api/1.0/forums/${id}/similar`);
+  }
 }

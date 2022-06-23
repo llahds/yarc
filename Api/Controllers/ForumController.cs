@@ -197,5 +197,26 @@ namespace Api.Controllers
 
             return this.Ok(model);
         }
+
+
+        [HttpGet, Route("api/1.0/forums/{forumId}/similar")]
+        [ProducesResponseType(200, Type = typeof(KeyValueModel[]))]
+        public async Task<IActionResult> FindSimilarTopics(int forumId)
+        {
+            //var model = await this.context
+            //    .Topics
+            //    .Where(E => E.Name.StartsWith(queryText))
+            //    .Select(F => new KeyValueModel
+            //    {
+            //        Id = F.Id,
+            //        Name = F.Name
+            //    })
+            //    .OrderBy(B => B.Name)
+            //    .ToArrayAsync();
+
+
+
+            return this.Ok();
+        }
     }
 }
