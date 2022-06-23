@@ -1,5 +1,6 @@
 ﻿using Api.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Api.Data
 {
@@ -17,6 +18,7 @@ namespace Api.Data
         public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<CommentVote> CommentVotes { get; set; }
         public DbSet<ReportedComment> ReportedComments { get; set; }
+        public DbSet<Topic> Topics { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)
@@ -70,6 +72,9 @@ namespace Api.Data
                 .HasIndex(c => new { c.CommentId, c.ById })
                 .IsUnique();
 
+            modelBuilder.Entity<ForumTopic>()
+                .HasKey(c => new { c.ForumId, c.TopicId });
+
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules" });
@@ -88,6 +93,28 @@ namespace Api.Data
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 14, Label = "Misinformation" });
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public async Task SynchronizeChildren<TEntity, TChild>(Expression<Func<TEntity, bool>> query, Func<IEnumerable<int>> childIds, Func<TChild, TEntity> converter)
+            where TEntity : class
+            where TChild : class
+        {
+            var entitySet = this.Set<TEntity>();
+            this.RemoveRange(await entitySet.Where(query).ToArrayAsync());
+
+            await AddChildren(childIds, converter);
+        }
+
+        public async Task AddChildren<TEntity, TChild>(Func<IEnumerable<int>> childIds, Func<TChild, TEntity> converter)
+            where TEntity : class
+            where TChild : class
+        {
+            var entitySet = this.Set<TEntity>();
+            var childSet = this.Set<TChild>();
+            foreach (var id in childIds())
+            {
+                await entitySet.AddAsync(converter(await childSet.FindAsync(id)));
+            }
         }
     }
 }

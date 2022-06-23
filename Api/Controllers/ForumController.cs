@@ -43,17 +43,28 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumModel))]
         public async Task<IActionResult> Get(int id)
         {
-            var entity = await this.context
+            var model = await this.context
                 .Forums
                 .Where(E => E.Id == id)
+                .Select(F => new ForumModel
+                {
+                    Name = F.Name,
+                    CreatedOn = F.CreatedOn,
+                    Description = F.Description, 
+                    Slug = F.Slug,
+                    Topics = F.Topics.Select(T => new KeyValueModel
+                    {
+                        Id = T.TopicId,
+                        Name = T.Topic.Name
+                    })
+                    .ToArray()
+                })
                 .FirstOrDefaultAsync();
 
-            if (entity == null)
+            if (model == null)
             {
                 return this.NotFound();
             }
-
-            var model = this.mapper.Map<ForumModel>(entity);
 
             return this.Ok(model);
         }
@@ -79,12 +90,22 @@ namespace Api.Controllers
                 return this.BadRequest(this.ModelState);
             }
 
-            var entity = this.mapper.Map<Forum>(model);
-
+            var entity = new Forum();
+            entity.Name = model.Name;
+            entity.Description = model.Description;
+            entity.Slug = model.Slug;
             entity.PostSettings = new ForumPostSettings();
             entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.AddAsync(entity);
+
+            await this.context.AddChildren<ForumTopic, Topic>(
+                () => model.Topics.Select(M => M.Id),
+                topic => new ForumTopic
+                {
+                    Topic = topic,
+                    Forum = entity
+                });
 
             await this.context.SaveChangesAsync();
 
@@ -125,6 +146,15 @@ namespace Api.Controllers
             entity.Description = model.Description;
             entity.Slug = model.Slug;
 
+            await this.context.SynchronizeChildren<ForumTopic, Topic>(
+                E => E.ForumId == id,
+                () => model.Topics.Select(M => M.Id),
+                topic => new ForumTopic
+                {
+                    Forum = entity,
+                    Topic = topic
+                });
+
             await this.context.SaveChangesAsync();
 
             return this.Ok();
@@ -148,6 +178,24 @@ namespace Api.Controllers
             await this.context.SaveChangesAsync();
 
             return this.Ok();
+        }
+
+        [HttpGet, Route("api/1.0/forums/topics/suggest")]
+        [ProducesResponseType(200, Type = typeof(KeyValueModel[]))]
+        public async Task<IActionResult> SuggestTopics(string queryText)
+        {
+            var model = await this.context
+                .Topics
+                .Where(E => E.Name.StartsWith(queryText))
+                .Select(F => new KeyValueModel
+                {
+                    Id = F.Id,
+                    Name = F.Name
+                })
+                .OrderBy(B => B.Name)
+                .ToArrayAsync();
+
+            return this.Ok(model);
         }
     }
 }

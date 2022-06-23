@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Id } from './models/common';
+import { Id, KeyValueModel } from './models/common';
 import { ForumEditModel, Forum, ForumPostSettings, ForumPostGuideLines } from './models/forums';
 import { RestApiService } from './rest-api.service';
 
@@ -41,5 +41,9 @@ export class ForumsService {
 
   getGuideLines(id: number) : Observable<ForumPostGuideLines> {
     return this.client.get(`api/1.0/forums/${id}/posts/guide-lines`);
+  }
+
+  suggestTopics(queryText: string) : Observable<KeyValueModel[]> {
+    return this.client.get(`api/1.0/forums/topics/suggest?queryText=${queryText}`);
   }
 }

@@ -10,7 +10,7 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class ForumListComponent implements OnInit {
 
-  public showPostModal: boolean = false;
+
   public list: Post[] = [];
   public id!: number;
   public postId!: number;
@@ -30,10 +30,5 @@ export class ForumListComponent implements OnInit {
         this.isLoading = false;
       });
     });
-  }
-
-  createPost() {
-    this.postId = 0;
-    this.showPostModal = true
   }
 }

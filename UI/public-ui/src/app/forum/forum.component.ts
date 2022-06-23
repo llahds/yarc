@@ -10,8 +10,10 @@ import { Forum } from '../services/models/forums';
 })
 export class ForumComponent implements OnInit {
 
+  public showPostModal: boolean = false;
   public forum!: Forum;
   public id!: number;
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -23,5 +25,9 @@ export class ForumComponent implements OnInit {
       this.id = +this.route.snapshot.params['forumId'];
       this.api.getForum(this.id).subscribe(r => this.forum = r);
     });
+  }
+
+  createPost() {
+    this.showPostModal = true
   }
 }
