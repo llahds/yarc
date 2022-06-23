@@ -10,5 +10,6 @@
         public DateTime CreatedOn { get; set; }
         public string Title { get; set; }
         public int? Vote { get; set; }
+        public int CommentCount { get; set; }
     }
 }

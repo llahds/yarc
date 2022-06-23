@@ -50,4 +50,8 @@ export class ForumsService {
   similarForums(id: number) : Observable<SimilarForum[]> {
     return this.client.get(`api/1.0/forums/${id}/similar`);
   }
+
+  suggestUsers(queryText: string) : Observable<KeyValueModel[]> {
+    return this.client.get(`api/1.0/forums/users/suggest?queryText=${queryText}`);
+  }
 }

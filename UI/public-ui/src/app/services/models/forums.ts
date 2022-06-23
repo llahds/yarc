@@ -2,6 +2,9 @@ import { KeyValueModel } from "./common";
 
 export interface Forum extends ForumEditModel {
     createdOn: Date;
+    memberCount: number;
+    isModerator: boolean;
+    isOwner: boolean;
 }
 
 export interface ForumEditModel {

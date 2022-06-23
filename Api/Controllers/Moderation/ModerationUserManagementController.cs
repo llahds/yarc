@@ -1,5 +1,6 @@
 ﻿using Api.Data;
 using Api.Models;
+using Api.Services.Moderation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Controllers.Moderation
 {
     [Authorize]
-    public class ModerationUserManagementController : Controller
+    public class ModerationUserManagementController : ModerationController
     {
         private readonly YARCContext context;
 
         public ModerationUserManagementController(
-            YARCContext context)
+            YARCContext context,
+            IModerationService moderation)
+            : base(moderation)
         {
             this.context = context;
         }
@@ -21,24 +24,27 @@ namespace Api.Controllers.Moderation
         [ProducesResponseType(200, Type = typeof(UserInfoModel[]))]
         public async Task<IActionResult> List(int forumId, int startAt, string query, int status)
         {
-            query = query ?? "";
+            return await this.VerifyCredentials(forumId, async () =>
+            {
+                query = query ?? "";
 
-            var model = await this.context
-                .Users
-                .Where(U => 
-                    U.Forums.Any(F => F.ForumId == forumId && F.Status == status)
-                    && (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query))
-                    && U.IsDeleted == false)
-                .Select(U => new UserInfoModel
-                {
-                    Id = U.Id,
-                    UserName = U.UserName
-                })
-                .Take(25)
-                .Skip(startAt)
-                .ToArrayAsync();
+                var model = await this.context
+                    .Users
+                    .Where(U =>
+                        U.Forums.Any(F => F.ForumId == forumId && F.Status == status)
+                        && (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query))
+                        && U.IsDeleted == false)
+                    .Select(U => new UserInfoModel
+                    {
+                        Id = U.Id,
+                        UserName = U.UserName
+                    })
+                    .Take(25)
+                    .Skip(startAt)
+                    .ToArrayAsync();
 
-            return this.Ok(model);
+                return this.Ok(model);
+            });
         }
 
         [HttpGet, Route("api/1.0/moderation/users")]
@@ -49,7 +55,7 @@ namespace Api.Controllers.Moderation
 
             var model = await this.context
                 .Users
-                .Where(U => 
+                .Where(U =>
                     (query.Length == 0 || query.Length > 0 && U.UserName.StartsWith(query))
                     && U.IsDeleted == false
                 )
@@ -68,46 +74,52 @@ namespace Api.Controllers.Moderation
         [HttpDelete, Route("api/1.0/moderation/forums/{forumId}/users/{userId}")]
         public async Task<IActionResult> Remove(int forumId, int userId)
         {
-            var entity = await this.context
-                .ForumMembers
-                .Where(U => U.ForumId == forumId && U.MemberId == userId)
-                .FirstOrDefaultAsync();
-
-            if (entity != null)
+            return await this.VerifyCredentials(forumId, async () =>
             {
-                this.context.Remove(entity);
+                var entity = await this.context
+                    .ForumMembers
+                    .Where(U => U.ForumId == forumId && U.MemberId == userId)
+                    .FirstOrDefaultAsync();
 
-                await this.context.SaveChangesAsync();
-            }
+                if (entity != null)
+                {
+                    this.context.Remove(entity);
 
-            return this.Ok();
+                    await this.context.SaveChangesAsync();
+                }
+
+                return this.Ok();
+            });
         }
 
         [HttpPost, Route("api/1.0/moderation/forums/{forumId}/users/{userId}/status")]
         public async Task<IActionResult> Approve(int forumId, int userId, [FromBody] ForumMemberStatusModel model)
         {
-            var entity = await this.context
-                .ForumMembers
-                .Where(U => U.ForumId == forumId && U.Id == userId)
-                .FirstOrDefaultAsync();
-
-            if (entity == null)
+            return await this.VerifyCredentials(forumId, async () =>
             {
-                entity = new Data.Entities.ForumMember
+                var entity = await this.context
+                    .ForumMembers
+                    .Where(U => U.ForumId == forumId && U.Id == userId)
+                    .FirstOrDefaultAsync();
+
+                if (entity == null)
                 {
-                    ForumId = forumId,
-                    MemberId = userId
-                };
+                    entity = new Data.Entities.ForumMember
+                    {
+                        ForumId = forumId,
+                        MemberId = userId
+                    };
 
-                await this.context.AddAsync(entity);
-            }
+                    await this.context.AddAsync(entity);
+                }
 
-            entity.CreatedOn = DateTime.UtcNow;
-            entity.Status = model.Status;
+                entity.CreatedOn = DateTime.UtcNow;
+                entity.Status = model.Status;
 
-            await this.context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
 
-            return this.Ok();
+                return this.Ok();
+            });
         }
     }
 }

@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center" *ngIf="isAuthenticated">
                     <button class="btn btn-sm btn-outline-primary mt-2 mx-auto" routerLink="/r/create">Create Community</button>
                 </div>
             </div>

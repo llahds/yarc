@@ -25,23 +25,22 @@
         <div class="card mb-2">
             <div class="card-header d-flex gap-2 justify-content-between align-items-center">
                 <span>About Community</span>
-                <div class="dropdown">
+                <div class="dropdown" *ngIf="forum?.isOwner || forum?.isModerator">
                     <button class="btn btn-xs btn-light" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-h"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" [routerLink]="['/r', id, 'edit']">Edit</a></li>
-                        <li><a class="dropdown-item" [routerLink]="['/r', id, 'settings']">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Remove</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/r', id, 'edit']" *ngIf="forum?.isOwner">Edit</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/r', id, 'settings']" *ngIf="forum?.isModerator || forum?.isOwner">Settings</a></li>
+                        <li><a class="dropdown-item" href="#"  *ngIf="forum?.isOwner">Remove</a></li>
                     </ul>
                 </div>
             </div>
             <div class="card-body">
-                <p>Things that make you go AWW! Like puppies, bunnies, babies, and so on... A place for really cute
-                    pictures and videos!</p>
+                <p>{{forum?.description}}</p>
                 <div class="d-flex gap-2 justify-content-around">
                     <div>
-                        <div>31m</div>
+                        <div>{{forum?.memberCount}}</div>
                         <div>members</div>
                     </div>
                     <div>
@@ -49,14 +48,15 @@
                         <div>online</div>
                     </div>
                 </div>
-                <p class="mt-2">Created Jan 25, 2008</p>
+                <p class="mt-2">Created {{forum?.createdOn | date: 'mediumDate'}}</p>
                 <div class="d-grid gap-2 mt-2 mb-2">
                     <button class="btn btn-sm btn-primary" (click)="createPost()">Create Post</button>
                 </div>
                 <div *ngIf="forum && forum.topics.length > 0">
                     Topics:
                     <div class="d-flex gap-2 flex-wrap">
-                        <span class="badge bg-secondary rounded-pill" *ngFor="let topic of forum?.topics">{{topic.name}}</span>
+                        <span class="badge bg-secondary rounded-pill"
+                            *ngFor="let topic of forum?.topics">{{topic.name}}</span>
                     </div>
                 </div>
             </div>

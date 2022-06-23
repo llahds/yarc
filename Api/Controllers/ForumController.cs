@@ -1,7 +1,9 @@
 ﻿using Api.Data;
 using Api.Data.Entities;
 using Api.Models;
+using Api.Services.Authentication;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +13,16 @@ namespace Api.Controllers
     {
         private readonly YARCContext context;
         private readonly IMapper mapper;
+        private readonly IIdentityService identity;
 
         public ForumController(
             YARCContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IIdentityService identity)
         {
             this.context = context;
             this.mapper = mapper;
+            this.identity = identity;
         }
 
         [HttpGet, Route("api/1.0/forums/{id}/posts/guide-lines")]
@@ -43,6 +48,13 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumModel))]
         public async Task<IActionResult> Get(int id)
         {
+            var userId = 0;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                userId = this.identity.GetIdentity().Id;
+            }
+
             var model = await this.context
                 .Forums
                 .Where(E => E.Id == id)
@@ -57,7 +69,16 @@ namespace Api.Controllers
                         Id = T.TopicId,
                         Name = T.Topic.Name
                     })
-                    .ToArray()
+                    .ToArray(),
+                    Moderators = F.ForumModerators.Select(T => new KeyValueModel
+                    {
+                        Id = T.ModeratorId,
+                        Name = T.Moderator.UserName
+                    })
+                    .ToArray(),
+                    MemberCount = F.Members.Count(),
+                    IsOwner = (userId > 0 && F.ForumOwners.Any(U => U.OwnerId == userId)),
+                    IsModerator = (userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId))
                 })
                 .FirstOrDefaultAsync();
 
@@ -69,6 +90,7 @@ namespace Api.Controllers
             return this.Ok(model);
         }
 
+        [Authorize]
         [HttpPost, Route("api/1.0/forums")]
         [ProducesResponseType(200, Type = typeof(IdModel<int>))]
         public async Task<IActionResult> Create([FromBody] EditForumModel model)
@@ -107,11 +129,26 @@ namespace Api.Controllers
                     Forum = entity
                 });
 
+            await this.context.AddChildren<ForumModerator, User>(
+                () => model.Moderators.Select(M => M.Id),
+                moderator => new ForumModerator
+                {
+                    Moderator = moderator,
+                    Forum = entity
+                });
+
+            await this.context.AddAsync(new ForumOwner
+            {
+                Forum = entity,
+                OwnerId = this.identity.GetIdentity().Id
+            });
+
             await this.context.SaveChangesAsync();
 
             return this.Ok( new IdModel<int> { Id = entity.Id });
         }
 
+        [Authorize]
         [HttpPut, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] EditForumModel model)
         {
@@ -155,6 +192,15 @@ namespace Api.Controllers
                     Topic = topic
                 });
 
+            await this.context.SynchronizeChildren<ForumModerator, User>(
+                E => E.ForumId == id,
+                () => model.Moderators.Select(M => M.Id),
+                moderator => new ForumModerator
+                {
+                    Forum = entity,
+                    Moderator = moderator
+                });
+
             await this.context.SaveChangesAsync();
 
             return this.Ok();
@@ -191,6 +237,24 @@ namespace Api.Controllers
                 {
                     Id = F.Id,
                     Name = F.Name
+                })
+                .OrderBy(B => B.Name)
+                .ToArrayAsync();
+
+            return this.Ok(model);
+        }
+
+        [HttpGet, Route("api/1.0/forums/users/suggest")]
+        [ProducesResponseType(200, Type = typeof(KeyValueModel[]))]
+        public async Task<IActionResult> SuggestUsers(string queryText)
+        {
+            var model = await this.context
+                .Users
+                .Where(E => E.UserName.StartsWith(queryText))
+                .Select(F => new KeyValueModel
+                {
+                    Id = F.Id,
+                    Name = F.UserName
                 })
                 .OrderBy(B => B.Name)
                 .ToArrayAsync();

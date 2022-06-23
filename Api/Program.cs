@@ -1,6 +1,7 @@
 ﻿using Api.Data;
 using Api.Services;
 using Api.Services.Authentication;
+using Api.Services.Moderation;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddTransient<IModerationService, ModerationService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

@@ -29,7 +29,6 @@ export class ForumEditComponent implements OnInit {
       if (this.id) {
         this.forums.getForum(this.id).subscribe(r => {
           this.entity = r;
-          this.entity.moderators = this.entity.moderators = [];
         });
       }
     });
@@ -48,14 +47,10 @@ export class ForumEditComponent implements OnInit {
   searchModerators(query: string) {
     this.suggestedModerators = [];
     if (query) {
-      this.suggestedModerators = [
-        { id: 1, name: "moderator 1" },
-        { id: 2, name: "moderator 2" },
-      ]
-      // this.api.suggestTopics(query).subscribe(r => {
-      //   let s = r.filter((f: any) => this.entity.topics.find((m: any) => m.id === f.id) === undefined);
-      //   this.suggestedTopics = s;
-      // });
+      this.forums.suggestUsers(query).subscribe(r => {
+        let s = r.filter((f: any) => this.entity.moderators.find((m: any) => m.id === f.id) === undefined);
+        this.suggestedModerators = s;
+      });
     }
   }
 

@@ -62,7 +62,8 @@ namespace Api.Controllers
                     },
                     Ups = E.Votes.Count(V => V.Vote > 0),
                     Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
+                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
                 })
                 .ToArrayAsync();
 
@@ -107,7 +108,8 @@ namespace Api.Controllers
                     },
                     Ups = E.Votes.Count(V => V.Vote > 0),
                     Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
+                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
+                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
                 })
                 .Take(25)
                 .ToArrayAsync();
