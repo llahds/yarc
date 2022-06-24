@@ -65,5 +65,9 @@ export class ForumsService {
 
   leave (id: number) {
     return this.client.post(`api/1.0/forums/${id}/leave`, {});
-  }  
+  }
+
+  getIdBySlug(slug: string) {
+    return this.client.get(`api/1.0/forums/slug/${slug}`);
+  }
 }

@@ -16,6 +16,7 @@ import { ForumComponent } from './forum/forum.component';
 import { PopularComponent } from './popular/popular.component';
 import { PrivateForumComponent } from './private-forum/private-forum.component';
 import { ForumGuardService } from './services/forum-guard.service';
+import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 export const routingConfiguration: ExtraOptions = {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: "private",
     component: PrivateForumComponent
+  },
+  {
+    path: "s/:slug",
+    component: SlugRedirectComponent
   },
   {
     path: "r/:forumId",

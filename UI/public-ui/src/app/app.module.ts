@@ -47,6 +47,7 @@ import { ChangePasswordComponent } from './user-settings/change-password/change-
 import { VoteComponent } from './vote/vote.component';
 import { SimilarForumsComponent } from './forum/similar-forums/similar-forums.component';
 import { PrivateForumComponent } from './private-forum/private-forum.component';
+import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { PrivateForumComponent } from './private-forum/private-forum.component';
     VoteComponent,
     SimilarForumsComponent,
     PrivateForumComponent,
+    SlugRedirectComponent,
   ],
   imports: [
     BrowserModule,

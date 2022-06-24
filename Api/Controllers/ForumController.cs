@@ -183,5 +183,19 @@ namespace Api.Controllers
 
             return this.NoContent();
         }
+
+        [HttpGet, Route("api/1.0/forums/slug/{slug}")]
+        [ProducesResponseType(200, Type = typeof(IdModel<int>))]
+        public async Task<IActionResult> GetBySlug(string slug)
+        {
+            var r = await this.forums.GetIdBySlug(slug);
+
+            if (r == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(new IdModel<int> { Id = r.Value });
+        }
     }
 }

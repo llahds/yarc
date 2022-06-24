@@ -360,5 +360,14 @@ namespace Api.Services.Forums
 
             return entity;
         }
+
+        public async Task<int?> GetIdBySlug(string slug)
+        {
+            return await this.context
+                .Forums
+                .Where(F => F.Slug == slug)
+                .Select(F => F.Id)
+                .FirstOrDefaultAsync();
+        }
     }
 }
