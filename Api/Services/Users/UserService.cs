@@ -14,17 +14,20 @@ namespace Api.Services.Users
         private readonly IMapper mapper;
         private readonly ITokenGeneratorService tokens;
         private readonly IIdentityService identity;
-        
+        private readonly IPasswordHashService passwords;
+
         public UserService(
             YARCContext context,
             IMapper mapper,
             ITokenGeneratorService tokens,
-            IIdentityService identity)
+            IIdentityService identity,
+            IPasswordHashService passwords)
         {
             this.context = context;
             this.mapper = mapper;
             this.tokens = tokens;
             this.identity = identity;
+            this.passwords = passwords;
         }
 
         public async Task<bool> EmailAlreadyExists(string email, int? userId)
@@ -44,6 +47,8 @@ namespace Api.Services.Users
         public async Task<AuthenticationTokenModel> Register(RegisterModel model)
         {
             var entity = this.mapper.Map<User>(model);
+
+            entity.Password = await this.passwords.Generate(model.Password);
 
             await this.context.Users.AddAsync(entity);
 
@@ -115,7 +120,7 @@ namespace Api.Services.Users
 
             var entity = await this.context.Users.FirstOrDefaultAsync(U => U.Id == userId);
 
-            entity.Password = password;
+            entity.Password = await this.passwords.Generate(password);
 
             await this.context.SaveChangesAsync();
         }

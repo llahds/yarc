@@ -26,6 +26,7 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IPostViewService, PostViewService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportingService, ReportingService>();
+builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

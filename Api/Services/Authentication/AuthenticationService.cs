@@ -9,13 +9,16 @@ namespace Api.Services.Authentication
     {
         private readonly YARCContext context;
         private readonly ITokenGeneratorService tokens;
+        private readonly IPasswordHashService passwords;
 
         public AuthenticationService(
             YARCContext context,
-            ITokenGeneratorService tokens)
+            ITokenGeneratorService tokens,
+            IPasswordHashService passwords)
         {
             this.context = context;
             this.tokens = tokens;
+            this.passwords = passwords;
         }
 
         public async Task<AuthenticationTokenModel> VerifyCredentials(AuthenticateRequestModel model)
@@ -46,12 +49,7 @@ namespace Api.Services.Authentication
                 .Where(U => U.UserName == userName)
                 .FirstOrDefaultAsync();
 
-            if (entity?.Password != password)
-            {
-                return false;
-            }
-
-            return true;
+            return await this.passwords.Validate(password, entity?.Password);
         }
     }
 }
