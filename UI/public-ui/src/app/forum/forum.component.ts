@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ForumsService } from '../services/forums.service';
 import { Forum } from '../services/models/forums';
 
@@ -13,11 +13,11 @@ export class ForumComponent implements OnInit {
   public showPostModal: boolean = false;
   public forum!: Forum;
   public id!: number;
-  
 
   constructor(
     private route: ActivatedRoute,
-    private api: ForumsService
+    private api: ForumsService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -29,5 +29,9 @@ export class ForumComponent implements OnInit {
 
   createPost() {
     this.showPostModal = true
+  }
+
+  remove() {
+    this.api.remove(this.id).subscribe(r => this.router.navigateByUrl("/"));
   }
 }

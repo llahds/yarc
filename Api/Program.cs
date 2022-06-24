@@ -2,6 +2,7 @@
 using Api.Services;
 using Api.Services.Authentication;
 using Api.Services.Comments;
+using Api.Services.Forums;
 using Api.Services.Moderation;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +18,7 @@ builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IModerationService, ModerationService>();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
+builder.Services.AddTransient<IForumService, ForumService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
