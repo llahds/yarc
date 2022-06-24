@@ -1,162 +1,41 @@
-﻿using Api.Data;
-using Api.Data.Entities;
-using Api.Models;
-using Api.Services.Authentication;
-using AutoMapper;
+﻿using Api.Models;
+using Api.Services.Posts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
     public class ForumPostController : Controller
     {
-        private readonly YARCContext context;
-        private readonly IMapper mapper;
-        private readonly IIdentityService identity;
+        private readonly IPostService posts;
+        private readonly IPostViewService views;
 
         public ForumPostController(
-            YARCContext context,
-            IMapper mapper,
-            IIdentityService identity)
+            IPostService posts,
+            IPostViewService views)
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.identity = identity;
+            this.posts = posts;
+            this.views = views;
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
         [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
         public async Task<IActionResult> List(int forumId, int startAt)
         {
-            var userId = 0;
-
-            if (this.User.Identity.IsAuthenticated)
-            {
-                userId = this.identity.GetIdentity().Id;
-            }
-
-            var posts = await this.context
-                .Posts
-                .Where(E => 
-                    E.ForumId == forumId 
-                    && E.Id > startAt 
-                    && E.IsHidden == false
-                    && E.IsDeleted == false)
-                .OrderBy(E => E.CreatedOn)
-                .Take(25)
-                .Select(E => new ForumPostListItemModel
-                {
-                    Id = E.Id,
-                    CreatedOn = E.CreatedOn,
-                    Title = E.Title,
-                    Forum = new KeyValueModel
-                    {
-                        Id = E.ForumId,
-                        Name = E.Forum.Name
-                    },
-                    PostedBy = new PostedByModel
-                    {
-                        Id = E.PostedById,
-                        Name = E.PostedBy.DisplayName ?? "[deleted]",
-                        AvatarId = -1
-                    },
-                    Ups = E.Votes.Count(V => V.Vote > 0),
-                    Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
-                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
-                })
-                .ToArrayAsync();
-
-            return this.Ok(posts);
+            return this.Ok(await this.posts.List(forumId, startAt));
         }
 
         [HttpGet, Route("api/1.0/forums/posts/popular")]
         [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
         public async Task<IActionResult> Popular(int startAt)
         {
-            var userId = 0; 
-            
-            if (this.User.Identity.IsAuthenticated)
-            {
-                userId = this.identity.GetIdentity().Id;
-            }
-
-            var posts = await this.context
-                .Posts
-                //.Where(E => E.Id > startAt)
-                //.OrderBy(E => Guid.NewGuid())
-                //.Take(25)
-                .Where(E => 
-                    E.ForumId == 27 
-                    && E.IsHidden == false
-                    && E.IsDeleted == false)
-                .Select(E => new ForumPostListItemModel
-                {
-                    Id = E.Id,
-                    CreatedOn = E.CreatedOn,
-                    Title = E.Title,
-                    Forum = new KeyValueModel
-                    {
-                        Id = E.ForumId,
-                        Name = E.Forum.Name
-                    },
-                    PostedBy = new PostedByModel
-                    {
-                        Id = E.PostedById,
-                        Name = E.PostedBy.DisplayName ?? "[deleted]",
-                        AvatarId = -1
-                    },
-                    Ups = E.Votes.Count(V => V.Vote > 0),
-                    Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
-                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
-                })
-                .Take(25)
-                .ToArrayAsync();
-
-            return this.Ok(posts);
+            return this.Ok(await this.views.Popular(startAt));
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         [ProducesResponseType(200, Type = typeof(ForumPostViewModel))]
         public async Task<IActionResult> Get(int forumId, int postId)
         {
-            var userId = 0;
-
-            if (this.User.Identity.IsAuthenticated)
-            {
-                userId = this.identity.GetIdentity().Id;
-            }
-
-            var model = await this.context
-                .Posts
-                .Where(E => 
-                    E.Id == postId 
-                    && E.ForumId == forumId)
-                .Select(E => new ForumPostViewModel
-                {
-                    Id = E.Id,
-                    CreatedOn = E.CreatedOn,
-                    Title = E.Title,
-                    Text = E.Text,
-                    Forum = new KeyValueModel
-                    {
-                        Id = E.ForumId,
-                        Name = E.Forum.Name
-                    },
-                    PostedBy = new PostedByModel
-                    {
-                        Id = E.PostedById,
-                        Name = E.PostedBy.DisplayName ?? "[deleted]",
-                        AvatarId = -1
-                    },
-                    CanReport = userId > 0 
-                        && E.ReportedPosts.Any(R => R.ReportedById == userId) == false,
-                    Ups = E.Votes.Count(V => V.Vote > 0),
-                    Downs = E.Votes.Count(V => V.Vote < 0),
-                    Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote
-                })
-                .FirstOrDefaultAsync();
+            var model = await this.posts.Get(forumId, postId);
 
             if (model == null)
             {
@@ -175,17 +54,7 @@ namespace Api.Controllers
                 return this.BadRequest(this.ModelState);
             }
 
-            var entity = this.mapper.Map<Post>(model);
-
-            entity.ForumId = forumId;
-            entity.PostedById = 1;
-            entity.CreatedOn = DateTime.UtcNow;
-
-            await this.context.AddAsync(entity);
-
-            await this.context.SaveChangesAsync();
-
-            return this.Ok(new IdModel<int> { Id = entity.Id });
+            return this.Ok(await this.posts.Create(forumId, model));
         }
 
         [HttpPut, Route("api/1.0/forums/{forumId}/posts/{postId}")]
@@ -196,20 +65,10 @@ namespace Api.Controllers
                 return this.BadRequest(this.ModelState);
             }
 
-            var entity = await this.context
-                .Posts
-                .Where(E => E.ForumId == forumId && E.Id == postId)
-                .FirstOrDefaultAsync();
-
-            if (entity == null)
+            if (await this.posts.Update(forumId, postId, model) == false)
             {
-                return NotFound();
+                return this.NotFound();
             }
-
-            entity.Title = model.Title;
-            entity.Text = model.Text;
-
-            await this.context.SaveChangesAsync();
 
             return this.Ok();
         }
@@ -217,19 +76,10 @@ namespace Api.Controllers
         [HttpDelete, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         public async Task<IActionResult> Remove(int forumId, int postId)
         {
-            var entity = await this.context
-                .Posts
-                .Where(E => E.ForumId == forumId && E.Id == postId)
-                .FirstOrDefaultAsync();
-
-            if (entity == null)
+            if (await this.posts.Remove(forumId, postId) == false)
             {
                 return this.NotFound();
             }
-
-            entity.IsDeleted = true;
-
-            await this.context.SaveChangesAsync();
 
             return this.Ok();
         }

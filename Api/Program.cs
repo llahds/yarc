@@ -4,6 +4,7 @@ using Api.Services.Authentication;
 using Api.Services.Comments;
 using Api.Services.Forums;
 using Api.Services.Moderation;
+using Api.Services.Posts;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ builder.Services.AddTransient<IModerationService, ModerationService>();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 builder.Services.AddTransient<IForumService, ForumService>();
+builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IPostViewService, PostViewService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
