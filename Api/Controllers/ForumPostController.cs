@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using Api.Data.Entities;
+using Api.Models;
 using Api.Services.Forums;
 using Api.Services.Posts;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             return this.Ok(await this.posts.List(forumId, startAt));
@@ -46,7 +47,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             var model = await this.posts.Get(forumId, postId);
@@ -65,12 +66,17 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             if (this.ModelState.IsValid == false)
             {
                 return this.BadRequest(this.ModelState);
+            }
+
+            if (await this.forums.GetMemberStatus(forumId) == ForumMemberStatuses.MUTED)
+            {
+                return this.Forbid();
             }
 
             return this.Ok(await this.posts.Create(forumId, model));
@@ -81,7 +87,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             if (this.ModelState.IsValid == false)
@@ -102,7 +108,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             if (await this.posts.Remove(forumId, postId) == false)

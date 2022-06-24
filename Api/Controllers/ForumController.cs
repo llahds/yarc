@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using Api.Data.Entities;
+using Api.Models;
 using Api.Services.Forums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(id) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             var model = await this.forums.GetForumGuidelines(id);
@@ -50,7 +51,7 @@ namespace Api.Controllers
         {
             if (await this.forums.CanAccessForum(id) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             var model = await this.forums.Get(id);
@@ -90,7 +91,7 @@ namespace Api.Controllers
         {
             if (await this.forums.VerifyOwner(id) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             if (string.IsNullOrEmpty(model?.Slug) == false)
@@ -119,7 +120,7 @@ namespace Api.Controllers
         {
             if (await this.forums.VerifyOwner(id) == false)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             if (await this.forums.Remove(id))
@@ -149,6 +150,38 @@ namespace Api.Controllers
         public async Task<IActionResult> FindSimilarForums(int forumId)
         {
             return this.Ok(await this.forums.FindSimilarForums(forumId));
+        }
+
+        [Authorize]
+        [HttpPost, Route("api/1.0/forums/{forumId}/join")]
+        public async Task<IActionResult> Join(int forumId)
+        {
+            var statusId = await this.forums.GetMemberStatus(forumId);
+
+            if (statusId == -1 || statusId == ForumMemberStatuses.LEFT)
+            {
+                await this.forums.Join(forumId);
+
+                return this.Ok();
+            }
+
+            return this.NoContent();            
+        }
+
+        [Authorize]
+        [HttpPost, Route("api/1.0/forums/{forumId}/leave")]
+        public async Task<IActionResult> Leave(int forumId)
+        {
+            var statusId = await this.forums.GetMemberStatus(forumId);
+
+            if (statusId == -1 || statusId == ForumMemberStatuses.JOINED || statusId == ForumMemberStatuses.APPROVED)
+            {
+                await this.forums.Leave(forumId);
+
+                return this.Ok();
+            }
+
+            return this.NoContent();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Api.Controllers.Moderation
                 return await func();
             }
 
-            return this.Unauthorized();
+            return this.Forbid();
         }
     }
 }

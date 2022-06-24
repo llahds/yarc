@@ -5,6 +5,8 @@ export interface Forum extends ForumEditModel {
     memberCount: number;
     isModerator: boolean;
     isOwner: boolean;
+    hasJoined: boolean;
+    isMuted: boolean;
 }
 
 export interface ForumEditModel {

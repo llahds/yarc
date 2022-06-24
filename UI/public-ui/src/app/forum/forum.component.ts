@@ -34,4 +34,16 @@ export class ForumComponent implements OnInit {
   remove() {
     this.api.remove(this.id).subscribe(r => this.router.navigateByUrl("/"));
   }
+
+  join() {
+    this.api.join(this.id).subscribe(r => {
+      this.forum.hasJoined = true;
+    })
+  }
+
+  leave() {
+    this.api.leave(this.id).subscribe(r => {
+      this.forum.hasJoined = false;
+    })
+  }
 }

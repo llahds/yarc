@@ -63,10 +63,12 @@ namespace Api.Services.Forums
                         Name = T.Moderator.UserName
                     })
                     .ToArray(),
-                    MemberCount = F.Members.Count(),
-                    IsOwner = (userId > 0 && F.ForumOwners.Any(U => U.OwnerId == userId)),
-                    IsModerator = (userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId)),
-                    IsPrivate = F.IsPrivate
+                    MemberCount = F.Members.Count(M => M.Status == ForumMemberStatuses.JOINED || M.Status == ForumMemberStatuses.APPROVED),
+                    IsOwner = userId > 0 && F.ForumOwners.Any(U => U.OwnerId == userId),
+                    IsModerator = userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId),
+                    IsPrivate = F.IsPrivate,
+                    HasJoined = userId > 0 && F.Members.Any(U => U.MemberId == userId && (U.Status == ForumMemberStatuses.JOINED || U.Status == ForumMemberStatuses.APPROVED)),
+                    IsMuted = userId > 0 && F.Members.Any(U => U.MemberId == userId && U.Status == ForumMemberStatuses.MUTED)
                 })
                 .FirstOrDefaultAsync();
         }
@@ -302,6 +304,61 @@ namespace Api.Services.Forums
             return await this.context
                 .ForumModerator
                 .AnyAsync(M => M.ModeratorId == userId && M.ForumId == forumId);
+        }
+
+        public async Task Join(int forumId)
+        {
+            var entity = await EnsureForumMemberRecord(forumId);
+
+            entity.CreatedOn = DateTime.UtcNow;
+            entity.Status = ForumMemberStatuses.JOINED;
+
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task Leave(int forumId)
+        {
+            var entity = await EnsureForumMemberRecord(forumId);
+
+            entity.CreatedOn = DateTime.UtcNow;
+            entity.Status = ForumMemberStatuses.LEFT;
+
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task<int?> GetMemberStatus(int forumId)
+        {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            var entity = await this.context
+                .ForumMembers
+                .Where(F => F.MemberId == userId && F.ForumId == forumId)
+                .FirstOrDefaultAsync();
+
+            return entity?.Status ?? -1;
+        }
+
+        private async Task<ForumMember> EnsureForumMemberRecord(int forumId)
+        {
+            var userId = this.identity.GetIdentity().Id;
+
+            var entity = await this.context
+                .ForumMembers
+                .Where(U => U.ForumId == forumId && U.MemberId == userId)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                entity = new Data.Entities.ForumMember
+                {
+                    ForumId = forumId,
+                    MemberId = userId
+                };
+
+                await this.context.AddAsync(entity);
+            }
+
+            return entity;
         }
     }
 }

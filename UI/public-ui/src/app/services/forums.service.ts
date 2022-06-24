@@ -58,4 +58,12 @@ export class ForumsService {
   checkForumAccess(id: number) : Observable<CanAccessForum> {
     return this.client.get(`api/1.0/forums/${id}/access`);
   }
+
+  join (id: number) {
+    return this.client.post(`api/1.0/forums/${id}/join`, {});
+  }
+
+  leave (id: number) {
+    return this.client.post(`api/1.0/forums/${id}/leave`, {});
+  }  
 }
