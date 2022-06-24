@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IModerationService, ModerationService>();
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

@@ -1,23 +1,17 @@
-﻿using Api.Data;
-using Api.Models;
+﻿using Api.Models;
 using Api.Services.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Api.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly YARCContext context;
-        private readonly ITokenGeneratorService tokens;
+        private readonly IAuthenticationService authentication;
 
         public AuthenticationController(
-            YARCContext context,
-            ITokenGeneratorService tokens)
+            IAuthenticationService authentication)
         {
-            this.context = context;
-            this.tokens = tokens;
+            this.authentication = authentication;
         }
 
         [HttpPost, Route("api/1.0/authenticate")]
@@ -29,25 +23,15 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await this.context.Users
-                .Where(U => U.UserName == model.UserName)
-                .FirstOrDefaultAsync();
+            var token = await this.authentication.VerifyCredentials(model);
 
-            if (entity?.Password != model.Password)
+            if (token == null)
             {
                 this.ModelState.AddModelError(nameof(model.UserName), "Invalid user name or password.");
                 return this.BadRequest(this.ModelState);
             }
 
-            var upn = new Claim(ClaimTypes.NameIdentifier, entity.UserName);
-            var id = new Claim("Id", entity.Id.ToString());
-            var token = await this.tokens.Generate(new[] { upn, id });
-
-            return this.Ok(new AuthenticationTokenModel
-            {
-                UserName = model.UserName,
-                Token = token
-            });
+            return this.Ok(token);
         }
     }
 }
