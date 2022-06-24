@@ -22,9 +22,7 @@ namespace Api.Services.Authentication
         {
             if (await this.CheckPassword(model.UserName, model.Password) == false)
             {
-#pragma warning disable CS8603 // Possible null reference return.
                 return null;
-#pragma warning restore CS8603 // Possible null reference return.
             }
 
             var entity = await this.context.Users

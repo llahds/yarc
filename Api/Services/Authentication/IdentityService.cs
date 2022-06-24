@@ -13,16 +13,16 @@ namespace Api.Services.Authentication
             this.context = context;
         }
 
-        public IdentityModel GetIdentity()
+        public IdentityModel? GetIdentity()
         {
-            if (context.HttpContext.User.Identity.IsAuthenticated)
+            if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
             {
                 var identity = (ClaimsIdentity)context.HttpContext.User.Identity;
 
                 return new IdentityModel
                 {
                     UserName = identity.FindFirst(ClaimTypes.NameIdentifier).Value,
-                    Id = Convert.ToInt32(identity.FindFirst("Id").Value)
+                    Id = Convert.ToInt32(identity.FindFirst("Id")?.Value)
                 };
             }
 

@@ -42,7 +42,6 @@ namespace Api.Services.Forums
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
 
-#pragma warning disable CS8603 // Possible null reference return.
             return await this.context
                 .Forums
                 .Where(E => E.Id == forumId)
@@ -69,7 +68,6 @@ namespace Api.Services.Forums
                     IsModerator = (userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId))
                 })
                 .FirstOrDefaultAsync();
-#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task<bool> SlugAlreadyTaken(string slug, int? forumId)

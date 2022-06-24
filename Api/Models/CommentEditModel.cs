@@ -5,6 +5,6 @@ namespace Api.Models
     public class CommentEditModel
     {
         [Required]
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
     }
 }

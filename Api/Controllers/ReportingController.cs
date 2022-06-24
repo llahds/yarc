@@ -1,61 +1,33 @@
-﻿using Api.Data;
-using Api.Data.Entities;
-using Api.Models;
-using Api.Services.Authentication;
-using AutoMapper;
+﻿using Api.Models;
+using Api.Services.Reporting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
+    [Authorize]
     public class ReportingController : Controller
     {
-        private readonly YARCContext context;
-        private readonly IMapper mapper;
-        private readonly IIdentityService identity;
+        private readonly IReportingService reporting;
 
         public ReportingController(
-            YARCContext context,
-            IMapper mapper,
-            IIdentityService identity)
+            IReportingService reporting)
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.identity = identity;
+            this.reporting = reporting;
         }
 
         [HttpGet, Route("api/1.0/reporting/reasons")]
         [ProducesResponseType(200, Type = typeof(ReportReasonModel[]))]
         public async Task<IActionResult> Get()
         {
-            var entities = await this.context
-                .ReportReasons
-                .ToArrayAsync();
-
-            var model = entities.Select(E => this.mapper.Map<ReportReasonModel>(E)).ToArray();
-
-            return this.Ok(model);
+            return this.Ok(await this.reporting.GetReportReasons());
         }
 
         [Authorize]
         [HttpPost, Route("api/1.0/reporting/posts")]
         public async Task<IActionResult> CreateFromPost([FromBody] ReportedPostModel model)
         {
-            var entity = new ReportedPost();
-
-            entity.PostId = model.PostId;
-            entity.ReasonId = model.ReasonId;
-            entity.ReportedById = this.identity.GetIdentity().Id;
-            entity.CreatedOn = DateTime.UtcNow;
-
-            await this.context.AddAsync(entity);
-
-            var post = await this.context.Posts.FirstOrDefaultAsync(P => P.Id == model.PostId);
-
-            post.IsHidden = true;
-
-            await this.context.SaveChangesAsync();
+            await this.reporting.CreateFromPost(model);
 
             return this.Ok();
         }
@@ -64,22 +36,7 @@ namespace Api.Controllers
         [HttpPost, Route("api/1.0/reporting/comments")]
         public async Task<IActionResult> CreateFromComment([FromBody] ReportedCommentModel model)
         {
-            var entity = new ReportedComment();
-
-            entity.CommentId = model.CommentId;
-            entity.ReasonId = model.ReasonId;
-            entity.ReportedById = this.identity.GetIdentity().Id;
-            entity.CreatedOn = DateTime.UtcNow;
-
-            await this.context.AddAsync(entity);
-
-            var comment = await this.context
-                .Comments
-                .FirstOrDefaultAsync(P => P.Id == model.CommentId);
-
-            comment.IsHidden = true;
-
-            await this.context.SaveChangesAsync();
+            await this.reporting.CreateFromComment(model);
 
             return this.Ok();
         }

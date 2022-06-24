@@ -2,6 +2,6 @@
 {
     public class ForumPostGuideLinesModel
     {
-        public string GuideLines { get; set; }
+        public string GuideLines { get; set; } = "";
     }
 }

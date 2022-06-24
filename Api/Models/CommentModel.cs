@@ -2,9 +2,6 @@
 {
     public class CommentModel : CommentInfoModel
     {
-        public int Id { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public PostedByModel PostedBy { get; set; }
         public int ReplyCount { get; set; }
         public int Ups { get; set; }
         public int Downs { get; set; }

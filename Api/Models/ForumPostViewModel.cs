@@ -2,7 +2,7 @@
 {
     public class ForumPostViewModel : ForumPostListItemModel
     {
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
         public bool CanReport { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Api.Services.Comments;
 using Api.Services.Forums;
 using Api.Services.Moderation;
 using Api.Services.Posts;
+using Api.Services.Reporting;
 using Api.Services.Users;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,6 +25,7 @@ builder.Services.AddTransient<IForumService, ForumService>();
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IPostViewService, PostViewService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IReportingService, ReportingService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

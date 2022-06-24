@@ -4,6 +4,6 @@ namespace Api.Services.Authentication
 {
     public interface IIdentityService
     {
-        IdentityModel GetIdentity();
+        IdentityModel? GetIdentity();
     }
 }

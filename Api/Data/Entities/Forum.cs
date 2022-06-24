@@ -11,28 +11,33 @@ namespace Api.Data.Entities
     public class Forum 
     {
         public int Id { get; set; }
-        [MaxLength(100)]
-        public string Name { get; set; }
-        [MaxLength(4000)]
-        public string Description { get; set; }
-        [MaxLength(125)]
-        public string Slug { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public ICollection<ForumOwner> ForumOwners { get; set; }
-        public ICollection<ForumModerator> ForumModerators { get; set; }
-        public ICollection<Post> Posts { get; set; }
-        public ICollection<ForumMember> Members { get; set; }
-        public bool IsDeleted { get; set; }
-        public ICollection<ForumTopic> Topics { get; set; }
 
-        internal string _postSettingsJson { get; set; }
+        [MaxLength(100)]
+        public string Name { get; set; } = "";
+
+        [MaxLength(4000)]
+        public string Description { get; set; } = "";
+        
+        [MaxLength(125)]
+        public string Slug { get; set; } = "";
+        public DateTime CreatedOn { get; set; }
+        public ICollection<ForumOwner>? ForumOwners { get; set; }
+        public ICollection<ForumModerator>? ForumModerators { get; set; }
+        public ICollection<Post>? Posts { get; set; }
+        public ICollection<ForumMember>? Members { get; set; }
+        public bool IsDeleted { get; set; }
+        public ICollection<ForumTopic> ?Topics { get; set; }
+
+        internal string _postSettingsJson { get; set; } = "";
 
         [NotMapped]
-        public ForumPostSettings PostSettings 
+        public ForumPostSettings? PostSettings 
         { 
             get
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 return JsonSerializer.Deserialize<ForumPostSettings>(string.IsNullOrEmpty(this._postSettingsJson) ? "{}" : this._postSettingsJson);
+#pragma warning restore CS8603 // Possible null reference return.
             } 
             set
             {

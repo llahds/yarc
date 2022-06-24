@@ -5,10 +5,10 @@ namespace Api.Models
     public class ChangePasswordModel
     {
         [Required]
-        public string OldPassword { get; set; }
+        public string OldPassword { get; set; } = "";
         [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
         [Required, Compare("Password")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; } = "";
     }
 }

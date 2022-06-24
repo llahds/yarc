@@ -6,9 +6,9 @@ namespace Api.Data.Entities
     public class ForumMember
     {
         public int Id { get; set; }
-        public Forum Forum { get; set; }
+        public Forum? Forum { get; set; }
         public int ForumId { get; set; }
-        public User Member { get; set; }
+        public User? Member { get; set; }
         public int MemberId { get; set; }
         public DateTime CreatedOn { get; set; }
         public int Status { get; set; }

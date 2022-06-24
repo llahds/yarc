@@ -1,33 +1,23 @@
-﻿using Api.Data;
-using Api.Data.Entities;
-using Api.Models;
+﻿using Api.Models;
 using Api.Services.Authentication;
 using Api.Services.Users;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
     [Authorize]
     public class UserSettingsController : Controller
     {
-        private readonly IMapper mapper;
-        private readonly YARCContext context;
         private readonly IIdentityService identity;
         private readonly IUserService users;
         private readonly IAuthenticationService authentication;
 
         public UserSettingsController(
-            IMapper mapper,
-            YARCContext context,
             IIdentityService identity,
             IUserService users,
             IAuthenticationService authentication)
         {
-            this.mapper = mapper;
-            this.context = context;
             this.identity = identity;
             this.users = users;
             this.authentication = authentication;
