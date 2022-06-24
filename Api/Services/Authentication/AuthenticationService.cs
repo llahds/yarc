@@ -20,14 +20,16 @@ namespace Api.Services.Authentication
 
         public async Task<AuthenticationTokenModel> VerifyCredentials(AuthenticateRequestModel model)
         {
+            if (await this.CheckPassword(model.UserName, model.Password) == false)
+            {
+#pragma warning disable CS8603 // Possible null reference return.
+                return null;
+#pragma warning restore CS8603 // Possible null reference return.
+            }
+
             var entity = await this.context.Users
                 .Where(U => U.UserName == model.UserName)
                 .FirstOrDefaultAsync();
-
-            if (entity?.Password != model.Password)
-            {
-                return null;
-            }
 
             var upn = new Claim(ClaimTypes.NameIdentifier, entity.UserName);
             var id = new Claim("Id", entity.Id.ToString());
@@ -38,6 +40,20 @@ namespace Api.Services.Authentication
                 UserName = model.UserName,
                 Token = token
             };
+        }
+
+        public async Task<bool> CheckPassword(string userName, string password)
+        {
+            var entity = await this.context.Users
+                .Where(U => U.UserName == userName)
+                .FirstOrDefaultAsync();
+
+            if (entity?.Password != password)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

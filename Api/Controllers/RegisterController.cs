@@ -1,48 +1,29 @@
-﻿using Api.Data;
-using Api.Data.Entities;
-using Api.Models;
-using Api.Services.Authentication;
-using AutoMapper;
+﻿using Api.Models;
+using Api.Services.Users;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Api.Controllers
 {
     public class RegisterController : Controller
     {
-        private readonly YARCContext context;
-        private readonly IMapper mapper;
-        private readonly ITokenGeneratorService tokens;
+        private readonly IUserService users;
 
         public RegisterController(
-            YARCContext context,
-            IMapper mapper,
-            ITokenGeneratorService tokens)
+            IUserService users)
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.tokens = tokens;
+            this.users = users;
         }
 
         [HttpPost, Route("api/1.0/register")]
         [ProducesResponseType(200, Type = typeof(AuthenticationTokenModel))]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var emailAlreadyExists = await context
-                .Users
-                .AnyAsync(U => U.Email == model.Email);
-
-            if (emailAlreadyExists)
+            if (await users.EmailAlreadyExists(model.Email, null))
             {
                 this.ModelState.AddModelError(nameof(model.Email), "Email already exists.");
             }
 
-            var userNameAlreadyExists = await context
-                .Users
-                .AnyAsync(U => U.UserName == model.UserName);
-
-            if (userNameAlreadyExists)
+            if (await this.users.UserNameAlreadyExists(model.UserName, null))
             {
                 this.ModelState.AddModelError(nameof(model.UserName), "User name already exists.");
             }
@@ -52,21 +33,7 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = this.mapper.Map<User>(model);
-
-            await this.context.Users.AddAsync(entity);
-
-            await this.context.SaveChangesAsync();
-
-            var upn = new Claim(ClaimTypes.NameIdentifier, entity.UserName);
-            var id = new Claim("Id", entity.Id.ToString());
-            var token = await this.tokens.Generate(new[] { upn, id });
-
-            return this.Ok(new AuthenticationTokenModel
-            {
-                UserName = model.UserName,
-                Token = token
-            });
+            return this.Ok(await this.users.Register(model));
         }
     }
 }

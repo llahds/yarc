@@ -2,6 +2,7 @@
 using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Authentication;
+using Api.Services.Users;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,31 +16,28 @@ namespace Api.Controllers
         private readonly IMapper mapper;
         private readonly YARCContext context;
         private readonly IIdentityService identity;
+        private readonly IUserService users;
+        private readonly IAuthenticationService authentication;
 
         public UserSettingsController(
             IMapper mapper,
             YARCContext context,
-            IIdentityService identity)
+            IIdentityService identity,
+            IUserService users,
+            IAuthenticationService authentication)
         {
             this.mapper = mapper;
             this.context = context;
             this.identity = identity;
+            this.users = users;
+            this.authentication = authentication;
         }
 
         [HttpGet, Route("api/1.0/user-settings")]
         [ProducesResponseType(200, Type = typeof(UserSettingsModel))]
         public async Task<IActionResult> Get()
         {
-            var userName = this.identity.GetIdentity().UserName;
-
-            var entity = await this.context
-                .Users
-                .Where(U => U.UserName == userName)
-                .FirstOrDefaultAsync();
-
-            var model = this.mapper.Map<UserSettingsModel>(entity);
-
-            return this.Ok(model);
+            return this.Ok(await this.users.GetUserSettings());
         }
 
         [HttpPut, Route("api/1.0/user-settings")]
@@ -50,17 +48,7 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userName = this.identity.GetIdentity().UserName;
-
-            var entity = await this.context
-                .Users
-                .Where(U => U.UserName == userName)
-                .FirstOrDefaultAsync();
-
-            entity.DisplayName = model.DisplayName;
-            entity.About = model.About;
-
-            await this.context.SaveChangesAsync();
+            await this.users.UpdateUserSettings(model);
 
             return this.Ok();
         }
@@ -68,14 +56,9 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/user-settings/user-name")]
         public async Task<IActionResult> UpdateUserName([FromBody] ChangeUserNameModel model)
         {
-            var userName = this.identity.GetIdentity().UserName;
+            var userId = this.identity.GetIdentity().Id;
 
-            var userNameAlreadyExists = await context
-                .Users
-                .AnyAsync(U => U.UserName == model.UserName
-                    && U.UserName != userName);
-
-            if (userNameAlreadyExists)
+            if (await this.users.UserNameAlreadyExists(model.UserName, userId))
             {
                 this.ModelState.AddModelError(nameof(model.UserName), "User name already exists.");
             }
@@ -85,20 +68,15 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await this.context
-                .Users
-                .Where(U => U.UserName == userName)
-                .FirstOrDefaultAsync();
+            var userName = this.identity.GetIdentity().UserName;
 
-            if (entity?.Password != model.Password)
+            if (await this.authentication.CheckPassword(userName, model.Password) == false)
             {
                 this.ModelState.AddModelError(nameof(model.Password), "Invalid password.");
                 return this.BadRequest(this.ModelState);
             }
 
-            entity.UserName = model.UserName;
-
-            await this.context.SaveChangesAsync();
+            await this.users.UpdateUserName(model.UserName);
 
             return this.Ok();
         }
@@ -106,16 +84,11 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/user-settings/email")]
         public async Task<IActionResult> UpdateEmail([FromBody] ChangeEmailModel model)
         {
-            var userName = this.identity.GetIdentity().UserName;
+            var userId = this.identity.GetIdentity().Id;
 
-            var emailAlreadyExists = await context
-                .Users
-                .AnyAsync(U => U.Email == model.Email
-                    && U.UserName != userName);
-
-            if (emailAlreadyExists)
+            if (await this.users.EmailAlreadyExists(model.Email, userId))
             {
-                this.ModelState.AddModelError(nameof(model.Email), "User name already exists.");
+                this.ModelState.AddModelError(nameof(model.Email), "Email already exists.");
             }
 
             if (!ModelState.IsValid)
@@ -123,20 +96,15 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await this.context
-                .Users
-                .Where(U => U.UserName == userName)
-                .FirstOrDefaultAsync();
+            var userName = this.identity.GetIdentity().UserName;
 
-            if (entity?.Password != model.Password)
+            if (await this.authentication.CheckPassword(userName, model.Password))
             {
                 this.ModelState.AddModelError(nameof(model.Password), "Invalid password.");
                 return this.BadRequest(this.ModelState);
             }
 
-            entity.Email = model.Email;
-
-            await this.context.SaveChangesAsync();
+            await this.users.UpdateEmail(model.Email);
 
             return this.Ok();
         }
@@ -151,20 +119,13 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await this.context
-                .Users
-                .Where(U => U.UserName == userName)
-                .FirstOrDefaultAsync();
-
-            if (entity?.Password != model.OldPassword)
+            if (await this.authentication.CheckPassword(userName, model.OldPassword) == false)
             {
                 this.ModelState.AddModelError(nameof(model.OldPassword), "Invalid password.");
                 return this.BadRequest(this.ModelState);
             }
 
-            entity.Password = model.Password;
-
-            await this.context.SaveChangesAsync();
+            await this.users.UpdatePassword(model.Password);
 
             return this.Ok();
         }
