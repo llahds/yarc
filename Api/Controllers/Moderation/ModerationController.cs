@@ -5,7 +5,7 @@ namespace Api.Controllers.Moderation
 {
     public class ModerationController : Controller
     {
-        private readonly IModerationService moderation;
+        protected readonly IModerationService moderation;
 
         public ModerationController(
             IModerationService moderation)

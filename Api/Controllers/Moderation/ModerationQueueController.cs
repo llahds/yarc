@@ -1,23 +1,18 @@
-﻿using Api.Data;
-using Api.Models;
+﻿using Api.Models;
 using Api.Services.Moderation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.Moderation
 {
     [Authorize]
     public class ModerationQueueController : ModerationController
     {
-        private readonly YARCContext context;
-
         public ModerationQueueController(
-            YARCContext context,
             IModerationService moderation)
             : base(moderation)
         {
-            this.context = context;
+
         }
 
         [HttpGet, Route("api/1.0/moderation/{forumId}/queue")]
@@ -26,72 +21,7 @@ namespace Api.Controllers.Moderation
         {
             return await this.VerifyCredentials(forumId, async () =>
             {
-                var items = await this.context
-                    .Posts
-                    .Where(P =>
-                        P.ForumId == forumId
-                        && P.ReportedPosts.Any(R => reasonIds.Length == 0 || (reasonIds.Length > 0 && reasonIds.Contains(R.ReasonId)))
-                        && P.IsDeleted == false)
-                    .Select(P => new ReportQueueItemModel
-                    {
-                        Post = new ForumPostListItemModel
-                        {
-                            Id = P.Id,
-                            CreatedOn = P.CreatedOn,
-                            Title = P.Title,
-                            Forum = new KeyValueModel
-                            {
-                                Id = P.ForumId,
-                                Name = P.Forum.Name
-                            },
-                            PostedBy = new PostedByModel
-                            {
-                                Id = P.PostedById,
-                                Name = P.PostedBy.DisplayName ?? "[deleted]",
-                                AvatarId = -1
-                            }
-                        },
-                        Reasons = P
-                            .ReportedPosts
-                            .GroupBy(R => R.Reason.Label)
-                            .Select(R => R.Key)
-                            .ToArray()
-                    })
-                    .Take(25)
-                    .ToListAsync();
-
-                var comments = await this.context
-                    .Comments
-                    .Where(C =>
-                        C.Post.ForumId == forumId
-                        && C.ReportedComments.Any(R => reasonIds.Length == 0 || (reasonIds.Length > 0 && reasonIds.Contains(R.ReasonId)))
-                        && C.IsDeleted == false
-                    )
-                    .Select(C => new ReportQueueItemModel
-                    {
-                        Comment = new CommentInfoModel
-                        {
-                            Id = C.Id,
-                            CreatedOn = C.CreatedOn,
-                            Text = C.Text,
-                            PostedBy = new PostedByModel
-                            {
-                                Id = C.PostedById,
-                                Name = C.PostedBy.UserName
-                            }
-                        },
-                        Reasons = C
-                            .ReportedComments
-                            .GroupBy(R => R.Reason.Label)
-                            .Select(R => R.Key)
-                            .ToArray()
-                    })
-                    .Take(25)
-                    .ToListAsync();
-
-                items.AddRange(comments);
-
-                return this.Ok(items);
+                return this.Ok(await this.moderation.GetModerationQueue(forumId, startAt, reasonIds));
             });
         }
 
@@ -100,23 +30,7 @@ namespace Api.Controllers.Moderation
         {
             return await this.VerifyCredentials(forumId, async () =>
             {
-                var post = await this.context
-                    .Posts
-                    .Include(P => P.ReportedPosts)
-                    .Where(U =>
-                        U.ForumId == forumId
-                        && U.Id == postId
-                        && U.IsDeleted == false)
-                    .FirstOrDefaultAsync();
-
-                if (post != null)
-                {
-                    post.IsHidden = false;
-
-                    context.RemoveRange(post.ReportedPosts);
-
-                    await this.context.SaveChangesAsync();
-                }
+                await this.moderation.ApprovePost(forumId, postId);
 
                 return this.Ok();
             });
@@ -127,22 +41,7 @@ namespace Api.Controllers.Moderation
         {
             return await this.VerifyCredentials(forumId, async () =>
             {
-                var post = await this.context
-                    .Posts
-                    .Where(U =>
-                        U.ForumId == forumId
-                        && U.Id == postId
-                        && U.IsDeleted == false)
-                    .FirstOrDefaultAsync();
-
-                if (post != null)
-                {
-                    post.IsDeleted = true;
-
-                    context.RemoveRange(post.ReportedPosts);
-
-                    await this.context.SaveChangesAsync();
-                }
+                await this.moderation.RejectPost(forumId, postId);
 
                 return this.Ok();
             });
@@ -153,23 +52,7 @@ namespace Api.Controllers.Moderation
         {
             return await this.VerifyCredentials(forumId, async () =>
             {
-                var comment = await this.context
-                    .Comments
-                    .Include(P => P.ReportedComments)
-                    .Where(U =>
-                        U.Post.ForumId == forumId
-                        && U.Id == commentId
-                        && U.IsDeleted == false)
-                    .FirstOrDefaultAsync();
-
-                if (comment != null)
-                {
-                    comment.IsHidden = false;
-
-                    context.RemoveRange(comment.ReportedComments);
-
-                    await this.context.SaveChangesAsync();
-                }
+                await this.moderation.ApproveComment(forumId, commentId);
 
                 return this.Ok();
             });
@@ -180,23 +63,7 @@ namespace Api.Controllers.Moderation
         {
             return await this.VerifyCredentials(forumId, async () =>
             {
-                var comment = await this.context
-                    .Comments
-                    .Include(P => P.ReportedComments)
-                    .Where(U =>
-                        U.Post.ForumId == forumId
-                        && U.Id == commentId
-                        && U.IsDeleted == false)
-                    .FirstOrDefaultAsync();
-
-                if (comment != null)
-                {
-                    comment.IsDeleted = true;
-
-                    context.RemoveRange(comment.ReportedComments);
-
-                    await this.context.SaveChangesAsync();
-                }
+                await this.moderation.RejectComment(forumId, commentId);
 
                 return this.Ok();
             });
