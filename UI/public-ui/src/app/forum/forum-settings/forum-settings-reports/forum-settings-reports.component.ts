@@ -45,7 +45,6 @@ export class ForumSettingsReportsComponent implements OnInit {
   }
 
   reject(item: QueueListWorkItem) {
-    console.log(item);
     this.isLoading = true;
     if (item.post) {
       this.reporting.rejectPost(this.forumId, item.post.id).subscribe(() => this.reload());

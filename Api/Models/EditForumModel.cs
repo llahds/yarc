@@ -17,5 +17,6 @@ namespace Api.Models
 
         public KeyValueModel[] Moderators { get; set; } = new KeyValueModel[0];
 
+        public bool IsPrivate { get; set; }
     }
 }

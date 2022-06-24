@@ -4,6 +4,7 @@ namespace Api.Services.Forums
 {
     public interface IForumService
     {
+        Task<bool> CanAccessForum(int forumId);
         Task<IdModel<int>> Create(EditForumModel model);
         Task<SimilarForumModel[]> FindSimilarForums(int forumId);
         Task<ForumModel> Get(int forumId);
@@ -13,6 +14,7 @@ namespace Api.Services.Forums
         Task<KeyValueModel[]> SuggestTopics(string queryText);
         Task<KeyValueModel[]> SuggestUsers(string queryText);
         Task<bool> Update(int forumId, EditForumModel model);
-        Task<bool> VerifyCredentials(int forumId);
+        Task<bool> VerifyOwner(int forumId);
+        Task<bool> VerifyModerator(int forumId);
     }
 }

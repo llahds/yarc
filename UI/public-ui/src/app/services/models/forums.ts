@@ -11,8 +11,9 @@ export interface ForumEditModel {
     name: string; 
     description: string;
     slug: string;
-    topics: KeyValueModel[]
-    moderators: KeyValueModel[]
+    topics: KeyValueModel[];
+    moderators: KeyValueModel[];
+    isPrivate: boolean;
 }
 
 export interface ForumPostSettings extends ForumPostGuideLines {
@@ -33,3 +34,6 @@ export interface SimilarForum {
     memberCount: number;
 }
 
+export interface CanAccessForum {
+    canAccessForum: boolean;
+}

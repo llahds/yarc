@@ -26,7 +26,8 @@ namespace Api.Data.Entities
         public ICollection<Post>? Posts { get; set; }
         public ICollection<ForumMember>? Members { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<ForumTopic> ?Topics { get; set; }
+        public ICollection<ForumTopic>? Topics { get; set; }
+        public bool IsPrivate { get; set; }
 
         internal string _postSettingsJson { get; set; } = "";
 

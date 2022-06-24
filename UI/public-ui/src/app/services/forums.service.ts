@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Id, KeyValueModel } from './models/common';
-import { ForumEditModel, Forum, ForumPostSettings, ForumPostGuideLines, SimilarForum } from './models/forums';
+import { ForumEditModel, Forum, ForumPostSettings, ForumPostGuideLines, SimilarForum, CanAccessForum } from './models/forums';
 import { RestApiService } from './rest-api.service';
 
 @Injectable({
@@ -53,5 +53,9 @@ export class ForumsService {
 
   suggestUsers(queryText: string) : Observable<KeyValueModel[]> {
     return this.client.get(`api/1.0/forums/users/suggest?queryText=${queryText}`);
+  }
+
+  checkForumAccess(id: number) : Observable<CanAccessForum> {
+    return this.client.get(`api/1.0/forums/${id}/access`);
   }
 }

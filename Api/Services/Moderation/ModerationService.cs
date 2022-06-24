@@ -164,6 +164,7 @@ namespace Api.Services.Moderation
         {
             var post = await this.context
                 .Posts
+                .Include(P => P.ReportedPosts)
                 .Where(U =>
                     U.ForumId == forumId
                     && U.Id == postId

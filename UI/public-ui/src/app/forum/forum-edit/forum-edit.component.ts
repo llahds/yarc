@@ -10,7 +10,7 @@ import { ForumEditModel } from 'src/app/services/models/forums';
 })
 export class ForumEditComponent implements OnInit {
 
-  public entity: ForumEditModel = { name: "", description: "", slug: "", topics: [], moderators: [] };
+  public entity: ForumEditModel = { name: "", description: "", slug: "", topics: [], moderators: [], isPrivate: false };
   public suggestedTopics: any[] = [];
   public suggestedModerators: any[] = [];
   public id!: number;
@@ -60,7 +60,7 @@ export class ForumEditComponent implements OnInit {
     if (this.id > 0) {
       this.update();
     } else {
-      this.create();      
+      this.create();
     }
   }
 
@@ -69,7 +69,7 @@ export class ForumEditComponent implements OnInit {
     this.isSaving = true;
     this.forums.create(this.entity).subscribe(r => {
       this.isSaving = false;
-      this.entity = { name: "", description: "", slug: "", topics: [], moderators: [] };
+      this.entity = { name: "", description: "", slug: "", topics: [], moderators: [], isPrivate: false };
       this.router.navigateByUrl("/r/" + r.id);
     }, e => {
       this.errors = e.error;
@@ -82,7 +82,7 @@ export class ForumEditComponent implements OnInit {
     this.isSaving = true;
     this.forums.update(this.id, this.entity).subscribe(r => {
       this.isSaving = false;
-      this.entity = { name: "", description: "", slug: "", topics: [], moderators: [] };
+      this.entity = { name: "", description: "", slug: "", topics: [], moderators: [], isPrivate: false };
       this.router.navigateByUrl("/r/" + this.id);
     }, e => {
       this.errors = e.error;
@@ -91,7 +91,11 @@ export class ForumEditComponent implements OnInit {
   }
 
   cancel() {
-
+    if (this.id) {
+      this.router.navigateByUrl("/r/" + this.id);
+    } else {
+      this.router.navigateByUrl("/");
+    }
   }
 
   get hasInvalidData() {

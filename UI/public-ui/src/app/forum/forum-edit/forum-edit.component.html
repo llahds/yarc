@@ -26,6 +26,13 @@
                     <app-control-validation-errors [errors]="errors" fieldName="Description">
                     </app-control-validation-errors>
                 </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="isPrivate" [(ngModel)]="entity.isPrivate">
+                    <label class="form-check-label" for="isPrivate">
+                      This is a private forum.
+                    </label>
+                    <div class="form-text">Private forums don't show up in search results and users have be to added by a moderator.</div>
+                  </div>                
                 <div class="mb-3">
                     <label class="form-label">Topics</label>
                     <app-multiselector placeholder="search for topics" emptyMessage="No topics have been added."

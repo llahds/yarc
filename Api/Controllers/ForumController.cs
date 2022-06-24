@@ -15,10 +15,25 @@ namespace Api.Controllers
             this.forums = forums;
         }
 
+        [HttpGet, Route("api/1.0/forums/{id}/access")]
+        [ProducesResponseType(200, Type = typeof(CanAccessForumModel))]
+        public async Task<IActionResult> CheckAccess(int id)
+        {
+            return this.Ok(new CanAccessForumModel
+            {
+                CanAccessForum = await this.forums.CanAccessForum(id)
+            });
+        }
+
         [HttpGet, Route("api/1.0/forums/{id}/posts/guide-lines")]
         [ProducesResponseType(200, Type = typeof(ForumPostGuideLinesModel))]
         public async Task<IActionResult> GetGuideLines(int id)
         {
+            if (await this.forums.CanAccessForum(id) == false)
+            {
+                return this.Unauthorized();
+            }
+
             var model = await this.forums.GetForumGuidelines(id);
 
             if (model == null)
@@ -33,6 +48,11 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumModel))]
         public async Task<IActionResult> Get(int id)
         {
+            if (await this.forums.CanAccessForum(id) == false)
+            {
+                return this.Unauthorized();
+            }
+
             var model = await this.forums.Get(id);
 
             if (model == null)
@@ -68,7 +88,7 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] EditForumModel model)
         {
-            if (await this.forums.VerifyCredentials(id) == false)
+            if (await this.forums.VerifyOwner(id) == false)
             {
                 return this.Unauthorized();
             }
@@ -97,7 +117,7 @@ namespace Api.Controllers
         [HttpDelete, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            if (await this.forums.VerifyCredentials(id) == false)
+            if (await this.forums.VerifyOwner(id) == false)
             {
                 return this.Unauthorized();
             }
@@ -126,7 +146,7 @@ namespace Api.Controllers
 
         [HttpGet, Route("api/1.0/forums/{forumId}/similar")]
         [ProducesResponseType(200, Type = typeof(SimilarForumModel[]))]
-        public async Task<IActionResult> FindSimilarTopics(int forumId)
+        public async Task<IActionResult> FindSimilarForums(int forumId)
         {
             return this.Ok(await this.forums.FindSimilarForums(forumId));
         }

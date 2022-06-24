@@ -1,4 +1,5 @@
 ﻿using Api.Models;
+using Api.Services.Forums;
 using Api.Services.Posts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,19 +9,27 @@ namespace Api.Controllers
     {
         private readonly IPostService posts;
         private readonly IPostViewService views;
+        private readonly IForumService forums;
 
         public ForumPostController(
             IPostService posts,
-            IPostViewService views)
+            IPostViewService views,
+            IForumService forums)
         {
             this.posts = posts;
             this.views = views;
+            this.forums = forums;
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
         [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
         public async Task<IActionResult> List(int forumId, int startAt)
         {
+            if (await this.forums.CanAccessForum(forumId) == false)
+            {
+                return this.Unauthorized();
+            }
+
             return this.Ok(await this.posts.List(forumId, startAt));
         }
 
@@ -35,6 +44,11 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(ForumPostViewModel))]
         public async Task<IActionResult> Get(int forumId, int postId)
         {
+            if (await this.forums.CanAccessForum(forumId) == false)
+            {
+                return this.Unauthorized();
+            }
+
             var model = await this.posts.Get(forumId, postId);
 
             if (model == null)
@@ -49,6 +63,11 @@ namespace Api.Controllers
         [ProducesResponseType(200, Type = typeof(IdModel<int>))]
         public async Task<IActionResult> Create(int forumId, [FromBody] EditForumPostModel model)
         {
+            if (await this.forums.CanAccessForum(forumId) == false)
+            {
+                return this.Unauthorized();
+            }
+
             if (this.ModelState.IsValid == false)
             {
                 return this.BadRequest(this.ModelState);
@@ -60,6 +79,11 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         public async Task<IActionResult> Update(int forumId, int postId, [FromBody] EditForumPostModel model)
         {
+            if (await this.forums.CanAccessForum(forumId) == false)
+            {
+                return this.Unauthorized();
+            }
+
             if (this.ModelState.IsValid == false)
             {
                 return this.BadRequest(this.ModelState);
@@ -76,6 +100,11 @@ namespace Api.Controllers
         [HttpDelete, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         public async Task<IActionResult> Remove(int forumId, int postId)
         {
+            if (await this.forums.CanAccessForum(forumId) == false)
+            {
+                return this.Unauthorized();
+            }
+
             if (await this.posts.Remove(forumId, postId) == false)
             {
                 return this.NotFound();

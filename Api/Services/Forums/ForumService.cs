@@ -65,7 +65,8 @@ namespace Api.Services.Forums
                     .ToArray(),
                     MemberCount = F.Members.Count(),
                     IsOwner = (userId > 0 && F.ForumOwners.Any(U => U.OwnerId == userId)),
-                    IsModerator = (userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId))
+                    IsModerator = (userId > 0 && F.ForumModerators.Any(U => U.ModeratorId == userId)),
+                    IsPrivate = F.IsPrivate
                 })
                 .FirstOrDefaultAsync();
         }
@@ -86,6 +87,7 @@ namespace Api.Services.Forums
             entity.Slug = model.Slug;
             entity.PostSettings = new ForumPostSettings();
             entity.CreatedOn = DateTime.UtcNow;
+            entity.IsPrivate = model.IsPrivate;
 
             await this.context.AddAsync(entity);
 
@@ -131,6 +133,7 @@ namespace Api.Services.Forums
             entity.Name = model.Name;
             entity.Description = model.Description;
             entity.Slug = model.Slug;
+            entity.IsPrivate = model.IsPrivate;
 
             await this.context.SynchronizeChildren<ForumTopic, Topic>(
                 E => E.ForumId == forumId,
@@ -174,9 +177,9 @@ namespace Api.Services.Forums
             return true;
         }
 
-        public async Task<bool> VerifyCredentials(int forumId)
+        public async Task<bool> VerifyOwner(int forumId)
         {
-            var userId = this.identity.GetIdentity().Id;
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
 
             return await this.context
                 .ForumOwners
@@ -213,10 +216,20 @@ namespace Api.Services.Forums
 
         public async Task<SimilarForumModel[]> FindSimilarForums(int forumId)
         {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
             var forumTopicIds = this.context
                 .ForumTopics
                 .Where(F => F.ForumId == forumId)
                 .Select(F => F.TopicId);
+
+            var validForumIds = this.context
+                .ForumMembers
+                .Where(M =>
+                    M.Forum.IsPrivate == false
+                    || (userId > 0 && M.Forum.IsPrivate && M.MemberId == userId && M.Status == ForumMemberStatuses.APPROVED)
+                )
+                .Select(F => F.ForumId);
 
             var similar = await this.context
                 .Forums
@@ -225,7 +238,12 @@ namespace Api.Services.Forums
                     Forum = F,
                     TopicCount = F.Topics.Count(T => forumTopicIds.Contains(T.TopicId))
                 })
-                .Where(T => T.TopicCount > 0 && T.Forum.Id != forumId)
+                .Where(T => 
+                    T.TopicCount > 0 
+                    && T.Forum.Id != forumId 
+                    && T.Forum.IsDeleted == false
+                    //&& validForumIds.Contains(T.Forum.Id)
+                )
                 .OrderByDescending(F => F.TopicCount)
                 .Select(T => new SimilarForumModel
                 {
@@ -237,6 +255,53 @@ namespace Api.Services.Forums
                 .ToArrayAsync();
 
             return similar;
+        }
+
+        public async Task<bool> CanAccessForum(int forumId)
+        {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            if (await this.VerifyModerator(forumId) || await this.VerifyOwner(forumId))
+            {
+                return true;
+            }
+
+            var forum = await this.context
+                .Forums
+                .Where(F => F.Id == forumId)
+                .Select(F => new
+                {
+                    IsPrivate = F.IsPrivate,
+                    IsMember = (F.IsPrivate && F.Members.Any(M => M.MemberId == userId && M.Status == ForumMemberStatuses.APPROVED)),
+                    IsBanned = F.Members.Any(M => M.Id == userId && M.Status == ForumMemberStatuses.BANNED)
+                })
+                .FirstOrDefaultAsync();
+
+            if (forum == null)
+            {
+                return false;
+            }
+
+            if (forum.IsBanned)
+            {
+                return false;
+            }
+
+            if (forum.IsPrivate == true && forum.IsMember == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> VerifyModerator(int forumId)
+        {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            return await this.context
+                .ForumModerator
+                .AnyAsync(M => M.ModeratorId == userId && M.ForumId == forumId);
         }
     }
 }

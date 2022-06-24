@@ -14,6 +14,8 @@ import { ForumSettingsSpamComponent } from './forum/forum-settings/forum-setting
 import { ForumSettingsComponent } from './forum/forum-settings/forum-settings.component';
 import { ForumComponent } from './forum/forum.component';
 import { PopularComponent } from './popular/popular.component';
+import { PrivateForumComponent } from './private-forum/private-forum.component';
+import { ForumGuardService } from './services/forum-guard.service';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 export const routingConfiguration: ExtraOptions = {
@@ -35,8 +37,13 @@ const routes: Routes = [
     component: ForumCreateComponent
   },
   {
+    path: "private",
+    component: PrivateForumComponent
+  },
+  {
     path: "r/:forumId",
     component: ForumComponent,
+    canActivate: [ForumGuardService],
     children: [
       {
         path: "",
