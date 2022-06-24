@@ -1,6 +1,7 @@
 ﻿using Api.Data;
 using Api.Services;
 using Api.Services.Authentication;
+using Api.Services.Comments;
 using Api.Services.Moderation;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,7 @@ builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IModerationService, ModerationService>();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+builder.Services.AddTransient<ICommentService, CommentService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
