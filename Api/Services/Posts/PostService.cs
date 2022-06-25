@@ -2,6 +2,8 @@
 using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Authentication;
+using Api.Services.FullText;
+using Api.Services.FullText.Documents;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +14,18 @@ namespace Api.Services.Posts
         private readonly YARCContext context;
         private readonly IMapper mapper;
         private readonly IIdentityService identity;
+        private readonly IFullTextIndex fts;
 
         public PostService(
             YARCContext context,
             IMapper mapper,
-            IIdentityService identity)
+            IIdentityService identity,
+            IFullTextIndex fts)
         {
             this.context = context;
             this.mapper = mapper;
             this.identity = identity;
+            this.fts = fts;
         }
 
         public async Task<ForumPostListItemModel[]> List(int forumId, int startAt)
@@ -113,6 +118,16 @@ namespace Api.Services.Posts
 
             await this.context.SaveChangesAsync();
 
+            var forum = await this.context.Forums.FirstOrDefaultAsync(F => F.Id == forumId);
+
+            this.fts.Save(new PostFTS
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Text = entity.Text,
+                ForumName = forum?.Name
+            });
+
             return new IdModel<int> { Id = entity.Id };
         }
 
@@ -133,6 +148,16 @@ namespace Api.Services.Posts
 
             await this.context.SaveChangesAsync();
 
+            var forum = await this.context.Forums.FirstOrDefaultAsync(F => F.Id == forumId);
+
+            this.fts.Save(new PostFTS
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Text = entity.Text,
+                ForumName = forum?.Name
+            });
+
             return true;
         }
 
@@ -151,6 +176,11 @@ namespace Api.Services.Posts
             entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
+
+            this.fts.Delete(new PostFTS
+            {
+                Id = entity.Id,
+            });
 
             return true;
         }

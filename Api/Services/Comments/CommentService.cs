@@ -2,6 +2,8 @@
 using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Authentication;
+using Api.Services.FullText;
+using Api.Services.FullText.Documents;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +14,18 @@ namespace Api.Services.Comments
         private readonly IIdentityService identity;
         private readonly YARCContext context;
         private readonly IMapper mapper;
+        private readonly IFullTextIndex fts;
 
         public CommentService(
             IIdentityService identity,
             YARCContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IFullTextIndex fts)
         {
             this.identity = identity;
             this.context = context;
             this.mapper = mapper;
+            this.fts = fts;
         }
 
         public async Task<CommentModel[]> GetComments(int forumId, int postId, int? parentId)
@@ -71,7 +76,12 @@ namespace Api.Services.Comments
 
             await this.context.SaveChangesAsync();
 
-#pragma warning disable CS8603 // Possible null reference return.
+            this.fts.Save(new CommentFTS
+            {
+                Id = entity.Id,
+                Text = entity.Text
+            });
+
             return await this.context
                 .Comments
                 .Where(E => E.Id == entity.Id)
@@ -88,7 +98,6 @@ namespace Api.Services.Comments
                     }
                 })
                 .FirstOrDefaultAsync();
-#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task<CommentModel> CreateAtParent(int forumId, int postId, int parentId, CommentEditModel model)
@@ -104,7 +113,12 @@ namespace Api.Services.Comments
 
             await this.context.SaveChangesAsync();
 
-#pragma warning disable CS8603 // Possible null reference return.
+            this.fts.Save(new CommentFTS
+            {
+                Id = entity.Id,
+                Text = entity.Text
+            });
+
             return await this.context
                 .Comments
                 .Where(E => E.Id == entity.Id)
@@ -121,7 +135,6 @@ namespace Api.Services.Comments
                     }
                 })
                 .FirstOrDefaultAsync();
-#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task<bool> Update(int forumId, int postId, int commentId, CommentEditModel model)
@@ -139,6 +152,12 @@ namespace Api.Services.Comments
             entity.Text = model.Text;
 
             await this.context.SaveChangesAsync();
+
+            this.fts.Save(new CommentFTS
+            {
+                Id = entity.Id,
+                Text = entity.Text
+            });
 
             return true;
         }
@@ -158,6 +177,11 @@ namespace Api.Services.Comments
             entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
+
+            this.fts.Delete(new CommentFTS
+            {
+                Id = entity.Id,
+            });
 
             return true;
         }

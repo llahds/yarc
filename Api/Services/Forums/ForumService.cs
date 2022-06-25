@@ -2,6 +2,8 @@
 using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Authentication;
+using Api.Services.FullText;
+using Api.Services.FullText.Documents;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +14,18 @@ namespace Api.Services.Forums
         private readonly YARCContext context;
         private readonly IMapper mapper;
         private readonly IIdentityService identity;
+        private readonly IFullTextIndex fts;
 
         public ForumService(
             YARCContext context,
             IMapper mapper,
-            IIdentityService identity)
+            IIdentityService identity,
+            IFullTextIndex fts)
         {
             this.context = context;
             this.mapper = mapper;
             this.identity = identity;
+            this.fts = fts;
         }
 
         public async Task<ForumPostGuideLinesModel> GetForumGuidelines(int forumId)
@@ -117,6 +122,14 @@ namespace Api.Services.Forums
 
             await this.context.SaveChangesAsync();
 
+            this.fts.Save(new ForumFTS
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Description = entity.Description,
+                Slug = entity.Slug
+            });
+
             return new IdModel<int> { Id = entity.Id };
         }
 
@@ -157,6 +170,14 @@ namespace Api.Services.Forums
 
             await this.context.SaveChangesAsync();
 
+            this.fts.Save(new ForumFTS
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Description = entity.Description,
+                Slug = entity.Slug
+            });
+
             return true;
         }
 
@@ -175,6 +196,8 @@ namespace Api.Services.Forums
             entity.IsDeleted = true;
 
             await this.context.SaveChangesAsync();
+
+            this.fts.Delete(new ForumFTS { Id = entity.Id });
 
             return true;
         }

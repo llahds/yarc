@@ -3,11 +3,13 @@ using Api.Services;
 using Api.Services.Authentication;
 using Api.Services.Comments;
 using Api.Services.Forums;
+using Api.Services.FullText;
 using Api.Services.Moderation;
 using Api.Services.Posts;
 using Api.Services.Reporting;
 using Api.Services.Users;
 using AutoMapper;
+using Lucene.Net.Store;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +29,8 @@ builder.Services.AddTransient<IPostViewService, PostViewService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportingService, ReportingService>();
 builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
+
+builder.Services.AddSingleton<IFullTextIndex>(new FullTextIndex(FSDirectory.Open(builder.Configuration["connectionStrings:fts"])));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
