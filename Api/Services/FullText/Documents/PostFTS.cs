@@ -10,5 +10,6 @@
         public string Text { get; set; }
         [TextField]
         public string ForumName { get; set; }
+        public int ForumId { get; set; }
     }
 }

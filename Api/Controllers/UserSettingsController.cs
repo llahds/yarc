@@ -60,7 +60,7 @@ namespace Api.Controllers
 
             var userName = this.identity.GetIdentity().UserName;
 
-            if (await this.authentication.CheckPassword(userName, model.Password) == false)
+            if (await this.authentication.CheckHashedPassword(userName, model.Password) == false)
             {
                 this.ModelState.AddModelError(nameof(model.Password), "Invalid password.");
                 return this.BadRequest(this.ModelState);
@@ -88,7 +88,7 @@ namespace Api.Controllers
 
             var userName = this.identity.GetIdentity().UserName;
 
-            if (await this.authentication.CheckPassword(userName, model.Password))
+            if (await this.authentication.CheckHashedPassword(userName, model.Password))
             {
                 this.ModelState.AddModelError(nameof(model.Password), "Invalid password.");
                 return this.BadRequest(this.ModelState);
@@ -109,7 +109,7 @@ namespace Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await this.authentication.CheckPassword(userName, model.OldPassword) == false)
+            if (await this.authentication.CheckHashedPassword(userName, model.OldPassword) == false)
             {
                 this.ModelState.AddModelError(nameof(model.OldPassword), "Invalid password.");
                 return this.BadRequest(this.ModelState);

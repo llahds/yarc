@@ -23,9 +23,18 @@ namespace Api.Services.Authentication
 
         public async Task<AuthenticationTokenModel> VerifyCredentials(AuthenticateRequestModel model)
         {
-            if (await this.CheckPassword(model.UserName, model.Password) == false)
+            var changePassword = false;
+
+            if (await this.CheckHashedPassword(model.UserName, model.Password) == false)
             {
-                return null;
+                if (await this.CheckPlainTextPassword(model.UserName, model.Password) == true)
+                {
+                    changePassword = true;
+                }
+                else
+                {
+                    return null;
+                }
             }
 
             var entity = await this.context.Users
@@ -39,17 +48,35 @@ namespace Api.Services.Authentication
             return new AuthenticationTokenModel
             {
                 UserName = model.UserName,
-                Token = token
+                Token = token,
+                ChangePassword = changePassword
             };
         }
 
-        public async Task<bool> CheckPassword(string userName, string password)
+        public async Task<bool> CheckHashedPassword(string userName, string password)
         {
             var entity = await this.context.Users
                 .Where(U => U.UserName == userName)
                 .FirstOrDefaultAsync();
 
-            return await this.passwords.Validate(password, entity?.Password);
+            try
+            {
+                return await this.passwords.Validate(password, entity.Password);
+            }
+            catch (Exception e)
+            {
+                // TODO: add logging
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckPlainTextPassword(string userName, string password)
+        {
+            var entity = await this.context.Users
+                .Where(U => U.UserName == userName)
+                .FirstOrDefaultAsync();
+
+            return entity.Password == password;
         }
     }
 }

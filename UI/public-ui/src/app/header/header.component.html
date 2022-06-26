@@ -5,9 +5,14 @@
         </a>
 
         <div class="d-flex align-items-center" style="flex-basis: 50rem;">
-            <form class="w-100" role="search">
-                <input type="search" class="form-control form-control-sm" placeholder="Search YARC" aria-label="Search">
-            </form>
+            <div class="w-100">
+                <div class="input-group input-group-sm">
+                    <input type="search" class="form-control form-control-sm" placeholder="Search YARC" aria-label="Search" [(ngModel)]="queryText">
+                    <button class="btn btn-outline-primary" (click)="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>                
+            </div>
         </div>
 
         <div class="d-flex gap-2">

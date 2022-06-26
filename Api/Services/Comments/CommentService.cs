@@ -79,7 +79,9 @@ namespace Api.Services.Comments
             this.fts.Save(new CommentFTS
             {
                 Id = entity.Id,
-                Text = entity.Text
+                Text = entity.Text,
+                ForumId = forumId,
+                PostId = postId
             });
 
             return await this.context
@@ -116,7 +118,9 @@ namespace Api.Services.Comments
             this.fts.Save(new CommentFTS
             {
                 Id = entity.Id,
-                Text = entity.Text
+                Text = entity.Text,
+                ForumId = forumId,
+                PostId = postId
             });
 
             return await this.context
@@ -156,7 +160,9 @@ namespace Api.Services.Comments
             this.fts.Save(new CommentFTS
             {
                 Id = entity.Id,
-                Text = entity.Text
+                Text = entity.Text,
+                ForumId = forumId,
+                PostId = postId
             });
 
             return true;

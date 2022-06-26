@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -14,8 +15,11 @@ export class HeaderComponent implements OnInit {
   public userName: string = "";
   public isAuthenticated: boolean = false;
 
+  public queryText: string = "";
+
   constructor(
-    private authentication: AuthenticationService
+    private authentication: AuthenticationService,
+    private router: Router
   ) {
     this.authentication.onNewSignIn.subscribe(u => {
       this.userName = u.userName;
@@ -38,5 +42,9 @@ export class HeaderComponent implements OnInit {
     this.authentication.clearIdentity();
     this.isAuthenticated = false;
     this.userName = "";
+  }
+
+  search() {
+    this.router.navigateByUrl(`/search?q=${this.queryText}&s=0`);
   }
 }

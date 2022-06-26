@@ -48,6 +48,8 @@ import { VoteComponent } from './vote/vote.component';
 import { SimilarForumsComponent } from './forum/similar-forums/similar-forums.component';
 import { PrivateForumComponent } from './private-forum/private-forum.component';
 import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
+import { SearchComponent } from './search/search.component';
+import { SearchTypeComponent } from './search/search-type/search-type.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +94,8 @@ import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
     SimilarForumsComponent,
     PrivateForumComponent,
     SlugRedirectComponent,
+    SearchComponent,
+    SearchTypeComponent,
   ],
   imports: [
     BrowserModule,

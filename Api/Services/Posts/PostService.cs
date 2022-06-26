@@ -125,7 +125,8 @@ namespace Api.Services.Posts
                 Id = entity.Id,
                 Title = entity.Title,
                 Text = entity.Text,
-                ForumName = forum?.Name
+                ForumName = forum?.Name,
+                ForumId = forum?.Id ?? 0
             });
 
             return new IdModel<int> { Id = entity.Id };
@@ -155,7 +156,8 @@ namespace Api.Services.Posts
                 Id = entity.Id,
                 Title = entity.Title,
                 Text = entity.Text,
-                ForumName = forum?.Name
+                ForumName = forum?.Name,
+                ForumId = forum?.Id ?? 0
             });
 
             return true;

@@ -46,7 +46,8 @@ using (var index = new FullTextIndex(FSDirectory.Open("D:\\Development\\Attack o
                 Id = post.Id,
                 Title = post.Title,
                 Text = post.Text,
-                ForumName = forums[post.ForumId]
+                ForumName = forums[post.ForumId],
+                ForumId = post.ForumId
             });
 
             i++;
@@ -59,12 +60,14 @@ using (var index = new FullTextIndex(FSDirectory.Open("D:\\Development\\Attack o
 
         i = 0;
 
-        foreach (var comment in context.Comments)
+        foreach (var comment in context.Comments.Include(P => P.Post))
         {
             index.Save(new CommentFTS
             {
                 Id = comment.Id,
-                Text = comment.Text
+                Text = comment.Text,
+                PostId = comment.PostId,
+                ForumId = comment.Post.ForumId
             });
 
             i++;

@@ -15,6 +15,8 @@ import { ForumSettingsComponent } from './forum/forum-settings/forum-settings.co
 import { ForumComponent } from './forum/forum.component';
 import { PopularComponent } from './popular/popular.component';
 import { PrivateForumComponent } from './private-forum/private-forum.component';
+import { SearchTypeComponent } from './search/search-type/search-type.component';
+import { SearchComponent } from './search/search.component';
 import { ForumGuardService } from './services/forum-guard.service';
 import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
@@ -45,6 +47,14 @@ const routes: Routes = [
     path: "s/:slug",
     component: SlugRedirectComponent
   },
+  {
+    path: "search",
+    component: SearchComponent
+  },  
+  {
+    path: "search/:type",
+    component: SearchTypeComponent
+  },    
   {
     path: "r/:forumId",
     component: ForumComponent,

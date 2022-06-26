@@ -1,0 +1,34 @@
+<div class="card mt-2" style="max-width: 600px;">
+    <div class="card-header">
+        {{group.type}} ({{group.total}})
+    </div>
+    <div class="card-body">
+        <div *ngIf="group.total === 0">We couldn't find any results for <strong>"{{query}}"</strong> in
+            <strong>"{{group.type}}"</strong>.</div>
+
+        <div *ngFor="let r of group.results">
+            <div *ngIf="group.type === 'Forums'">
+                <a [routerLink]="['/r', r.id]">{{r.name}}</a>
+            </div>
+
+            <div *ngIf="group.type === 'Posts'" class="d-flex flex-column mb-3">
+                <a [routerLink]="['/r', r.forumId, 'p', r.id]">{{r.title}}</a>
+                <span class="ts-4">{{r.text}}</span>
+            </div>
+
+            <div *ngIf="group.type === 'Comments'" class="d-flex flex-column mb-3">
+                <a [routerLink]="['/r', r.forumId, 'p', r.postId]">
+                    {{r.text}}
+                </a>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a [routerLink]="['/search', group.type.toLowerCase()]" [queryParams]="{startAt: +startAt - 10, q: query}" [class.disabled]="startAt <= 0"
+                class="btn btn-sm btn-outline-primary ts-4" *ngIf="group.total > 0">Previous</a>
+
+            <a [routerLink]="['/search', group.type.toLowerCase()]" [queryParams]="{startAt: +startAt + 10, q: query}"
+                class="btn btn-sm btn-outline-primary ts-4" *ngIf="group.total > 0">Next</a>
+        </div>
+    </div>
+</div>
