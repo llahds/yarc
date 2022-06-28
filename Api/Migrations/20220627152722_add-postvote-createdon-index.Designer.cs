@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    partial class YARCContextModelSnapshot : ModelSnapshot
+    [Migration("20220627152722_add-postvote-createdon-index")]
+    partial class addpostvotecreatedonindex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,10 +327,6 @@ namespace Api.Migrations
 
                     SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedOn"), new[] { "PostId" });
 
-                    b.HasIndex("Vote");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("Vote"), new[] { "PostId" });
-
                     b.HasIndex("PostId", "ById")
                         .IsUnique();
 
@@ -564,7 +562,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2022, 6, 28, 11, 54, 47, 4, DateTimeKind.Utc).AddTicks(5629),
+                            CreatedOn = new DateTime(2022, 6, 27, 15, 27, 22, 372, DateTimeKind.Utc).AddTicks(2833),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,

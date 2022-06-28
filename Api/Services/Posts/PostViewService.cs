@@ -23,14 +23,11 @@ namespace Api.Services.Posts
             var userId = this.identity.GetIdentity()?.Id ?? 0;
 
             var posts = await this.context
-                .Posts
-                //.Where(E => E.Id > startAt)
-                //.OrderBy(E => Guid.NewGuid())
-                //.Take(25)
-                .Where(E =>
-                    E.ForumId == 27
-                    && E.IsHidden == false
-                    && E.IsDeleted == false)
+                .PostScores
+                .Include(P => P.Post)
+                .OrderByDescending(S => S.Top)
+                .Take(25)
+                .Select(E => E.Post)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -52,7 +49,6 @@ namespace Api.Services.Posts
                     Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
                     CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
                 })
-                .Take(25)
                 .ToArrayAsync();
 
             return posts;

@@ -1,4 +1,6 @@
-﻿namespace Api.Data.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Api.Data.Entities
 {
     public class PostVote
     {

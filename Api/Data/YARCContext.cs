@@ -20,6 +20,7 @@ namespace Api.Data
         public DbSet<ReportedComment> ReportedComments { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<ForumTopic> ForumTopics { get; set; }
+        public DbSet<PostScore> PostScores { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)
@@ -75,6 +76,17 @@ namespace Api.Data
 
             modelBuilder.Entity<ForumTopic>()
                 .HasKey(c => new { c.ForumId, c.TopicId });
+
+            modelBuilder.Entity<PostScore>()
+                .HasKey(c => new { c.PostId });
+
+            modelBuilder.Entity<PostVote>()
+                .HasIndex(e => e.CreatedOn)
+                .IncludeProperties(e => e.PostId);
+
+            modelBuilder.Entity<PostVote>()
+                .HasIndex(e => e.Vote)
+                .IncludeProperties(e => e.PostId);
 
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 

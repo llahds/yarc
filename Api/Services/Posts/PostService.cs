@@ -209,6 +209,7 @@ namespace Api.Services.Posts
             }
 
             entity.Vote = 1;
+            entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
         }
@@ -235,6 +236,7 @@ namespace Api.Services.Posts
             }
 
             entity.Vote = -1;
+            entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
         }

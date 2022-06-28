@@ -23,5 +23,6 @@ namespace Api.Data.Entities
         public ICollection<Comment> Comments { get; set; }
         public ICollection<PostVote> Votes { get; set; }
         public bool IsDeleted { get; set; }
+        public PostScore Scores { get; set; }
     }
 }

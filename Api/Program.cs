@@ -7,8 +7,10 @@ using Api.Services.FullText;
 using Api.Services.Moderation;
 using Api.Services.Posts;
 using Api.Services.Reporting;
+using Api.Services.Scoring;
 using Api.Services.Users;
 using AutoMapper;
+using Hangfire;
 using Lucene.Net.Store;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +31,12 @@ builder.Services.AddTransient<IPostViewService, PostViewService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportingService, ReportingService>();
 builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
+builder.Services.AddTransient<IUpdatePostScores, UpdatePostScores>();
 
 builder.Services.AddSingleton<IFullTextIndex>(new FullTextIndex(FSDirectory.Open(builder.Configuration["connectionStrings:fts"])));
+
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration["connectionStrings:db"]));
+builder.Services.AddHangfireServer();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -133,4 +139,9 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IUpdatePostScores>("UpdatePostScores", x => x.Execute(), Cron.MinuteInterval(3));
+
 app.Run();
+
