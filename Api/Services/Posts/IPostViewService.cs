@@ -4,6 +4,6 @@ namespace Api.Services.Posts
 {
     public interface IPostViewService
     {
-        Task<ForumPostListItemModel[]> Popular(int startAt);
+        Task<ListResultModel<ForumPostListItemModel>> Popular(int startAt, string sort);
     }
 }

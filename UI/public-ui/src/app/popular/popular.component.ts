@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { Post } from '../services/models/posts';
 import { PostsService } from '../services/posts.service';
@@ -13,10 +14,12 @@ export class PopularComponent implements OnInit {
   public list: Post[] = [];
   public isLoading: boolean = false;
   public isAuthenticated: boolean = false;
+  public sortBy: string = "";
 
   constructor(
     private posts: PostsService,
-    private authentication: AuthenticationService
+    private authentication: AuthenticationService,
+    private route: ActivatedRoute
   ) {
     this.authentication.onSignOut.subscribe(r => this.isAuthenticated = false);
 
@@ -26,11 +29,16 @@ export class PopularComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.posts.getPopularPosts(0).subscribe(r => {
-      this.list = r;
-      this.isLoading = false;
-    });
+    this.route.queryParamMap.subscribe(params => {
+      this.isLoading = true;
+      this.sortBy = params.get('sort') || "";
+      this.posts.getPopularPosts(0, this.sortBy).subscribe(r => {
+        this.list = r.list;
+        this.sortBy = r.sortBy;
+        this.isLoading = false;
+      });
+    })
+
   }
 
 }

@@ -1,24 +1,24 @@
 <div class="card mt-2">
     <div class="card-body d-flex gap-2">
-        <button class="btn btn-sm btn-outline-primary">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'" [routerLink]="['/popular']" [queryParams]="{ sort: 'hot' }">
             <i class="fab fa-hotjar"></i>
             Hot
-        </button>
+        </a>
 
-        <button class="btn btn-sm btn-outline-primary">
+        <a class="btn btn-sm btn-outline-primary" [class.btn-primary]="sortBy === 'new'" [class.btn-outline-primary]="sortBy !== 'new'" [routerLink]="['/popular']" [queryParams]="{ sort: 'new' }">
             <i class="far fa-clock"></i>
             New
-        </button>
+        </a>
 
-        <button class="btn btn-sm btn-outline-primary">
+        <a class="btn btn-sm btn-outline-primary" [class.btn-primary]="sortBy === 'top'" [class.btn-outline-primary]="sortBy !== 'tpp'" [routerLink]="['/popular']" [queryParams]="{ sort: 'top' }">
             <i class="fas fa-level-up-alt"></i>
             Top
-        </button>
+        </a>
 
-        <button class="btn btn-sm btn-outline-primary">
+        <a class="btn btn-sm btn-outline-primary" [class.btn-primary]="sortBy === 'rising'" [class.btn-outline-primary]="sortBy !== 'rising'" [routerLink]="['/popular']" [queryParams]="{ sort: 'rising' }">
             <i class="fas fa-chart-line"></i>
             Rising
-        </button>
+        </a>
     </div>
 </div>
 

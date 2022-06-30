@@ -2,6 +2,7 @@
 using Api.Models;
 using Api.Services.Authentication;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Api.Services.Posts
 {
@@ -18,14 +19,37 @@ namespace Api.Services.Posts
             this.context = context;
         }
 
-        public async Task<ForumPostListItemModel[]> Popular(int startAt)
+        public async Task<ListResultModel<ForumPostListItemModel>> Popular(int startAt, string sort)
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            var sortField = "Top DESC";
+
+            if (sort == "top" || string.IsNullOrEmpty(sort))
+            {
+                sortField = "[Top] DESC";
+                sort = "top";
+            }
+            else if (sort == "hot")
+            {
+                sortField = "[Hot] DESC";
+                sort = "hot";
+            }
+            else if (sort == "new")
+            {
+                sortField = "[New] DESC";
+                sort = "new";
+            }
+            else if (sort == "rising")
+            {
+                sortField = "[Rising] DESC";
+                sort = "rising";
+            }
 
             var posts = await this.context
                 .PostScores
                 .Include(P => P.Post)
-                .OrderByDescending(S => S.Top)
+                .OrderBy(sortField)
                 .Take(25)
                 .Select(E => E.Post)
                 .Select(E => new ForumPostListItemModel
@@ -51,7 +75,11 @@ namespace Api.Services.Posts
                 })
                 .ToArrayAsync();
 
-            return posts;
+            return new ListResultModel<ForumPostListItemModel>
+            {
+                List = posts,
+                SortBy = sort
+            };
         }
     }
 }

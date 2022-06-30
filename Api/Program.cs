@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-Task.Delay(10_000).Wait();
+//Task.Delay(10_000).Wait();
 
 var builder = WebApplication.CreateBuilder(args);
 

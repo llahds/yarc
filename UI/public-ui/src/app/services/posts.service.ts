@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Id } from './models/common';
+import { Id, ListResult } from './models/common';
 import { Comment, EditPost, Post } from './models/posts';
 import { RestApiService } from './rest-api.service';
 
@@ -14,8 +14,8 @@ export class PostsService {
 
   }
 
-  getPopularPosts(startAt: number): Observable<Post[]> {
-    return this.client.get(`api/1.0/forums/posts/popular?startAt=${startAt}`);
+  getPopularPosts(startAt: number, sort: string): Observable<ListResult<Post>> {
+    return this.client.get(`api/1.0/forums/posts/popular?startAt=${startAt}&sort=${sort}`);
   }
 
   getPosts(forumId: number, startAt: number): Observable<Post[]> {

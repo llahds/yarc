@@ -10,5 +10,10 @@ export interface PostedBy  {
 }
 
 export interface Id {
-    id: number
+    id: number;
+}
+
+export interface ListResult<TEntity> {
+    list: TEntity[];
+    sortBy: string;
 }

@@ -1,3 +1,9 @@
+<div class="card" *ngIf="list.length === 0">
+    <div class="card-body d-flex justify-content-center">
+        <span>I was expecting a list of posts but all I got was a lousy t-shirt that says "Blame the developer".</span>
+    </div>
+</div>
+
 <div class="card">
     <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let item of list">

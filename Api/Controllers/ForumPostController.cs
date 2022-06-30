@@ -35,10 +35,10 @@ namespace Api.Controllers
         }
 
         [HttpGet, Route("api/1.0/forums/posts/popular")]
-        [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
-        public async Task<IActionResult> Popular(int startAt)
+        [ProducesResponseType(200, Type = typeof(ListResultModel<ForumPostListItemModel>))]
+        public async Task<IActionResult> Popular(int startAt, [FromQuery] string sort)
         {
-            return this.Ok(await this.views.Popular(startAt));
+            return this.Ok(await this.views.Popular(startAt, sort));
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts/{postId}")]
