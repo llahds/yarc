@@ -1,43 +1,16 @@
 <div class="card" style="max-width: 600px;">
     <div class="card-body d-flex flex-column gap-2">
         <form>
-            <div class="mb-5">
-                <label class="form-label fw-bold">Spam Filter Strength</label>
-                <div class="d-flex flex-column gap-1">
-                    <div class="d-flex gap-2 justify-content-between">
-                        <span>Posts</span>
-                        <div>
-                            <select class="form-control form-control-sm">
-                                <option>All</option>
-                                <option>High</option>
-                                <option>Low</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2 justify-content-between">
-                        <span>Comments</span>
-                        <div>
-                            <select class="form-control form-control-sm">
-                                <option>All</option>
-                                <option>High</option>
-                                <option>Low</option>
-                            </select>
-                        </div>
-                    </div>    
-                    <div class="d-flex gap-2 justify-content-between">
-                        <span>Links</span>
-                        <div>
-                            <select class="form-control form-control-sm">
-                                <option>All</option>
-                                <option>High</option>
-                                <option>Low</option>
-                            </select>
-                        </div>
-                    </div>                                        
-                </div>
-                <div class="form-text">'HIGH' is the standard filter, 'LOW' disables most filtering, 'ALL' will filter
-                    every post initially and they will need to be approved manually to be visible</div>
-            </div>
+            <div class="mb-5 d-flex flex-column">
+                <label class="form-label fw-bold">Spam Detector Strength</label>
+                <select class="form-control form-control-sm" style="max-width: 100px;">
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                    <option>Off</option>
+                </select>
+                <div class="form-text">Posts and comments scored as spam will be automatically labelled and require moderator review.</div>
+            </div>            
 
             <div class="mb-5 d-flex flex-column">
                 <label class="form-label fw-bold">Toxic Filter Strength</label>
@@ -45,8 +18,9 @@
                     <option>High</option>
                     <option>Medium</option>
                     <option>Low</option>
+                    <option>Off</option>
                 </select>
-                <div class="form-text">Posts and comments scored as toxic will be automatically labelled and require an extra click to view.</div>
+                <div class="form-text">Posts and comments scored as toxic will be automatically labelled and require moderator review.</div>
             </div>
 
             <div class="mb-2 d-flex flex-column">
@@ -55,6 +29,7 @@
                     <option>High</option>
                     <option>Medium</option>
                     <option>Low</option>
+                    <option>Off</option>
                 </select>
                 <div class="form-text">Posts scored as off topic will be automatically labelled and require an extra click to view.</div>
             </div>            

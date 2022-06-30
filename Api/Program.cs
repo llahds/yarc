@@ -8,6 +8,7 @@ using Api.Services.Moderation;
 using Api.Services.Posts;
 using Api.Services.Reporting;
 using Api.Services.Scoring;
+using Api.Services.Text.Toxicity;
 using Api.Services.Users;
 using AutoMapper;
 using Hangfire;
@@ -34,6 +35,7 @@ builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
 builder.Services.AddTransient<IUpdatePostScores, UpdatePostScores>();
 
 builder.Services.AddSingleton<IFullTextIndex>(new FullTextIndex(FSDirectory.Open(builder.Configuration["connectionStrings:fts"])));
+builder.Services.AddSingleton<IToxicityService, ToxicityService>();
 
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration["connectionStrings:db"]));
 builder.Services.AddHangfireServer();
