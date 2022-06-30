@@ -5,6 +5,7 @@ using Api.Services.Authentication;
 using Api.Services.FullText;
 using Api.Services.FullText.Documents;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services.Posts
@@ -106,6 +107,7 @@ namespace Api.Services.Posts
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        [Authorize]
         public async Task<IdModel<int>> Create(int forumId, EditForumPostModel model)
         {
             var entity = this.mapper.Map<Post>(model);
@@ -115,6 +117,14 @@ namespace Api.Services.Posts
             entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.AddAsync(entity);
+
+            await this.context.AddAsync(new PostVote
+            {
+                CreatedOn = DateTime.UtcNow,
+                ById = this.identity.GetIdentity().Id,
+                Post = entity,
+                Vote = 1
+            });
 
             await this.context.SaveChangesAsync();
 

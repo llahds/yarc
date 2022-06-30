@@ -2,7 +2,6 @@
 using Api.Models;
 using Api.Services.Authentication;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Api.Services.Posts
 {
@@ -27,22 +26,22 @@ namespace Api.Services.Posts
 
             if (sort == "top" || string.IsNullOrEmpty(sort))
             {
-                sortField = "[Top] DESC";
+                sortField = "Top DESC";
                 sort = "top";
             }
             else if (sort == "hot")
             {
-                sortField = "[Hot] DESC";
+                sortField = "Hot DESC";
                 sort = "hot";
             }
             else if (sort == "new")
             {
-                sortField = "[New] DESC";
+                sortField = "New";
                 sort = "new";
             }
             else if (sort == "rising")
             {
-                sortField = "[Rising] DESC";
+                sortField = "Rising DESC";
                 sort = "rising";
             }
 
