@@ -70,4 +70,8 @@ export class ForumsService {
   getIdBySlug(slug: string) {
     return this.client.get(`api/1.0/forums/slug/${slug}`);
   }
+
+  getPopularForums() {
+    return this.client.get(`api/1.0/forums/popular`);
+  }
 }

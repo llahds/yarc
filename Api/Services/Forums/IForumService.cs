@@ -20,5 +20,6 @@ namespace Api.Services.Forums
         Task Leave(int forumId);
         Task<int?> GetMemberStatus(int forumId);
         Task<int?> GetIdBySlug(string slug);
+        Task<SimilarForumModel[]> GetPopularForums();
     }
 }

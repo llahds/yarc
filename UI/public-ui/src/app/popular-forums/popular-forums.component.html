@@ -1,0 +1,15 @@
+<div class="card mb-2" *ngIf="list.length > 0">
+    <div class="card-header">
+        Popular Communities
+    </div>
+    <div class="card-body">
+        <div class="d-flex gap-2" *ngFor="let r of list">
+            <div><img class="rounded-circle" style="max-width: 2em; object-fit: contain;"
+                    src="https://i.pravatar.cc/100"></div>
+            <div class="d-flex flex-column flex-grow-1">
+                <a [routerLink]="['/r', r.id]" class="text-black hover ts-4 fw-bold">{{r.name}}</a>
+                <span class="text-muted  ts-4">{{r.memberCount}} members</span>
+            </div>
+        </div>
+    </div>
+</div>

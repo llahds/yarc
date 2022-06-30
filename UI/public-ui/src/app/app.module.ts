@@ -50,6 +50,7 @@ import { PrivateForumComponent } from './private-forum/private-forum.component';
 import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
 import { SearchComponent } from './search/search.component';
 import { SearchTypeComponent } from './search/search-type/search-type.component';
+import { PopularForumsComponent } from './popular-forums/popular-forums.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { SearchTypeComponent } from './search/search-type/search-type.component'
     SlugRedirectComponent,
     SearchComponent,
     SearchTypeComponent,
+    PopularForumsComponent,
   ],
   imports: [
     BrowserModule,

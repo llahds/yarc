@@ -197,5 +197,13 @@ namespace Api.Controllers
 
             return this.Ok(new IdModel<int> { Id = r.Value });
         }
+
+        [HttpGet, Route("api/1.0/forums/popular")]
+        [ProducesResponseType(200, Type = typeof(SimilarForumModel[]))]
+        public async Task<IActionResult> GetPopularForums()
+        {
+            return this.Ok(await this.forums.GetPopularForums());
+        }
+
     }
 }

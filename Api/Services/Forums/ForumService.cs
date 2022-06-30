@@ -392,5 +392,36 @@ namespace Api.Services.Forums
                 .Select(F => F.Id)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<SimilarForumModel[]> GetPopularForums()
+        {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            var validForumIds = this.context
+                .ForumMembers
+                .Where(M =>
+                    M.Forum.IsPrivate == false
+                    || (userId > 0 && M.Forum.IsPrivate && M.MemberId == userId && M.Status == ForumMemberStatuses.APPROVED)
+                )
+                .Select(F => F.ForumId);
+
+            var popular = await this.context
+                .Forums
+                .Where(T => T.IsDeleted == false
+                    && validForumIds.Contains(T.Id)
+                )
+                .OrderByDescending(F => F.Members.Count())
+                .Select(T => new SimilarForumModel
+                {
+                    Id = T.Id,
+                    Name = T.Name,
+                    MemberCount = T.Members.Count()
+                })
+                .Take(10)
+                .ToArrayAsync();
+
+            return popular;
+        }
+
     }
 }
