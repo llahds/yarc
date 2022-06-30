@@ -61,7 +61,7 @@ namespace Api.Services.Authentication
 
             try
             {
-                return await this.passwords.Validate(password, entity.Password);
+                return await this.passwords.Validate(password, entity?.Password);
             }
             catch (Exception e)
             {
@@ -76,7 +76,7 @@ namespace Api.Services.Authentication
                 .Where(U => U.UserName == userName)
                 .FirstOrDefaultAsync();
 
-            return entity.Password == password;
+            return entity?.Password == password;
         }
     }
 }

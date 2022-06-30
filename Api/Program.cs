@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
+Task.Delay(10_000).Wait();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
@@ -134,7 +136,11 @@ var mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddSpaStaticFiles(cfg => cfg.RootPath = "wwwroot");
+
 var app = builder.Build();
+
+app.UseSpaStaticFiles();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -142,6 +148,13 @@ app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHangfireDashboard();
+app.UseSpa(spa => spa.Options.SourcePath = "wwwroot");
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<YARCContext>();
+    dataContext.Database.Migrate();
+}
 
 RecurringJob.AddOrUpdate<IUpdatePostScores>("UpdatePostScores", x => x.Execute(), Cron.MinuteInterval(3));
 

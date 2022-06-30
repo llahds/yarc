@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+    web:
+      build: .
+      image: "yarc"
+      ports:
+          - "8000:80"
+      depends_on:
+          - mssql
+      environment:
+          connectionStrings__db: "Server=mssql;Database=master;User=sa;Password=Your_password123;"
+          connectionStrings__fts: "/data/fts"
+      volumes:
+        - D:\Data\YARC\fts:/data/fts            
+    mssql:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      ports:
+        - 1433:1433
+      volumes:
+        - ~/apps/mssql/data:/var/lib/mssqlql/data
+      environment:
+        - MSSQL_PID=Express
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=Your_password123
