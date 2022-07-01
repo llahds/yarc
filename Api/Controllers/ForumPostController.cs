@@ -23,15 +23,15 @@ namespace Api.Controllers
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
-        [ProducesResponseType(200, Type = typeof(ForumPostListItemModel[]))]
-        public async Task<IActionResult> List(int forumId, int startAt)
+        [ProducesResponseType(200, Type = typeof(ListResultModel<ForumPostListItemModel>))]
+        public async Task<IActionResult> List(int forumId, int startAt, [FromQuery] string sort)
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
                 return this.Forbid();
             }
 
-            return this.Ok(await this.posts.List(forumId, startAt));
+            return this.Ok(await this.posts.List(forumId, startAt, sort));
         }
 
         [HttpGet, Route("api/1.0/forums/posts/popular")]

@@ -29,18 +29,40 @@ namespace Api.Services.Posts
             this.fts = fts;
         }
 
-        public async Task<ForumPostListItemModel[]> List(int forumId, int startAt)
+        public async Task<ListResultModel<ForumPostListItemModel>> List(int forumId, int startAt, string sort)
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
 
+            var sortField = "Scores.Top DESC";
+
+            if (sort == "top" || string.IsNullOrEmpty(sort))
+            {
+                sortField = "Scores.Top DESC";
+                sort = "top";
+            }
+            else if (sort == "hot")
+            {
+                sortField = "Scores.Hot DESC";
+                sort = "hot";
+            }
+            else if (sort == "new")
+            {
+                sortField = "Scores.New";
+                sort = "new";
+            }
+            else if (sort == "rising")
+            {
+                sortField = "Scores.Rising DESC";
+                sort = "rising";
+            }
+
             var posts = await this.context
                 .Posts
-                .Where(E =>
-                    E.ForumId == forumId
-                    && E.Id > startAt
-                    && E.IsHidden == false
-                    && E.IsDeleted == false)
-                .OrderBy(E => E.CreatedOn)
+                .Where(P => 
+                    P.ForumId == forumId
+                    && P.IsDeleted == false 
+                    && P.IsHidden == false)
+                .OrderBy(sortField)
                 .Take(25)
                 .Select(E => new ForumPostListItemModel
                 {
@@ -65,7 +87,11 @@ namespace Api.Services.Posts
                 })
                 .ToArrayAsync();
 
-            return posts;
+            return new ListResultModel<ForumPostListItemModel>
+            {
+                List = posts,
+                SortBy = sort
+            };
         }
 
         public async Task<ForumPostListItemModel> Get(int forumId, int postId)

@@ -24,12 +24,12 @@ namespace Api.Services.Posts
 
             var sortField = "Top DESC";
 
-            if (sort == "top" || string.IsNullOrEmpty(sort))
+            if (sort == "top")
             {
                 sortField = "Top DESC";
                 sort = "top";
             }
-            else if (sort == "hot")
+            else if (sort == "hot" || string.IsNullOrEmpty(sort))
             {
                 sortField = "Hot DESC";
                 sort = "hot";
@@ -51,6 +51,7 @@ namespace Api.Services.Posts
                 .OrderBy(sortField)
                 .Take(25)
                 .Select(E => E.Post)
+                .Where(E => E.IsDeleted == false && E.IsHidden == false)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,

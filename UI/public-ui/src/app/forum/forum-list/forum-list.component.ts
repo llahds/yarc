@@ -10,11 +10,11 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class ForumListComponent implements OnInit {
 
-
   public list: Post[] = [];
   public id!: number;
   public postId!: number;
   public isLoading: boolean = false;
+  public sortBy: string = "";
 
   constructor(
     private posts: PostsService,
@@ -22,12 +22,26 @@ export class ForumListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      this.isLoading = true;
+
+      if (this.id) {
+        this.sortBy = params.get("sort") || "top";
+        this.posts.getPosts(this.id, 0, this.sortBy).subscribe(r => {
+          this.list = r.list;
+          this.isLoading = false;
+          this.sortBy = r.sortBy;
+        });
+      }
+    });
+
     this.route.paramMap.subscribe(params => {
       this.isLoading = true;
       this.id = +this.route.snapshot.params['forumId'];
-      this.posts.getPosts(this.id, 0).subscribe(r => {
-        this.list = r;
+      this.posts.getPosts(this.id, 0, this.sortBy).subscribe(r => {
+        this.list = r.list;
         this.isLoading = false;
+        this.sortBy = r.sortBy;
       });
     });
   }

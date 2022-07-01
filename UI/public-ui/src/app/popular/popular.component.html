@@ -1,5 +1,7 @@
 <div class="card mt-2">
-    <div class="card-body d-flex gap-2">
+    <div class="card-body d-flex gap-2 align-items-center">
+        <span>Popular</span>
+
         <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'" [routerLink]="['/popular']" [queryParams]="{ sort: 'hot' }">
             <i class="fab fa-hotjar"></i>
             Hot

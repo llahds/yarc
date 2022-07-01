@@ -18,8 +18,8 @@ export class PostsService {
     return this.client.get(`api/1.0/forums/posts/popular?startAt=${startAt}&sort=${sort}`);
   }
 
-  getPosts(forumId: number, startAt: number): Observable<Post[]> {
-    return this.client.get(`api/1.0/forums/${forumId}/posts?startAt=${startAt}`);
+  getPosts(forumId: number, startAt: number, sort: string): Observable<ListResult<Post>> {
+    return this.client.get(`api/1.0/forums/${forumId}/posts?startAt=${startAt}&sort=${sort}`);
   }
 
   getView(forumId: number, postId: number): Observable<Post> {
