@@ -19,7 +19,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-//Task.Delay(10_000).Wait();
+Console.WriteLine($"Use Docker: {Environment.GetEnvironmentVariable("USE_DOCKER_WAIT")}");
+
+if (Environment.GetEnvironmentVariable("USE_DOCKER_WAIT") == "true")
+{
+    Task.Delay(10_000).Wait();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 

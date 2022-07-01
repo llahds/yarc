@@ -10,6 +10,7 @@ services:
       environment:
           connectionStrings__db: "Server=mssql;Database=master;User=sa;Password=Your_password123;"
           connectionStrings__fts: "/data/fts"
+          USE_DOCKER_WAIT: Y
       volumes:
         - ~/apps/YARC/fts:/data/fts
     mssql:
