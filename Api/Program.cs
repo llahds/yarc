@@ -35,6 +35,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportingService, ReportingService>();
 builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
 builder.Services.AddTransient<IUpdatePostScores, UpdatePostScores>();
+builder.Services.AddTransient<IPostValidationService, PostValidationService>();
 
 builder.Services.AddSingleton<IFullTextIndex>(new FullTextIndex(FSDirectory.Open(builder.Configuration["connectionStrings:fts"])));
 builder.Services.AddSingleton<IToxicityService, ToxicityService>();

@@ -2,6 +2,7 @@
 using Api.Models;
 using Api.Services.Forums;
 using Api.Services.Posts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -11,15 +12,18 @@ namespace Api.Controllers
         private readonly IPostService posts;
         private readonly IPostViewService views;
         private readonly IForumService forums;
+        private readonly IPostValidationService validator;
 
         public ForumPostController(
             IPostService posts,
             IPostViewService views,
-            IForumService forums)
+            IForumService forums,
+            IPostValidationService validator)
         {
             this.posts = posts;
             this.views = views;
             this.forums = forums;
+            this.validator = validator;
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
@@ -60,6 +64,7 @@ namespace Api.Controllers
             return this.Ok(model);
         }
 
+        [Authorize]
         [HttpPost, Route("api/1.0/forums/{forumId}/posts")]
         [ProducesResponseType(200, Type = typeof(IdModel<int>))]
         public async Task<IActionResult> Create(int forumId, [FromBody] EditForumPostModel model)
@@ -69,19 +74,28 @@ namespace Api.Controllers
                 return this.Forbid();
             }
 
-            if (this.ModelState.IsValid == false)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             if (await this.forums.GetMemberStatus(forumId) == ForumMemberStatuses.MUTED)
             {
                 return this.Forbid();
             }
 
+            if (this.ModelState.IsValid == false)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var result = await this.validator.ValidatePost(forumId, model);
+
+            if (result != null)
+            {
+                this.ModelState.AddModelError(result.Field, result.Message);
+                return this.BadRequest(this.ModelState);
+            }
+
             return this.Ok(await this.posts.Create(forumId, model));
         }
 
+        [Authorize]
         [HttpPut, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         public async Task<IActionResult> Update(int forumId, int postId, [FromBody] EditForumPostModel model)
         {
@@ -95,6 +109,14 @@ namespace Api.Controllers
                 return this.BadRequest(this.ModelState);
             }
 
+            var result = await this.validator.ValidatePost(forumId, model);
+
+            if (result != null)
+            {
+                this.ModelState.AddModelError(result.Field, result.Message);
+                return this.BadRequest(this.ModelState);
+            }
+
             if (await this.posts.Update(forumId, postId, model) == false)
             {
                 return this.NotFound();
@@ -103,6 +125,7 @@ namespace Api.Controllers
             return this.Ok();
         }
 
+        [Authorize]
         [HttpDelete, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         public async Task<IActionResult> Remove(int forumId, int postId)
         {
