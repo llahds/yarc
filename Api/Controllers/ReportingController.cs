@@ -16,9 +16,10 @@ namespace Api.Controllers
             this.reporting = reporting;
         }
 
+        [AllowAnonymous]
         [HttpGet, Route("api/1.0/reporting/reasons")]
         [ProducesResponseType(200, Type = typeof(ReportReasonModel[]))]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetReportingReasons()
         {
             return this.Ok(await this.reporting.GetReportReasons());
         }

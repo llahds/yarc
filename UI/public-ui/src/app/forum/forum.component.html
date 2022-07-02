@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <p class="mt-2">Created {{forum?.createdOn | date: 'mediumDate'}}</p>
-                <div class="d-grid gap-2 mt-2 mb-2">
+                <div class="d-grid gap-2 mt-2 mb-2" *ngIf="isAuthenticated">
                     <button class="btn btn-sm btn-primary" (click)="createPost()" *ngIf="!forum?.isMuted">Create Post</button>
                 </div>
                 <div *ngIf="forum && forum.topics.length > 0">

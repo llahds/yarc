@@ -4,6 +4,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { Comment, Post } from 'src/app/services/models/posts';
 import { ReportingReason, SPAM_ID } from 'src/app/services/models/reporting';
 import { ReportingService } from 'src/app/services/reporting.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-forum-post',
@@ -32,13 +33,22 @@ export class ForumPostComponent implements OnInit {
 
   public isRemoving: boolean = false;
 
+  public isAuthenticated: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private api: PostsService,
-    private reporting: ReportingService
+    private reporting: ReportingService,
+    private authentication: AuthenticationService
   ) { }
 
   ngOnInit(): void {
+    this.isAuthenticated = !!this.authentication.token;
+
+    this.authentication.onNewSignIn.subscribe(() => this.isAuthenticated = true);
+
+    this.authentication.onSignOut.subscribe(() => this.isAuthenticated = false);
+
     this.reporting.getReportingReasons()
       .subscribe(r => this.reportingReasons = r);
 

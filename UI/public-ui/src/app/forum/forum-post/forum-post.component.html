@@ -19,7 +19,7 @@
                 <div class="mt-2">
                     <markdown ngPreserveWhitespaces [data]="item?.text"></markdown>
 
-                    <div class="mt-2 d-flex gap-2">
+                    <div class="mt-2 d-flex gap-2" *ngIf="isAuthenticated">
                         <button class="btn btn-sm btn-light" (click)="editPost()">
                             <i class="fa-regular fa-pen-to-square"></i>
                             Edit
@@ -41,10 +41,10 @@
                         </button>
                     </div>
 
-                    <textarea class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
+                    <textarea  *ngIf="isAuthenticated" class="form-control form-control-sm mt-2" style="max-width: 600px; height: 200px;"
                         [(ngModel)]="commentText" placeholder="What are your thoughts?"></textarea>
 
-                    <button class="btn btn-sm btn-primary mt-2" [disabled]="isCommenting || !commentText" (click)="comment()">
+                    <button class="btn btn-sm btn-primary mt-2"  *ngIf="isAuthenticated" [disabled]="isCommenting || !commentText" (click)="comment()">
                         Comment
 
                         <i class="fa fa-spin fa-spinner" *ngIf="isCommenting"></i>
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="card mt-2">
+<div class="card mt-2" *ngIf="comments.length > 0">
     <div class="card-body">
         <div class="ms-2 me-2 mb-2">
             <div class="dropdown">
