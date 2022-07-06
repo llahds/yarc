@@ -4,6 +4,7 @@ using Api.Models;
 using Api.Services.Authentication;
 using Api.Services.FullText;
 using Api.Services.FullText.Documents;
+using Api.Services.Moderation;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,17 +16,20 @@ namespace Api.Services.Forums
         private readonly IMapper mapper;
         private readonly IIdentityService identity;
         private readonly IFullTextIndex fts;
+        private readonly IModerationService moderation;
 
         public ForumService(
             YARCContext context,
             IMapper mapper,
             IIdentityService identity,
-            IFullTextIndex fts)
+            IFullTextIndex fts,
+            IModerationService moderation)
         {
             this.context = context;
             this.mapper = mapper;
             this.identity = identity;
             this.fts = fts;
+            this.moderation = moderation;
         }
 
         public async Task<ForumPostGuideLinesModel> GetForumGuidelines(int forumId)
@@ -202,15 +206,6 @@ namespace Api.Services.Forums
             return true;
         }
 
-        public async Task<bool> VerifyOwner(int forumId)
-        {
-            var userId = this.identity.GetIdentity()?.Id ?? 0;
-
-            return await this.context
-                .ForumOwners
-                .AnyAsync(M => M.OwnerId == userId && M.ForumId == forumId);
-        }
-
         public async Task<KeyValueModel[]> SuggestTopics(string queryText)
         {
             return await this.context
@@ -286,7 +281,7 @@ namespace Api.Services.Forums
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
 
-            if (await this.VerifyModerator(forumId) || await this.VerifyOwner(forumId))
+            if (await this.moderation.IsModerator(forumId) || await this.moderation.IsOwner(forumId))
             {
                 return true;
             }
@@ -318,15 +313,6 @@ namespace Api.Services.Forums
             }
 
             return true;
-        }
-
-        public async Task<bool> VerifyModerator(int forumId)
-        {
-            var userId = this.identity.GetIdentity()?.Id ?? 0;
-
-            return await this.context
-                .ForumModerator
-                .AnyAsync(M => M.ModeratorId == userId && M.ForumId == forumId);
         }
 
         public async Task Join(int forumId)

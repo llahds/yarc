@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Comment } from 'src/app/services/models/posts';
 import { ReportingReason, SPAM_ID } from 'src/app/services/models/reporting';
 import { PostsService } from 'src/app/services/posts.service';
@@ -35,10 +36,19 @@ export class ForumPostCommentComponent implements OnInit {
   public selectedReportReasonId!: number;
   public isReporting: boolean = false;
 
+  public isAuthenticated: boolean = false;
+
   constructor(
     private api: PostsService,
-    private reporting: ReportingService
-  ) { }
+    private reporting: ReportingService,
+    private authentication: AuthenticationService
+  ) { 
+    this.isAuthenticated = !!this.authentication.token;
+
+    this.authentication.onNewSignIn.subscribe(() => this.isAuthenticated = true);
+
+    this.authentication.onSignOut.subscribe(() => this.isAuthenticated = false);
+  }
 
   ngOnInit(): void {
     this.reporting.getReportingReasons()

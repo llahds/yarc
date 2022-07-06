@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { concat, map, merge, of, reduce } from 'rxjs';
 import { Post } from 'src/app/services/models/posts';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -9,6 +10,8 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./forum-list.component.scss']
 })
 export class ForumListComponent implements OnInit {
+
+  private static _sortBy: string = "";
 
   public list: Post[] = [];
   public id!: number;
@@ -22,27 +25,27 @@ export class ForumListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      this.isLoading = true;
 
-      if (this.id) {
-        this.sortBy = params.get("sort") || "top";
-        this.posts.getPosts(this.id, 0, this.sortBy).subscribe(r => {
-          this.list = r.list;
-          this.isLoading = false;
-          this.sortBy = r.sortBy;
-        });
-      }
+    this.route.queryParamMap.subscribe(params => {
+      this.sortBy = params.get("sort") || ForumListComponent._sortBy || "top";
+      this.refresh();
     });
 
     this.route.paramMap.subscribe(params => {
-      this.isLoading = true;
       this.id = +this.route.snapshot.params['forumId'];
+      this.refresh();
+    });
+  }
+
+  refresh() {
+    if (this.id) {
+      this.isLoading = true;
       this.posts.getPosts(this.id, 0, this.sortBy).subscribe(r => {
         this.list = r.list;
         this.isLoading = false;
         this.sortBy = r.sortBy;
+        ForumListComponent._sortBy = r.sortBy;
       });
-    });
+    }
   }
 }

@@ -25,7 +25,7 @@ namespace Api.Services.Moderation
 
         public async Task<bool> IsOwner(int forumId)
         {
-            var userId = this.identity.GetIdentity().Id;
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
 
             var isOwner = await this.context
                 .ForumOwners
@@ -36,7 +36,7 @@ namespace Api.Services.Moderation
 
         public async Task<bool> IsModerator(int forumId)
         {
-            var userId = this.identity.GetIdentity().Id;
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
 
             var isModerator = await this.context
                 .ForumModerator

@@ -14,8 +14,6 @@ namespace Api.Services.Forums
         Task<KeyValueModel[]> SuggestTopics(string queryText);
         Task<KeyValueModel[]> SuggestUsers(string queryText);
         Task<bool> Update(int forumId, EditForumModel model);
-        Task<bool> VerifyOwner(int forumId);
-        Task<bool> VerifyModerator(int forumId);
         Task Join(int forumId);
         Task Leave(int forumId);
         Task<int?> GetMemberStatus(int forumId);

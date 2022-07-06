@@ -33,17 +33,17 @@
                         [vote]="item?.vote"></app-vote>
                 </div>
 
-                <button class="btn btn-sm btn-light d-flex gap-2 align-items-center" (click)="showReply = !showReply">
+                <button class="btn btn-sm btn-light d-flex gap-2 align-items-center" (click)="showReply = !showReply" *ngIf="isAuthenticated">
                     <i class="far fa-comment-alt"></i>
                     <span>Reply</span>
                 </button>
 
-                <button class="btn btn-sm btn-light" (click)="edit()">
+                <button class="btn btn-sm btn-light" (click)="edit()" *ngIf="item.canEdit">
                     <i class="fa-regular fa-pen-to-square"></i>
                     Edit
                 </button>
 
-                <button class="btn btn-sm btn-light" (click)="confirmRemove()">
+                <button class="btn btn-sm btn-light" (click)="confirmRemove()" *ngIf="item.canEdit">
                     <i class="fa-solid fa-xmark"></i>
                     Remove
                 </button>

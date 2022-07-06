@@ -7,5 +7,6 @@
         public int Downs { get; set; }
         public int? Vote { get; set; }
         public bool CanReport { get; set; }
+        public bool CanEdit { get; set; }
     }
 }

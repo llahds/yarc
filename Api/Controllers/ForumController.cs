@@ -1,6 +1,7 @@
 ﻿using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Forums;
+using Api.Services.Moderation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,14 @@ namespace Api.Controllers
     public class ForumController : Controller
     {
         private readonly IForumService forums;
+        private readonly IModerationService moderation;
 
         public ForumController(
-            IForumService forums)
+            IForumService forums,
+            IModerationService moderation)
         {
             this.forums = forums;
+            this.moderation = moderation;
         }
 
         [HttpGet, Route("api/1.0/forums/{id}/access")]
@@ -89,7 +93,7 @@ namespace Api.Controllers
         [HttpPut, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] EditForumModel model)
         {
-            if (await this.forums.VerifyOwner(id) == false)
+            if (await this.moderation.IsOwner(id) == false)
             {
                 return this.Forbid();
             }
@@ -118,7 +122,7 @@ namespace Api.Controllers
         [HttpDelete, Route("api/1.0/forums/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            if (await this.forums.VerifyOwner(id) == false)
+            if (await this.moderation.IsOwner(id) == false)
             {
                 return this.Forbid();
             }

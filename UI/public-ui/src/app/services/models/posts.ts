@@ -28,4 +28,5 @@ export interface Comment {
     vote: number;
     isDeleted: boolean;
     canReport: boolean;
+    canEdit: boolean;
 }

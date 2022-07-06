@@ -4,6 +4,7 @@ using Api.Models;
 using Api.Services.Authentication;
 using Api.Services.FullText;
 using Api.Services.FullText.Documents;
+using Api.Services.Moderation;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,22 +16,28 @@ namespace Api.Services.Comments
         private readonly YARCContext context;
         private readonly IMapper mapper;
         private readonly IFullTextIndex fts;
+        private readonly IModerationService moderation;
 
         public CommentService(
             IIdentityService identity,
             YARCContext context,
             IMapper mapper,
-            IFullTextIndex fts)
+            IFullTextIndex fts,
+            IModerationService moderation)
         {
             this.identity = identity;
             this.context = context;
             this.mapper = mapper;
             this.fts = fts;
+            this.moderation = moderation;
         }
 
         public async Task<CommentModel[]> GetComments(int forumId, int postId, int? parentId)
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            var hasAdminRights = await this.moderation.IsModerator(forumId)
+                || await this.moderation.IsOwner(forumId);
 
             var comments = await this.context
                 .Comments
@@ -58,6 +65,7 @@ namespace Api.Services.Comments
                     Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
                     CanReport = userId > 0
                         && E.ReportedComments.Any(R => R.ReportedById == userId) == false,
+                    CanEdit = hasAdminRights || E.PostedById == userId
                 })
                 .ToArrayAsync();
 
@@ -244,6 +252,24 @@ namespace Api.Services.Comments
             entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
+        }
+
+        public async Task<bool> CanEditComment(int forumId, int postId, int commentId)
+        {
+            var userId = this.identity.GetIdentity()?.Id ?? 0;
+
+            var isCommentOwner = await this.context
+                .Comments
+                .Where(C => C.Id == commentId && C.PostId == postId && C.Post.ForumId == forumId && C.PostedById == userId)
+                .AnyAsync();
+
+            if (isCommentOwner)
+            {
+                return true;
+            }
+
+            return await this.moderation.IsModerator(forumId)
+                || await this.moderation.IsOwner(forumId);
         }
     }
 }
