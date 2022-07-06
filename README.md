@@ -26,8 +26,7 @@ app at localhost:4200 once the build process is finished.
 
 The app consists of two projects - a frontend built using Angular 14, Typescript, and Bootstrap and a REST api built using C#. The two data stores are SQL Server and 
 a Lucene full text index. The data is accessed using EF. There's a stored procedure used to calculate forum post scores that gets ran as a background process using 
-Hangfire. There's a machine learning model included to classify toxicity. The model is built using source from https://github.com/andrewfry/SharpML-Recurrent and lives 
-in the YARC.DL project.
+Hangfire. There's a machine learning model included to classify toxicity (/Api/Services/Text/Toxicty/ToxicityModel.cs). The model is built using source from https://github.com/andrewfry/SharpML-Recurrent and lives in the YARC.DL project.
 
 The REST api (/Api) is built as a monolith to simplify building and deployment. The data folder (/Api/Data) contains the EF context and entity definitions. DB migrations 
 are handled using EF Code First. The services (/Api/Services) contain the meat and potatoes. Services contracts are injected into the controllers using .NET's DI 
