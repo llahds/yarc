@@ -7,6 +7,10 @@ namespace Api.Data.Entities
     [Table("Posts", Schema = "Social"), Index(nameof(CreatedOn))]
     [Index(nameof(IsHidden))]
     [Index(nameof(IsDeleted))]
+    [Index(nameof(Hot))]
+    [Index(nameof(Top))]
+    [Index(nameof(New))]
+    [Index(nameof(Rising))]
     public class Post 
     {
         public int Id { get; set; }
@@ -23,6 +27,14 @@ namespace Api.Data.Entities
         public ICollection<Comment> Comments { get; set; }
         public ICollection<PostVote> Votes { get; set; }
         public bool IsDeleted { get; set; }
-        public PostScore Scores { get; set; }
+
+        public decimal Hot { get; set; }
+        public decimal Top { get; set; }
+        public decimal New { get; set; }
+        public decimal Rising { get; set; }
+
+        public int CommentCount { get; set; }
+        public int Ups { get; set; }
+        public int Downs { get; set; }
     }
 }

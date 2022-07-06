@@ -1,5 +1,7 @@
 ﻿using Api.Data.Entities;
+using Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Linq.Expressions;
 
 namespace Api.Data
@@ -20,7 +22,6 @@ namespace Api.Data
         public DbSet<ReportedComment> ReportedComments { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<ForumTopic> ForumTopics { get; set; }
-        public DbSet<PostScore> PostScores { get; set; }
 
         public YARCContext(DbContextOptions<YARCContext> options)
             : base(options)
@@ -76,9 +77,6 @@ namespace Api.Data
 
             modelBuilder.Entity<ForumTopic>()
                 .HasKey(c => new { c.ForumId, c.TopicId });
-
-            modelBuilder.Entity<PostScore>()
-                .HasKey(c => new { c.PostId });
 
             modelBuilder.Entity<PostVote>()
                 .HasIndex(e => e.CreatedOn)

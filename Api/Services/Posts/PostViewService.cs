@@ -1,4 +1,5 @@
 ﻿using Api.Data;
+using Api.Data.Entities;
 using Api.Models;
 using Api.Services.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,12 @@ namespace Api.Services.Posts
 
             var sortField = "Top DESC";
 
-            if (sort == "top")
+            if (sort == "top" || string.IsNullOrEmpty(sort))
             {
                 sortField = "Top DESC";
                 sort = "top";
             }
-            else if (sort == "hot" || string.IsNullOrEmpty(sort))
+            else if (sort == "hot")
             {
                 sortField = "Hot DESC";
                 sort = "hot";
@@ -44,14 +45,20 @@ namespace Api.Services.Posts
                 sortField = "Rising DESC";
                 sort = "rising";
             }
-
+            
             var posts = await this.context
-                .PostScores
-                .Include(P => P.Post)
+                .Posts
+                .Where(P =>
+                    P.IsDeleted == false
+                    && P.IsHidden == false
+                    && (
+                        P.Forum.IsPrivate == false
+                        || (P.Forum.IsPrivate && P.Forum.Members.Any(M => M.MemberId == userId && (M.Status == ForumMemberStatuses.JOINED || M.Status == ForumMemberStatuses.APPROVED))
+                       )
+                    )
+                 )
                 .OrderBy(sortField)
                 .Take(25)
-                .Select(E => E.Post)
-                .Where(E => E.IsDeleted == false && E.IsHidden == false)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -68,11 +75,10 @@ namespace Api.Services.Posts
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
                     },
-                    Ups = E.Votes.Count(V => V.Vote > 0),
-                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Ups = E.Ups,
+                    Downs = E.Downs,
                     Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
-                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
-                })
+                    CommentCount = E.CommentCount                })
                 .ToArrayAsync();
 
             return new ListResultModel<ForumPostListItemModel>

@@ -1,21 +1,21 @@
 <div class="card mt-2">
     <div class="card-body d-flex gap-2 align-items-center">
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'" [routerLink]="['/popular']" [queryParams]="{ sort: 'hot' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'" [routerLink]="['/home']" [queryParams]="{ sort: 'hot' }">
             <i class="fab fa-hotjar"></i>
             Hot
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'new'" [class.btn-outline-primary]="sortBy !== 'new'" [routerLink]="['/popular']" [queryParams]="{ sort: 'new' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'new'" [class.btn-outline-primary]="sortBy !== 'new'" [routerLink]="['/home']" [queryParams]="{ sort: 'new' }">
             <i class="far fa-clock"></i>
             New
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'top'" [class.btn-outline-primary]="sortBy !== 'top'" [routerLink]="['/popular']" [queryParams]="{ sort: 'top' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'top'" [class.btn-outline-primary]="sortBy !== 'top'" [routerLink]="['/home']" [queryParams]="{ sort: 'top' }">
             <i class="fas fa-level-up-alt"></i>
             Top
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'rising'" [class.btn-outline-primary]="sortBy !== 'rising'" [routerLink]="['/popular']" [queryParams]="{ sort: 'rising' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'rising'" [class.btn-outline-primary]="sortBy !== 'rising'" [routerLink]="['/home']" [queryParams]="{ sort: 'rising' }">
             <i class="fas fa-chart-line"></i>
             Rising
         </a>

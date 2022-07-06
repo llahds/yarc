@@ -7,7 +7,6 @@ import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { PopularComponent } from './popular/popular.component';
 import { PostItemComponent } from './post-item/post-item.component';
 import { ForumComponent } from './forum/forum.component';
 import { PostListComponent } from './post-list/post-list.component';
@@ -51,12 +50,12 @@ import { SlugRedirectComponent } from './slug-redirect/slug-redirect.component';
 import { SearchComponent } from './search/search.component';
 import { SearchTypeComponent } from './search/search-type/search-type.component';
 import { PopularForumsComponent } from './popular-forums/popular-forums.component';
+import { FeedComponent } from './feed/feed.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    PopularComponent,
     PostItemComponent,
     ForumComponent,
     PostListComponent,
@@ -98,6 +97,7 @@ import { PopularForumsComponent } from './popular-forums/popular-forums.componen
     SearchComponent,
     SearchTypeComponent,
     PopularForumsComponent,
+    FeedComponent,
   ],
   imports: [
     BrowserModule,

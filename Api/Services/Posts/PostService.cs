@@ -33,26 +33,26 @@ namespace Api.Services.Posts
         {
             var userId = this.identity.GetIdentity()?.Id ?? 0;
 
-            var sortField = "Scores.Top DESC";
+            var sortField = "Top DESC";
 
             if (sort == "top" || string.IsNullOrEmpty(sort))
             {
-                sortField = "Scores.Top DESC";
+                sortField = "Top DESC";
                 sort = "top";
             }
             else if (sort == "hot")
             {
-                sortField = "Scores.Hot DESC";
+                sortField = "Hot DESC";
                 sort = "hot";
             }
             else if (sort == "new")
             {
-                sortField = "Scores.New";
+                sortField = "New";
                 sort = "new";
             }
             else if (sort == "rising")
             {
-                sortField = "Scores.Rising DESC";
+                sortField = "Rising DESC";
                 sort = "rising";
             }
 
@@ -80,10 +80,10 @@ namespace Api.Services.Posts
                         Name = E.PostedBy.DisplayName ?? "[deleted]",
                         AvatarId = -1
                     },
-                    Ups = E.Votes.Count(V => V.Vote > 0),
-                    Downs = E.Votes.Count(V => V.Vote < 0),
+                    Ups = E.Ups,
+                    Downs = E.Downs,
                     Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
-                    CommentCount = E.Comments.Count(C => !C.IsDeleted || !C.IsHidden)
+                    CommentCount = E.CommentCount
                 })
                 .ToArrayAsync();
 

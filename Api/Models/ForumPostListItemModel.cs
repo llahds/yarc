@@ -1,6 +1,8 @@
-﻿namespace Api.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Api.Models
 {
-    public class ForumPostListItemModel 
+    public class ForumPostListItemModel
     {
         public int Id { get; set; }
         public KeyValueModel? Forum { get; set; }

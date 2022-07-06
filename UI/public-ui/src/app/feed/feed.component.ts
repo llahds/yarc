@@ -5,11 +5,11 @@ import { Post } from '../services/models/posts';
 import { PostsService } from '../services/posts.service';
 
 @Component({
-  selector: 'app-popular',
-  templateUrl: './popular.component.html',
-  styleUrls: ['./popular.component.scss']
+  selector: 'app-feed',
+  templateUrl: './feed.component.html',
+  styleUrls: ['./feed.component.scss']
 })
-export class PopularComponent implements OnInit {
+export class FeedComponent implements OnInit {
 
   public list: Post[] = [];
   public isLoading: boolean = false;
@@ -40,5 +40,4 @@ export class PopularComponent implements OnInit {
     })
 
   }
-
 }

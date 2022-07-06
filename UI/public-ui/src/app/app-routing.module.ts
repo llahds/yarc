@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { FeedComponent } from './feed/feed.component';
 import { ForumCreateComponent } from './forum/forum-create/forum-create.component';
 import { ForumEditComponent } from './forum/forum-edit/forum-edit.component';
 import { ForumListComponent } from './forum/forum-list/forum-list.component';
@@ -13,7 +14,6 @@ import { ForumSettingsReportsComponent } from './forum/forum-settings/forum-sett
 import { ForumSettingsSpamComponent } from './forum/forum-settings/forum-settings-spam/forum-settings-spam.component';
 import { ForumSettingsComponent } from './forum/forum-settings/forum-settings.component';
 import { ForumComponent } from './forum/forum.component';
-import { PopularComponent } from './popular/popular.component';
 import { PrivateForumComponent } from './private-forum/private-forum.component';
 import { SearchTypeComponent } from './search/search-type/search-type.component';
 import { SearchComponent } from './search/search.component';
@@ -28,12 +28,12 @@ export const routingConfiguration: ExtraOptions = {
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "popular",
+    redirectTo: "home",
     pathMatch: "full"
   },
   {
-    path: "popular",
-    component: PopularComponent,
+    path: "home",
+    component: FeedComponent,
   },
   {
     path: "r/create",
