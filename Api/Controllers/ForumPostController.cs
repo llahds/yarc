@@ -1,7 +1,9 @@
 ﻿using Api.Data.Entities;
 using Api.Models;
+using Api.Services.BackgroundJobs;
 using Api.Services.Forums;
 using Api.Services.Posts;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,17 +15,20 @@ namespace Api.Controllers
         private readonly IPostViewService views;
         private readonly IForumService forums;
         private readonly IPostValidationService validator;
+        private readonly IBackgroundJobClient backgroundJob;
 
         public ForumPostController(
             IPostService posts,
             IPostViewService views,
             IForumService forums,
-            IPostValidationService validator)
+            IPostValidationService validator,
+            IBackgroundJobClient backgroundJob)
         {
             this.posts = posts;
             this.views = views;
             this.forums = forums;
             this.validator = validator;
+            this.backgroundJob = backgroundJob;
         }
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
@@ -92,7 +97,11 @@ namespace Api.Controllers
                 return this.BadRequest(this.ModelState);
             }
 
-            return this.Ok(await this.posts.Create(forumId, model));
+            var id = await this.posts.Create(forumId, model);
+
+            this.backgroundJob.Enqueue<CheckPostToxicity>(item => item.Check(id.Id));
+
+            return this.Ok(id);
         }
 
         [Authorize]
@@ -121,6 +130,8 @@ namespace Api.Controllers
             {
                 return this.NotFound();
             }
+
+            this.backgroundJob.Enqueue<CheckPostToxicity>(item => item.Check(postId));
 
             return this.Ok();
         }

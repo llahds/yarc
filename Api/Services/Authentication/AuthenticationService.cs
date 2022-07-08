@@ -56,7 +56,7 @@ namespace Api.Services.Authentication
         public async Task<bool> CheckHashedPassword(string userName, string password)
         {
             var entity = await this.context.Users
-                .Where(U => U.UserName == userName)
+                .Where(U => U.UserName == userName && U.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
             try
@@ -73,7 +73,7 @@ namespace Api.Services.Authentication
         public async Task<bool> CheckPlainTextPassword(string userName, string password)
         {
             var entity = await this.context.Users
-                .Where(U => U.UserName == userName)
+                .Where(U => U.UserName == userName && U.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
             return entity?.Password == password;

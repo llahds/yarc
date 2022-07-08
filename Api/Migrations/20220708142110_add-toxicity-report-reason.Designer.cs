@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    partial class YARCContextModelSnapshot : ModelSnapshot
+    [Migration("20220708142110_add-toxicity-report-reason")]
+    partial class addtoxicityreportreason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -568,23 +570,12 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2022, 7, 8, 14, 39, 20, 849, DateTimeKind.Utc).AddTicks(7257),
+                            CreatedOn = new DateTime(2022, 7, 8, 14, 21, 10, 632, DateTimeKind.Utc).AddTicks(9807),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,
                             Password = "password",
                             UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = -1,
-                            About = "",
-                            CreatedOn = new DateTime(2022, 7, 8, 14, 39, 20, 849, DateTimeKind.Utc).AddTicks(7274),
-                            DisplayName = "YARCBot",
-                            Email = "YARCBot",
-                            IsDeleted = true,
-                            Password = "_________",
-                            UserName = "YARCBot"
                         });
                 });
 

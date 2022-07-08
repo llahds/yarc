@@ -91,6 +91,7 @@ namespace Api.Data
                 .IncludeProperties(P => P.ForumId);
 
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
+            modelBuilder.Entity<User>().HasData(new User { Id = -1, Email = "YARCBot", Password = "_________", About = "", UserName = "YARCBot", DisplayName = "YARCBot", CreatedOn = DateTime.UtcNow, IsDeleted = true });
 
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules" });
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 2, Label = "Harassment" });
@@ -106,6 +107,7 @@ namespace Api.Data
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 12, Label = "Self-harm or suicide" });
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 13, Label = "Spam" });
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 14, Label = "Misinformation" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = -1, Label = "Toxicity" });
 
             base.OnModelCreating(modelBuilder);
         }

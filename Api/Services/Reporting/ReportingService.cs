@@ -38,7 +38,8 @@ namespace Api.Services.Reporting
 
             entity.PostId = model.PostId;
             entity.ReasonId = model.ReasonId;
-            entity.ReportedById = this.identity.GetIdentity().Id;
+            // if authenticated identity can't be found then default to service accout (yarcbot)
+            entity.ReportedById = this.identity.GetIdentity()?.Id ?? -1;
             entity.CreatedOn = DateTime.UtcNow;
 
             await this.context.AddAsync(entity);

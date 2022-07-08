@@ -7,6 +7,7 @@ namespace Api.Services.Text.Toxicity
     {
         private readonly ToxicityModel model;
         private readonly HashSet<string> stopwords;
+        private readonly object lck = new object();
 
         public ToxicityService()
         {
@@ -16,20 +17,27 @@ namespace Api.Services.Text.Toxicity
 
         public ClassificationResultModel[] Classify(string text)
         {
-            var tokens = this.Tokenize(text);
-
-            if (tokens.Length == 0)
+            // This should be ok for now since prediction
+            // is generally quick. Model.Predict isn't 
+            // threadsafe so access will need to be
+            // serialized. 
+            lock (this.lck)
             {
-                return new ClassificationResultModel[0];
-            }
+                var tokens = this.Tokenize(text);
 
-            return this.model.Predict(tokens)
-                .Select(C => new ClassificationResultModel
+                if (tokens.Length == 0)
                 {
-                    Label = C.Name,
-                    Probability = C.Score
-                })
-                .ToArray();
+                    return new ClassificationResultModel[0];
+                }
+
+                return this.model.Predict(tokens)
+                    .Select(C => new ClassificationResultModel
+                    {
+                        Label = C.Name,
+                        Probability = C.Score
+                    })
+                    .ToArray();
+            }
         }
 
         private string[] Tokenize(string text)
