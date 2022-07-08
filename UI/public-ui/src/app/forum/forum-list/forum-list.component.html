@@ -34,6 +34,22 @@
         <app-post-list [list]="list">
 
         </app-post-list>
+
+        <div class="d-flex justify-content-center mb-2 mt-2" *ngIf="list.length > 0 && isLoading == false">
+            <div class="d-flex gap-2 align-items-center">
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt == 0" (click)="first()">
+                    First
+                </a>
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt == 0" (click)="previous()">
+                    Previous
+                </a>
+                <small>Showing {{ startAt + 1 }} to {{ pageSize + startAt < total ? pageSize + startAt : total }} of {{ total }} </small>
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt + pageSize >= total"
+                    (click)="next()">
+                    Next
+                </a>
+            </div>
+        </div>        
     </div>
 
 </div>

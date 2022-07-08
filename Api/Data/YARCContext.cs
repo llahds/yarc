@@ -86,6 +86,10 @@ namespace Api.Data
                 .HasIndex(e => e.Vote)
                 .IncludeProperties(e => e.PostId);
 
+            modelBuilder.Entity<Post>()
+                .HasIndex(c => new { c.IsHidden, c.IsDeleted })
+                .IncludeProperties(P => P.ForumId);
+
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
 
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules" });

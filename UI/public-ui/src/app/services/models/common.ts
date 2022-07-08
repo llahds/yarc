@@ -16,4 +16,6 @@ export interface Id {
 export interface ListResult<TEntity> {
     list: TEntity[];
     sortBy: string;
+    total: number;
+    pageSize: number;
 }

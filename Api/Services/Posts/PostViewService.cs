@@ -45,8 +45,10 @@ namespace Api.Services.Posts
                 sortField = "Rising DESC";
                 sort = "rising";
             }
-            
-            var posts = await this.context
+
+            var pageSize = 25;
+
+            var where = this.context
                 .Posts
                 .Where(P =>
                     P.IsDeleted == false
@@ -56,9 +58,14 @@ namespace Api.Services.Posts
                         || (P.Forum.IsPrivate && P.Forum.Members.Any(M => M.MemberId == userId && (M.Status == ForumMemberStatuses.JOINED || M.Status == ForumMemberStatuses.APPROVED))
                        )
                     )
-                 )
+                 );
+
+            var total = await where.CountAsync();
+
+            var posts = await where
                 .OrderBy(sortField)
-                .Take(25)
+                .Skip(startAt)
+                .Take(pageSize)
                 .Select(E => new ForumPostListItemModel
                 {
                     Id = E.Id,
@@ -84,7 +91,9 @@ namespace Api.Services.Posts
             return new ListResultModel<ForumPostListItemModel>
             {
                 List = posts,
-                SortBy = sort
+                SortBy = sort,
+                Total = total,
+                PageSize = pageSize
             };
         }
     }

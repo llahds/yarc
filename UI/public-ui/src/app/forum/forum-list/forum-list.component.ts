@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { concat, map, merge, of, reduce } from 'rxjs';
 import { Post } from 'src/app/services/models/posts';
 import { PostsService } from 'src/app/services/posts.service';
@@ -18,16 +18,21 @@ export class ForumListComponent implements OnInit {
   public postId!: number;
   public isLoading: boolean = false;
   public sortBy: string = "";
+  public startAt: number = 0;
+  public pageSize!: number;
+  public total!: number;
 
   constructor(
     private posts: PostsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
 
     this.route.queryParamMap.subscribe(params => {
       this.sortBy = params.get("sort") || ForumListComponent._sortBy || "top";
+      this.startAt = +params.get("startAt")! || 0;
       this.refresh();
     });
 
@@ -40,12 +45,32 @@ export class ForumListComponent implements OnInit {
   refresh() {
     if (this.id) {
       this.isLoading = true;
-      this.posts.getPosts(this.id, 0, this.sortBy).subscribe(r => {
+      this.posts.getPosts(this.id, this.startAt, this.sortBy).subscribe(r => {
         this.list = r.list;
         this.isLoading = false;
         this.sortBy = r.sortBy;
         ForumListComponent._sortBy = r.sortBy;
+        this.pageSize = r.pageSize;
+        this.total = r.total;        
       });
     }
+  }
+
+  first() {
+    let urlTree = this.router.parseUrl(this.router.url);
+    urlTree.queryParams["startAt"] = 0;
+    this.router.navigateByUrl(urlTree);
+  }
+
+  previous() {
+    let urlTree = this.router.parseUrl(this.router.url);
+    urlTree.queryParams["startAt"] = this.startAt - this.pageSize;
+    this.router.navigateByUrl(urlTree);
+  }
+
+  next() {
+    let urlTree = this.router.parseUrl(this.router.url);
+    urlTree.queryParams["startAt"] = this.startAt + this.pageSize;
+    this.router.navigateByUrl(urlTree);
   }
 }

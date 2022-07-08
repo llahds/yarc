@@ -1,21 +1,26 @@
 <div class="card mt-2">
     <div class="card-body d-flex gap-2 align-items-center">
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'" [routerLink]="['/home']" [queryParams]="{ sort: 'hot' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'hot'" [class.btn-outline-primary]="sortBy !== 'hot'"
+            [routerLink]="['/home']" [queryParams]="{ sort: 'hot' }">
             <i class="fab fa-hotjar"></i>
             Hot
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'new'" [class.btn-outline-primary]="sortBy !== 'new'" [routerLink]="['/home']" [queryParams]="{ sort: 'new' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'new'" [class.btn-outline-primary]="sortBy !== 'new'"
+            [routerLink]="['/home']" [queryParams]="{ sort: 'new' }">
             <i class="far fa-clock"></i>
             New
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'top'" [class.btn-outline-primary]="sortBy !== 'top'" [routerLink]="['/home']" [queryParams]="{ sort: 'top' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'top'" [class.btn-outline-primary]="sortBy !== 'top'"
+            [routerLink]="['/home']" [queryParams]="{ sort: 'top' }">
             <i class="fas fa-level-up-alt"></i>
             Top
         </a>
 
-        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'rising'" [class.btn-outline-primary]="sortBy !== 'rising'" [routerLink]="['/home']" [queryParams]="{ sort: 'rising' }">
+        <a class="btn btn-sm" [class.btn-primary]="sortBy === 'rising'"
+            [class.btn-outline-primary]="sortBy !== 'rising'" [routerLink]="['/home']"
+            [queryParams]="{ sort: 'rising' }">
             <i class="fas fa-chart-line"></i>
             Rising
         </a>
@@ -31,6 +36,22 @@
         <app-post-list [list]="list" [showForum]="true">
 
         </app-post-list>
+
+        <div class="d-flex justify-content-center mb-2 mt-2" *ngIf="list.length > 0 && isLoading == false">
+            <div class="d-flex gap-2 align-items-center">
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt == 0" (click)="first()">
+                    First
+                </a>
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt == 0" (click)="previous()">
+                    Previous
+                </a>
+                <small>Showing {{ startAt + 1 }} to {{ pageSize + startAt < total ? pageSize + startAt : total }} of {{ total }} </small>
+                <a class="btn btn-sm btn-outline-primary" [class.disabled]="startAt + pageSize >= total"
+                    (click)="next()">
+                    Next
+                </a>
+            </div>
+        </div>
     </div>
     <div class="d-flex flex-column d-none d-sm-block gap-2" style="width: 250px;">
         <app-popular-forums></app-popular-forums>

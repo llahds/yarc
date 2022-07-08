@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Api.Data.Entities
 {
     [Table("Posts", Schema = "Social"), Index(nameof(CreatedOn))]
-    [Index(nameof(IsHidden))]
-    [Index(nameof(IsDeleted))]
     [Index(nameof(Hot))]
     [Index(nameof(Top))]
     [Index(nameof(New))]
