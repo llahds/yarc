@@ -33,7 +33,7 @@ namespace Api.Controllers
 
         [HttpGet, Route("api/1.0/forums/{forumId}/posts")]
         [ProducesResponseType(200, Type = typeof(ListResultModel<ForumPostListItemModel>))]
-        public async Task<IActionResult> List(int forumId, int startAt, [FromQuery] string sort)
+        public async Task<IActionResult> List(int forumId, int startAt, string sort)
         {
             if (await this.forums.CanAccessForum(forumId) == false)
             {
@@ -45,7 +45,7 @@ namespace Api.Controllers
 
         [HttpGet, Route("api/1.0/forums/posts/popular")]
         [ProducesResponseType(200, Type = typeof(ListResultModel<ForumPostListItemModel>))]
-        public async Task<IActionResult> Popular(int startAt, [FromQuery] string sort)
+        public async Task<IActionResult> Popular(int startAt, string sort)
         {
             return this.Ok(await this.views.Popular(startAt, sort));
         }

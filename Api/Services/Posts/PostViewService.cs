@@ -85,7 +85,8 @@ namespace Api.Services.Posts
                     Ups = E.Ups,
                     Downs = E.Downs,
                     Vote = E.Votes.FirstOrDefault(V => V.ById == userId).Vote,
-                    CommentCount = E.CommentCount                })
+                    CommentCount = E.CommentCount
+                })
                 .ToArrayAsync();
 
             return new ListResultModel<ForumPostListItemModel>

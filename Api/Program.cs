@@ -28,6 +28,8 @@ if (Environment.GetEnvironmentVariable("USE_DOCKER_WAIT") == "true")
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddResponseCaching();
+
 builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IModerationService, ModerationService>();
@@ -148,6 +150,7 @@ var app = builder.Build();
 
 app.UseSpaStaticFiles();
 app.UseCors("AllowAll");
+app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
