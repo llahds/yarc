@@ -1,13 +1,15 @@
 ﻿using Api.Data;
 using Api.Services;
 using Api.Services.Authentication;
+using Api.Services.BackgroundJobs;
 using Api.Services.Comments;
 using Api.Services.Forums;
 using Api.Services.FullText;
+using Api.Services.IO.Blobs;
 using Api.Services.Moderation;
 using Api.Services.Posts;
 using Api.Services.Reporting;
-using Api.Services.Scoring;
+using Api.Services.Text.SPAM;
 using Api.Services.Text.Toxicity;
 using Api.Services.Users;
 using AutoMapper;
@@ -19,6 +21,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
+
+// NOTE: This should be in a startup script for docker. The SQL Server start up
+// process takes longer than this app to start which causes exceptions when
+// HangFire creates its tables.
 Console.WriteLine($"Use Docker: {Environment.GetEnvironmentVariable("USE_DOCKER_WAIT")}");
 
 if (Environment.GetEnvironmentVariable("USE_DOCKER_WAIT") == "true")
@@ -29,6 +35,7 @@ if (Environment.GetEnvironmentVariable("USE_DOCKER_WAIT") == "true")
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddResponseCaching();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
@@ -41,11 +48,12 @@ builder.Services.AddTransient<IPostViewService, PostViewService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportingService, ReportingService>();
 builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
-builder.Services.AddTransient<IUpdatePostScores, UpdatePostScores>();
 builder.Services.AddTransient<IPostValidationService, PostValidationService>();
+builder.Services.AddTransient<IBlobService, LocalFileStore>();
 
 builder.Services.AddSingleton<IFullTextIndex>(new FullTextIndex(FSDirectory.Open(builder.Configuration["connectionStrings:fts"])));
 builder.Services.AddSingleton<IToxicityService, ToxicityService>();
+builder.Services.AddSingleton<ISpamService, SpamService>();
 
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration["connectionStrings:db"]));
 builder.Services.AddHangfireServer();
@@ -165,7 +173,7 @@ using (var scope = app.Services.CreateScope())
     dataContext.Database.Migrate();
 }
 
-RecurringJob.AddOrUpdate<IUpdatePostScores>("UpdatePostScores", x => x.Execute(), Cron.MinuteInterval(3));
+RecurringJob.AddOrUpdate<UpdatePostScores>("UpdatePostScores", x => x.Execute(), Cron.MinuteInterval(3));
 
 app.Run();
 

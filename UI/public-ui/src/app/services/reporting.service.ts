@@ -44,4 +44,8 @@ export class ReportingService {
   rejectComment(forumId: number, commentId: number) {
     return this.client.post(`api/1.0/moderation/${forumId}/queue/comments/${commentId}/reject`, {});
   }
+
+  buildSpamModel(forumId: number) {
+    return this.client.post(`api/1.0/moderation/${forumId}/spam/build-model`, {});
+  }
 }

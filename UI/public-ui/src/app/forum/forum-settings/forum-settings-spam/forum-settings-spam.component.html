@@ -1,13 +1,16 @@
 <div class="card">
-    <div class="dropdown">
-        <button class="btn btn-sm btn-light dropdown-toggle ts-4" type="button" data-bs-toggle="dropdown">
-            Sort By:
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Newest</a></li>
-            <li><a class="dropdown-item" href="#">Oldest</a></li>
-            <li><a class="dropdown-item" href="#">Most Reported</a></li>
-        </ul>
+    <div class="d-flex gap-2 align-items-center">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-light dropdown-toggle ts-4" type="button" data-bs-toggle="dropdown">
+                Sort By:
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Newest</a></li>
+                <li><a class="dropdown-item" href="#">Oldest</a></li>
+                <li><a class="dropdown-item" href="#">Most Reported</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-sm p-1 m-1 ts-5 btn-outline-primary" (click)="buildModel()">Train SPAM Classifier</button>
     </div>
 
     <div class="card-body text-center" *ngIf="list.length === 0 && isLoading === false">

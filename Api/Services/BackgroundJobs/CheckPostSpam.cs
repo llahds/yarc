@@ -1,24 +1,25 @@
 ﻿using Api.Data;
 using Api.Services.Reporting;
-using Api.Services.Text.Toxicity;
+using Api.Services.Text.SPAM;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services.BackgroundJobs
 {
-    public class CheckPostToxicity 
+
+    public class CheckPostSpam 
     {
-        private readonly IToxicityService toxicity;
         private readonly YARCContext context;
         private readonly IReportingService reporting;
+        private readonly ISpamService spam;
 
-        public CheckPostToxicity(
-            IToxicityService toxicity,
+        public CheckPostSpam(
             YARCContext context,
-            IReportingService reporting)
+            IReportingService reporting,
+            ISpamService spam)
         {
-            this.toxicity = toxicity;
             this.context = context;
             this.reporting = reporting;
+            this.spam = spam;
         }
 
         public async Task Check(int postId)
@@ -28,15 +29,15 @@ namespace Api.Services.BackgroundJobs
 
             var text = $"{post?.Title ?? ""}\r\n{post?.Text ?? ""}";
 
-            var result = this.toxicity.Classify(text);
+            var result = await this.spam.Classify(post.ForumId, text);
 
             // TODO: The probability score threshold needs to be stored with the forum settings
-            if (result[0].Label == "toxic" && result[0].Probability > .75)
+            if (result.Length > 0 && result[0].Label == "spam" && result[0].Probability > .75)
             {
                 await this.reporting.CreateFromPost(new Models.ReportedPostModel
                 {
                     PostId = postId,
-                    ReasonId = -1
+                    ReasonId = 13
                 });
             }
         }

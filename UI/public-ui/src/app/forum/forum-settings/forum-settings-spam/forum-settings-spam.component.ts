@@ -53,4 +53,7 @@ export class ForumSettingsSpamComponent implements OnInit {
     }    
   }
 
+  buildModel() {
+    this.reporting.buildSpamModel(this.forumId).subscribe();
+  }
 }

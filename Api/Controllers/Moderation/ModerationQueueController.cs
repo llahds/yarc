@@ -1,5 +1,7 @@
 ﻿using Api.Models;
+using Api.Services.BackgroundJobs;
 using Api.Services.Moderation;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +10,25 @@ namespace Api.Controllers.Moderation
     [Authorize]
     public class ModerationQueueController : ModerationController
     {
+        private readonly IBackgroundJobClient backgroundJob;
+
         public ModerationQueueController(
-            IModerationService moderation)
+            IModerationService moderation,
+            IBackgroundJobClient backgroundJob)
             : base(moderation)
         {
+            this.backgroundJob = backgroundJob;
+        }
 
+        [HttpPost, Route("api/1.0/moderation/{forumId}/spam/build-model")]
+        public async Task<IActionResult> BuildSpamModel(int forumId)
+        {
+            return await this.VerifyCredentials(forumId, async () =>
+            {
+                this.backgroundJob.Enqueue<TrainForumSpamClassifier>(item => item.Train(forumId));
+
+                return this.Ok();
+            });
         }
 
         [HttpGet, Route("api/1.0/moderation/{forumId}/queue")]

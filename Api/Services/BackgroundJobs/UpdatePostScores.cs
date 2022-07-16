@@ -2,9 +2,9 @@
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Services.Scoring
+namespace Api.Services.BackgroundJobs
 {
-    public class UpdatePostScores : IUpdatePostScores
+    public class UpdatePostScores
     {
         private readonly YARCContext context;
 
@@ -17,7 +17,7 @@ namespace Api.Services.Scoring
         [DisableConcurrentExecution(timeoutInSeconds: 600)]
         public async Task Execute()
         {
-            await this.context.Database.ExecuteSqlRawAsync("exec Social.UpdatePostScores");
+            await context.Database.ExecuteSqlRawAsync("exec Social.UpdatePostScores");
         }
     }
 }

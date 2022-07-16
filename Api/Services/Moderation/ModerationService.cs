@@ -165,6 +165,7 @@ namespace Api.Services.Moderation
             var post = await this.context
                 .Posts
                 .Include(P => P.ReportedPosts)
+                .ThenInclude(P => P.Reason)
                 .Where(U =>
                     U.ForumId == forumId
                     && U.Id == postId
@@ -174,6 +175,7 @@ namespace Api.Services.Moderation
             if (post != null)
             {
                 post.IsDeleted = true;
+                post.IsSpam = post.ReportedPosts.Any(R => R.Reason.Code == "SPAM");
 
                 context.RemoveRange(post.ReportedPosts);
 

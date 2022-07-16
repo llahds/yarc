@@ -34,5 +34,7 @@ namespace Api.Data.Entities
         public int CommentCount { get; set; }
         public int Ups { get; set; }
         public int Downs { get; set; }
+
+        public bool IsSpam { get; set; }
     }
 }

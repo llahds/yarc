@@ -87,7 +87,7 @@
 </app-confirm-modal>
 
 <app-confirm-modal [showConfirm]="showReportModal" (onCancel)="showReportModal = false" (onConfirm)="report()"
-    [showActive]="isReporting" [disableButtons]="isReporting">
+    [showActive]="isReporting" [disableButtons]="isReporting || !selectedReportReasonId">
     <p>Are you sure you want to report this post?</p>
     <div>
         <select class="form-control form-control-sm" [(ngModel)]="selectedReportReasonId">

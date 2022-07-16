@@ -101,6 +101,8 @@ namespace Api.Controllers
 
             this.backgroundJob.Enqueue<CheckPostToxicity>(item => item.Check(id.Id));
 
+            this.backgroundJob.Enqueue<CheckPostSpam>(item => item.Check(id.Id));
+
             return this.Ok(id);
         }
 
@@ -132,6 +134,8 @@ namespace Api.Controllers
             }
 
             this.backgroundJob.Enqueue<CheckPostToxicity>(item => item.Check(postId));
+
+            this.backgroundJob.Enqueue<CheckPostSpam>(item => item.Check(postId));
 
             return this.Ok();
         }

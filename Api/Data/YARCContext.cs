@@ -93,21 +93,21 @@ namespace Api.Data
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
             modelBuilder.Entity<User>().HasData(new User { Id = -1, Email = "YARCBot", Password = "_________", About = "", UserName = "YARCBot", DisplayName = "YARCBot", CreatedOn = DateTime.UtcNow, IsDeleted = true });
 
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 2, Label = "Harassment" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 3, Label = "Threatening violence" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 4, Label = "Hate" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 5, Label = "Sexualization of minors" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 6, Label = "Sharing personal information" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 7, Label = "Non-consentual intimate media" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 8, Label = "Prohibited transaction" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 9, Label = "Impersonation" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 10, Label = "Copyright violation" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 11, Label = "Trademark violation" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 12, Label = "Self-harm or suicide" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 13, Label = "Spam" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 14, Label = "Misinformation" });
-            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = -1, Label = "Toxicity" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 1, Label = "Breaks {forum} rules", Code = "FORUM_RULES" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 2, Label = "Harassment", Code = "HARASSMENT" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 3, Label = "Threatening violence", Code = "VIOLENCE" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 4, Label = "Hate", Code = "HATE" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 5, Label = "Sexualization of minors", Code = "SEXUALIZATION" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 6, Label = "Sharing personal information", Code = "PII" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 7, Label = "Non-consentual intimate media", Code = "NCIM" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 8, Label = "Prohibited transaction", Code = "PT" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 9, Label = "Impersonation", Code = "IMPERSONATION" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 10, Label = "Copyright violation", Code = "COPYRIGHT" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 11, Label = "Trademark violation", Code = "TRADEMARK" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 12, Label = "Self-harm or suicide", Code = "SELF_HARM" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 13, Label = "Spam", Code = "SPAM" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 14, Label = "Misinformation", Code = "MISINFORMATION" });
+            modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = -1, Label = "Toxicity", Code = "TOXICITY" });
 
             base.OnModelCreating(modelBuilder);
         }
