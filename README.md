@@ -3,6 +3,10 @@
 YARC is a reddit clone built using C#, .NET 6, EF, SQL Server, and Angular 14. Most of my code is under NDA or privately owned so I put this together 
 to demonstrate my preferred tech stack. By the way, if you're hiring and like what you see then please contact me at llah.d.nevets@gmail.com.
 
+It currently supports user created forums, posts, comments, full text search, basic moderation, a toxicity filter, and a basic spam filter. 
+
+![YARC](https://user-images.githubusercontent.com/49455496/180092812-a84b4a3a-d3f6-45ff-9e80-d7c551ae87a5.gif)
+
 # Getting Started
 
 The quickest way to get started is using docker. Clone the repo and run `docker-compose up` from the solution root. Open a browser and goto to localhost:8000. 
