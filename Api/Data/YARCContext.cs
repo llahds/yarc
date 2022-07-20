@@ -109,6 +109,9 @@ namespace Api.Data
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = 14, Label = "Misinformation", Code = "MISINFORMATION" });
             modelBuilder.Entity<ReportReason>().HasData(new ReportReason { Id = -1, Label = "Toxicity", Code = "TOXICITY" });
 
+            modelBuilder.Entity<Forum>().HasData(new Forum { CreatedOn = DateTime.UtcNow, Id = 1, Name = "First Forum", Slug = "first-forum" });
+            modelBuilder.Entity<Post>().HasData(new Post { CreatedOn = DateTime.UtcNow, Id = 1, ForumId = 1, Title = "Test", Text = "Test Comments", PostedById = 1 });
+
             base.OnModelCreating(modelBuilder);
         }
 
