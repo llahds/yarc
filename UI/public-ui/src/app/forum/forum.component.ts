@@ -56,4 +56,9 @@ export class ForumComponent implements OnInit {
       this.forum.hasJoined = false;
     })
   }
+
+  onNewPost(postId: number) {
+    this.showPostModal = false;
+    this.router.navigate(["/r", this.id, "p", postId]);
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ForumsService } from '../services/forums.service';
+import { Id } from '../services/models/common';
 import { EditPost } from '../services/models/posts';
 import { PostsService } from '../services/posts.service';
 
@@ -21,7 +22,7 @@ export class PostEditComponent implements OnInit {
   @Input() showPost: boolean = false;
 
   @Output() onCancel = new EventEmitter<void>();
-  @Output() onPost = new EventEmitter<void>();
+  @Output() onPost = new EventEmitter<number>();
 
   constructor(
     private posts: PostsService,
@@ -56,7 +57,7 @@ export class PostEditComponent implements OnInit {
     this.posts.create(this.forumId, this.entity).subscribe(r => {
       this.isSaving = false;
       this.entity = { title: "", text: "" };
-      this.onPost.emit();
+      this.onPost.emit(r.id);
     }, e => {
       this.errors = e.error;
       this.isSaving = false;
@@ -68,8 +69,7 @@ export class PostEditComponent implements OnInit {
     this.isSaving = true;
     this.posts.update(this.forumId, this._postId!, this.entity).subscribe(r => {
       this.isSaving = false;
-      //this.entity = { title: "", text: "" };
-      this.onPost.emit();
+      this.onPost.emit(this._postId);
     }, e => {
       this.errors = e.error;
       this.isSaving = false;
