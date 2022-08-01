@@ -102,6 +102,7 @@ namespace Api.Services.FullText
         {
             public int Total { get; set; }
             public TEntity[] Results { get; set; }
+            public float[] Scores { get; set; }
         }
 
         public void Delete<TEntity>(Query query)
@@ -196,10 +197,17 @@ namespace Api.Services.FullText
                     .Select(D => JsonConvert.DeserializeObject<TEntity>(D))
                     .ToArray();
 
+                var scores = hits.ScoreDocs
+                    .Skip(startAt)
+                    .Take(pageSize)
+                    .Select(D => D.Score)
+                    .ToArray();
+
                 return new SearchResults<TEntity>
                 {
                     Total = totalHits,
-                    Results = entities
+                    Results = entities,
+                    Scores = scores
                 };
             }
             finally

@@ -50,6 +50,14 @@ namespace Api.Controllers
             return this.Ok(await this.views.Popular(startAt, sort));
         }
 
+        [Authorize]
+        [HttpGet, Route("api/1.0/forums/posts/recommended")]
+        [ProducesResponseType(200, Type = typeof(ListResultModel<ForumPostListItemModel>))]
+        public async Task<IActionResult> Recommended(int startAt)
+        {
+            return this.Ok(await this.views.Recommended(startAt));
+        }
+
         [HttpGet, Route("api/1.0/forums/{forumId}/posts/{postId}")]
         [ProducesResponseType(200, Type = typeof(ForumPostViewModel))]
         public async Task<IActionResult> Get(int forumId, int postId)

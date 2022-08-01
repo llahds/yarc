@@ -18,6 +18,10 @@ export class PostsService {
     return this.client.get(`api/1.0/forums/posts/popular?startAt=${startAt}&sort=${sort}`);
   }
 
+  getRecommendedPosts(startAt: number): Observable<ListResult<Post>> {
+    return this.client.get(`api/1.0/forums/posts/recommended?startAt=${startAt}`);
+  }  
+
   getPosts(forumId: number, startAt: number, sort: string): Observable<ListResult<Post>> {
     return this.client.get(`api/1.0/forums/${forumId}/posts?startAt=${startAt}&sort=${sort}`);
   }

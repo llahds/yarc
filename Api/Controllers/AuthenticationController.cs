@@ -1,5 +1,7 @@
 ﻿using Api.Models;
 using Api.Services.Authentication;
+using Api.Services.BackgroundJobs;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -7,11 +9,14 @@ namespace Api.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IAuthenticationService authentication;
+        private readonly IBackgroundJobClient backgroundJob;
 
         public AuthenticationController(
-            IAuthenticationService authentication)
+            IAuthenticationService authentication,
+            IBackgroundJobClient backgroundJob)
         {
             this.authentication = authentication;
+            this.backgroundJob = backgroundJob;
         }
 
         [HttpPost, Route("api/1.0/authenticate")]
@@ -30,6 +35,8 @@ namespace Api.Controllers
                 this.ModelState.AddModelError(nameof(model.UserName), "Invalid user name or password.");
                 return this.BadRequest(this.ModelState);
             }
+
+            this.backgroundJob.Enqueue<BuildRecommendedPostQuery>(item => item.Build(model.UserName));
 
             return this.Ok(token);
         }
