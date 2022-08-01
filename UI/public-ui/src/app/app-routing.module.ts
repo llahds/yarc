@@ -34,7 +34,17 @@ const routes: Routes = [
   {
     path: "home",
     component: FeedComponent,
+    data: {
+      view: "popular"
+    }    
   },
+  {
+    path: "recommended",
+    component: FeedComponent,
+    data: {
+      view: "recommended"
+    }
+  },  
   {
     path: "r/create",
     component: ForumCreateComponent

@@ -19,6 +19,8 @@ export class FeedComponent implements OnInit {
   public pageSize!: number;
   public total!: number;
 
+  private view: string = "popular";
+
   constructor(
     private posts: PostsService,
     private authentication: AuthenticationService,
@@ -33,17 +35,32 @@ export class FeedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.data.subscribe(d => {
+      this.view = d["view"];
+    });
+
     this.route.queryParamMap.subscribe(params => {
       this.isLoading = true;
       this.sortBy = params.get('sort') || "";
       this.startAt = +params.get("startAt")! || 0;
-      this.posts.getPopularPosts(this.startAt, this.sortBy).subscribe(r => {
-        this.list = r.list;
-        this.sortBy = r.sortBy;
-        this.isLoading = false;
-        this.pageSize = r.pageSize;
-        this.total = r.total;
-      });
+      
+      if (this.view === "popular") {
+        this.posts.getPopularPosts(this.startAt, this.sortBy).subscribe(r => {
+          this.list = r.list;
+          this.sortBy = r.sortBy;
+          this.isLoading = false;
+          this.pageSize = r.pageSize;
+          this.total = r.total;
+        });
+      } else if (this.view === "recommended") {
+        this.posts.getRecommendedPosts(this.startAt).subscribe(r => {
+          this.list = r.list;
+          this.sortBy = "";
+          this.isLoading = false;
+          this.pageSize = r.pageSize;
+          this.total = r.total;
+        });
+      }
     })
   }
 

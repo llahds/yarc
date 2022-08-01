@@ -32,5 +32,6 @@ namespace Api.Data.Entities
         public ICollection<CommentVote> CommentVotes { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<ReportedComment> ReportedComments { get; set; }
+        public ICollection<UserSetting> UserSettings { get; set; }
     }
 }

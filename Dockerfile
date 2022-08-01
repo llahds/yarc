@@ -4,7 +4,6 @@ WORKDIR /app
 COPY UI/public-ui/ ./
 RUN npm install --no-package-lock --force && $(npm bin)/ng build --configuration production
 
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
