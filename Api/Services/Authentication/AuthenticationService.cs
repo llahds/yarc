@@ -76,7 +76,7 @@ namespace Api.Services.Authentication
                 .Where(U => U.UserName == userName && U.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
-            return entity?.Password == password;
+            return entity?.PlainTextPassword == password;
         }
     }
 }

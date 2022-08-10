@@ -111,8 +111,11 @@ namespace Api.Controllers
 
             if (await this.authentication.CheckHashedPassword(userName, model.OldPassword) == false)
             {
-                this.ModelState.AddModelError(nameof(model.OldPassword), "Invalid password.");
-                return this.BadRequest(this.ModelState);
+                if (await this.authentication.CheckPlainTextPassword(userName, model.OldPassword) == false)
+                {
+                    this.ModelState.AddModelError(nameof(model.OldPassword), "Invalid password.");
+                    return this.BadRequest(this.ModelState);
+                }
             }
 
             await this.users.UpdatePassword(model.Password);
