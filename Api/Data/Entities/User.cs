@@ -19,8 +19,6 @@ namespace Api.Data.Entities
         public string Email { get; set; }
         [MaxLength(100)]
         public string Password { get; set; }
-        [MaxLength(25)]
-        public string PlainTextPassword { get; set; } = "";
         public DateTime CreatedOn { get; set; }
         public ICollection<ForumOwner> ForumOwners { get; set; }
         public ICollection<ForumModerator> ForumModerators { get; set; }

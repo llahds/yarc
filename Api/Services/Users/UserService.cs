@@ -121,7 +121,6 @@ namespace Api.Services.Users
             var entity = await this.context.Users.FirstOrDefaultAsync(U => U.Id == userId);
 
             entity.Password = await this.passwords.Generate(password);
-            entity.PlainTextPassword = "";
 
             await this.context.SaveChangesAsync();
         }
