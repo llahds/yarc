@@ -90,6 +90,10 @@ namespace Api.Data
                 .HasIndex(c => new { c.IsHidden, c.IsDeleted })
                 .IncludeProperties(P => P.ForumId);
 
+            modelBuilder.Entity<Comment>()
+                .HasIndex(e => e.CreatedOn)
+                .IncludeProperties(e => e.PostId);
+
             modelBuilder.Entity<User>().HasData(new User { Id = 1, Email = "admin", Password = "password", About = "", UserName = "admin", DisplayName = "Administrator", CreatedOn = DateTime.UtcNow });
             modelBuilder.Entity<User>().HasData(new User { Id = -1, Email = "YARCBot", Password = "_________", About = "", UserName = "YARCBot", DisplayName = "YARCBot", CreatedOn = DateTime.UtcNow, IsDeleted = true });
 
