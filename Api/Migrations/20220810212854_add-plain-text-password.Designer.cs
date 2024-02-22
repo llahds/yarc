@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    partial class YARCContextModelSnapshot : ModelSnapshot
+    [Migration("20220810212854_add-plain-text-password")]
+    partial class addplaintextpassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,10 +55,6 @@ namespace Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedOn");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedOn"), new[] { "PostId" });
 
                     b.HasIndex("IsDeleted");
 
@@ -151,7 +149,7 @@ namespace Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2022, 8, 11, 13, 31, 17, 552, DateTimeKind.Utc).AddTicks(3835),
+                            CreatedOn = new DateTime(2022, 8, 10, 21, 28, 53, 678, DateTimeKind.Utc).AddTicks(8397),
                             Description = "",
                             IsDeleted = false,
                             IsPrivate = false,
@@ -320,7 +318,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             CommentCount = 0,
-                            CreatedOn = new DateTime(2022, 8, 11, 13, 31, 17, 552, DateTimeKind.Utc).AddTicks(3846),
+                            CreatedOn = new DateTime(2022, 8, 10, 21, 28, 53, 678, DateTimeKind.Utc).AddTicks(8407),
                             Downs = 0,
                             ForumId = 1,
                             Hot = 0m,
@@ -610,6 +608,11 @@ namespace Api.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PlainTextPassword")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(35)
@@ -632,22 +635,24 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8630),
+                            CreatedOn = new DateTime(2022, 8, 10, 21, 28, 53, 678, DateTimeKind.Utc).AddTicks(8266),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,
                             Password = "password",
+                            PlainTextPassword = "",
                             UserName = "admin"
                         },
                         new
                         {
                             Id = -1,
                             About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8717),
+                            CreatedOn = new DateTime(2022, 8, 10, 21, 28, 53, 678, DateTimeKind.Utc).AddTicks(8284),
                             DisplayName = "YARCBot",
                             Email = "YARCBot",
                             IsDeleted = true,
                             Password = "_________",
+                            PlainTextPassword = "",
                             UserName = "YARCBot"
                         });
                 });

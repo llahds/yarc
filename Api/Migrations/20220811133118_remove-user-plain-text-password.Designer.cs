@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    partial class YARCContextModelSnapshot : ModelSnapshot
+    [Migration("20220811133118_remove-user-plain-text-password")]
+    partial class removeuserplaintextpassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,10 +55,6 @@ namespace Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedOn");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedOn"), new[] { "PostId" });
 
                     b.HasIndex("IsDeleted");
 
@@ -630,20 +628,9 @@ namespace Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8630),
-                            DisplayName = "Administrator",
-                            Email = "admin",
-                            IsDeleted = false,
-                            Password = "password",
-                            UserName = "admin"
-                        },
-                        new
-                        {
                             Id = -1,
                             About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8717),
+                            CreatedOn = new DateTime(2022, 8, 11, 13, 31, 17, 552, DateTimeKind.Utc).AddTicks(3558),
                             DisplayName = "YARCBot",
                             Email = "YARCBot",
                             IsDeleted = true,

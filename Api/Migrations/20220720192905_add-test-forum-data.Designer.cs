@@ -4,6 +4,7 @@ using Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(YARCContext))]
-    partial class YARCContextModelSnapshot : ModelSnapshot
+    [Migration("20220720192905_add-test-forum-data")]
+    partial class addtestforumdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,10 +55,6 @@ namespace Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedOn");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedOn"), new[] { "PostId" });
 
                     b.HasIndex("IsDeleted");
 
@@ -151,7 +149,7 @@ namespace Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2022, 8, 11, 13, 31, 17, 552, DateTimeKind.Utc).AddTicks(3835),
+                            CreatedOn = new DateTime(2022, 7, 20, 19, 29, 5, 379, DateTimeKind.Utc).AddTicks(5397),
                             Description = "",
                             IsDeleted = false,
                             IsPrivate = false,
@@ -320,7 +318,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             CommentCount = 0,
-                            CreatedOn = new DateTime(2022, 8, 11, 13, 31, 17, 552, DateTimeKind.Utc).AddTicks(3846),
+                            CreatedOn = new DateTime(2022, 7, 20, 19, 29, 5, 379, DateTimeKind.Utc).AddTicks(5408),
                             Downs = 0,
                             ForumId = 1,
                             Hot = 0m,
@@ -632,7 +630,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8630),
+                            CreatedOn = new DateTime(2022, 7, 20, 19, 29, 5, 379, DateTimeKind.Utc).AddTicks(5279),
                             DisplayName = "Administrator",
                             Email = "admin",
                             IsDeleted = false,
@@ -643,7 +641,7 @@ namespace Api.Migrations
                         {
                             Id = -1,
                             About = "",
-                            CreatedOn = new DateTime(2024, 2, 22, 5, 40, 20, 318, DateTimeKind.Utc).AddTicks(8717),
+                            CreatedOn = new DateTime(2022, 7, 20, 19, 29, 5, 379, DateTimeKind.Utc).AddTicks(5296),
                             DisplayName = "YARCBot",
                             Email = "YARCBot",
                             IsDeleted = true,

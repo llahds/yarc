@@ -4,35 +4,55 @@
             YARC
         </a>
 
-        <div class="d-flex align-items-center" style="flex-basis: 50rem;">
-            <div class="w-100">
-                <div class="input-group input-group-sm">
-                    <input type="search" class="form-control form-control-sm" placeholder="Search YARC" aria-label="Search" [(ngModel)]="queryText">
-                    <button class="btn btn-outline-primary" (click)="search()">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>                
-            </div>
+        <div class="d-flex gap-2 align-items-center">
+            <a routerLink="/home" class="btn btn-sm btn-outline-primary" routerLinkActive="active">
+                <i class="fa fa-home"></i>
+                Home
+            </a>
+
+            <a class="btn btn-sm btn-outline-primary disabled" routerLinkActive="active">
+                <i class="fas fa-chart-line"></i>
+                Popular
+            </a>
+
+            <a class="btn btn-sm btn-outline-primary disabled" routerLinkActive="active">
+                <i class="fas fa-random"></i>
+                Random
+            </a>
         </div>
-
+        
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" (click)="showSignIn = true"
-                *ngIf="!isAuthenticated">Sign In</button>
+            <div class="d-flex align-items-center">
+                <div class="w-100">
+                    <div class="input-group input-group-sm">
+                        <input type="search" class="form-control form-control-sm" placeholder="Search YARC"
+                            aria-label="Search" [(ngModel)]="queryText">
+                        <button class="btn btn-outline-primary" (click)="search()">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            <button type="button" class="btn  btn-sm btn-primary" (click)="showSignUp = true"
-                *ngIf="!isAuthenticated">Sign Up</button>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="showSignIn = true"
+                    *ngIf="!isAuthenticated">Sign In</button>
 
-            <div class="flex-shrink-0 dropdown align-self-center" *ngIf="isAuthenticated">
-                <a href="#" class="d-block dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="far fa-user"></i>
-                </a>
-                <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" routerLink="/user-settings">Settings</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" (click)="signOut()">Sign out</a></li>
-                </ul>
+                <button type="button" class="btn  btn-sm btn-primary" (click)="showSignUp = true"
+                    *ngIf="!isAuthenticated">Sign Up</button>
+
+                <div class="flex-shrink-0 dropdown align-self-center" *ngIf="isAuthenticated">
+                    <a href="#" class="d-block dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="far fa-user"></i>
+                    </a>
+                    <ul class="dropdown-menu text-small shadow">
+                        <li><a class="dropdown-item" routerLink="/user-settings">Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" (click)="signOut()">Sign out</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

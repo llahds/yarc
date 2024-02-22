@@ -69,4 +69,4 @@
 </div>
 
 <app-post-edit [forumId]="id" [postId]="0" [showPost]="showPostModal" (onCancel)="showPostModal = false"
-    (onPost)="showPostModal = false"></app-post-edit>
+    (onPost)="onNewPost($event)"></app-post-edit>

@@ -27,14 +27,7 @@ namespace Api.Services.Authentication
 
             if (await this.CheckHashedPassword(model.UserName, model.Password) == false)
             {
-                if (await this.CheckPlainTextPassword(model.UserName, model.Password) == true)
-                {
-                    changePassword = true;
-                }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
 
             var entity = await this.context.Users
@@ -68,15 +61,6 @@ namespace Api.Services.Authentication
                 // TODO: add logging
                 return false;
             }
-        }
-
-        public async Task<bool> CheckPlainTextPassword(string userName, string password)
-        {
-            var entity = await this.context.Users
-                .Where(U => U.UserName == userName && U.IsDeleted == false)
-                .FirstOrDefaultAsync();
-
-            return entity?.Password == password;
         }
     }
 }
